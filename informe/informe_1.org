@@ -1,3 +1,4 @@
+#-*- mode: org -*-
 #+TITLE:     
 #+AUTHOR:    
 #+EMAIL:     
@@ -13,6 +14,8 @@
 #+LINK_UP:   
 #+LINK_HOME: 
 #+XSLT: 
+
+###################################################### Latex Headers ##############################################################
 
 ##+LATEX_HEADER: \usepackage[latin1]{inputenc}
 ##+LATEX_HEADER: \inputencoding{latin1} 
@@ -33,9 +36,23 @@
 #+LATEX_HEADER: \hyphenpenalty=10000
 #+LATEX_HEADER: \usepackage[nottoc,numbib]{tocbibind}
 
+###################################################### Portada ##############################################################
+
 #+INCLUDE: "./header.org"
 
-#+INCLUDE: "./resumen.org"
+###################################################### Resumen ##############################################################
+
+#+begin_latex
+\section*{Resumen ejecutivo}
+#+end_latex
+
+
+
+#+begin_latex
+\newpage
+#+end_latex
+
+###################################################### Indice ##############################################################
 
 # TOC
 #+BEGIN_LaTeX
@@ -44,7 +61,7 @@
 \newpage
 #+END_LaTeX
 
-###################################################### CONTENIDO ##############################################################
+###################################################### Contenido ##############################################################
 
 * Introducción
 
@@ -260,10 +277,16 @@ Es necesario definir alguna notación relevante para lo que sigue:
     Determinar los mejores parámetros para los algoritmos y realizar experimentaciones, validando empíricamente su validez.
 
 ** Creación de una interfaz para visualizar y evaluar los resultados mediante un grupo de prueba
+   
+    Presentar los resultados obtenidos mediante una interfaz simple y
+    usable, de forma de ver el contenido multimedia más importante a
+    partir de un conjunto de eventos. Mediante un pequeño conjunto de
+    usuarios, evaluar y validar los resultados obtenidos.
 
-    Presentar los resultados obtenidos mediante una interfaz simple y usable, de forma de ver el contenido multimedia más importante a partir de un conjunto de eventos. Mediante un pequeño conjunto de usuarios, evaluar y validar los resultados obtenidos.
 
 
-###############################################################################################################################
 
+
+
+###################################################### Footer ##############################################################
 #+INCLUDE: "./footer.org"

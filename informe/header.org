@@ -43,7 +43,7 @@
 \textbf{Alumno} 	&: Mauricio Quezada\\
 \textbf{E-mail} 	&: mquezada@dcc.uchile.cl\\
 \textbf{Teléfono}	&: (+569) 9 150 4487 \\
-\textbf{Fecha de Entrega} &: Miércoles 25 de abril de 2012. \\
+\textbf{Fecha de Entrega} &: Miércoles 18 de Julio de 2012. \\
 \end{tabular}
 \end{flushright}
 \end{titlepage}

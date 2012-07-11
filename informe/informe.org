@@ -1,0 +1,83 @@
+#-*- mode: org -*-
+#+TITLE:     
+#+AUTHOR:    
+#+EMAIL:     
+#+DATE:      
+#+DESCRIPTION: 
+#+KEYWORDS: 
+#+LANGUAGE:  en
+#+OPTIONS:   H:3 num:t toc:nil \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+OPTIONS:   TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc
+#+INFOJS_OPT: view:nil toc:nil ltoc:nil mouse:underline buttons:0 path:http://orgmode.org/org-info.js
+#+EXPORT_SELECT_TAGS: export
+#+EXPORT_EXCLUDE_TAGS: noexport
+#+LINK_UP:   
+#+LINK_HOME: 
+#+XSLT: 
+
+###################################################### Latex Headers ##############################################################
+
+##+LATEX_HEADER: \usepackage[latin1]{inputenc}
+##+LATEX_HEADER: \inputencoding{latin1} 
+#+LATEX_HEADER: \usepackage{setspace}
+#+LATEX_HEADER: \usepackage[spanish,activeacute]{babel}
+##+LaTeX_CLASS: xelatex-org-article
+#+LATEX_HEADER: \usepackage[left=1.5cm,top=2cm,right=1.5cm,bottom=1cm]{geometry}
+#+LATEX_HEADER: \usepackage{fancyhdr}
+#+LATEX_HEADER: \usepackage{amssymb}
+#+LATEX_HEADER: \usepackage{anysize}
+#+LATEX_HEADER: \usepackage{graphicx}
+#+LATEX_HEADER: \usepackage{multicol}
+#+LATEX_HEADER: \usepackage{float}
+#+LATEX_HEADER: \usepackage{color}
+#+LATEX_HEADER: \usepackage{listings}
+#+LATEX_HEADER: \usepackage{appendix}
+#+LATEX_HEADER: \usepackage{hyperref}
+#+LATEX_HEADER: \hyphenpenalty=10000
+#+LATEX_HEADER: \usepackage[nottoc,numbib]{tocbibind}
+
+###################################################### Portada ##############################################################
+
+#+INCLUDE: "./header.org"
+
+###################################################### Resumen ##############################################################
+
+#+begin_latex
+\section*{Resumen ejecutivo}
+#+end_latex
+
+
+
+#+begin_latex
+\newpage
+#+end_latex
+
+###################################################### Indice ##############################################################
+
+# TOC
+#+BEGIN_LaTeX
+\newpage
+\tableofcontents
+\newpage
+#+END_LaTeX
+
+###################################################### Contenido ##############################################################
+
+* Introducción
+  
+** Motivación
+** Trabajo relacionado
+
+* Descripción del Problema
+* Descripción General de la propuesta
+* Objetivos
+** Objetivo General
+** Objetivos Específicos
+
+* Metodología de trabajo
+* Plan de trabajo
+
+
+
+###################################################### Footer ##############################################################
+#+INCLUDE: "./footer.org"
