@@ -1,0 +1,26 @@
+\newpage
+# BIBLIOGRAFIA
+#+BEGIN_LaTeX
+\begin{thebibliography}{9}
+\bibitem{concerts} 
+
+Hila Becker, Dan Iter, Mor Naaman, Luis Gravano. \emph{Identifying Content for Planned Events Across Social Media Sites}. WSDM'12.
+
+\bibitem{events}
+
+Deepayan Chakrabarti, Kunal Punera. \emph{Event Summarization using Tweets}. AAAI 2011.
+
+\bibitem{clusterers}
+
+Hila Becker, Mor Naaman, Luis Gravano. \emph{Learning Similarity Metrics for Event Identification in Social Media}. WSDM'10.
+
+\bibitem{selecting}
+
+Hila Becker, Mor Naaman, Luis Gravano. \emph{Selecting Quality Twitter Content for Events}. AAAI 2011.
+
+\bibitem{real}
+
+Hila Becker, Mor Naaman, Luis Gravano. \emph{Beyond Trending Topics: Real-World Event Identification on Twitter}. AAAI 2011.
+
+\end{thebibliography}
+#+END_LaTeX

@@ -1,0 +1,7 @@
+#+begin_latex
+\section*{Resumen ejecutivo}
+#+end_latex
+
+#+begin_latex
+\newpage
+#+end_latex
