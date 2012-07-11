@@ -103,10 +103,10 @@ Es necesario definir alguna notación relevante para lo que sigue:
 \newpage
 * Descripción del problema
 
-  Dada la masividad de los datos generados actualmente, es necesario
-  contar con herramientas automatizadas que permitan seleccionar
-  contenido relevante, útil y veraz para los usuarios y/o consumidores
-  de este contenido.\\
+  Dada la masividad de los datos generados en los medios hoy en día,
+  es necesario contar con herramientas automatizadas que permitan
+  seleccionar contenido relevante, útil y veraz para los usuarios y/o
+  consumidores de este contenido.\\
 
   El problema de construir resúmenes a partir de eventos es un
   problema ya abordado con anterioridad, aunque aun no hay demasiado
@@ -124,7 +124,6 @@ Es necesario definir alguna notación relevante para lo que sigue:
   sub-contenido relevante si no es de su interés, dado que el objetivo
   es además entregar información útil.\\
 
-
   Otro aspecto importante es la faceta temporal de los eventos. Es
   decir, el problema no se trata de encontrar contenido relevante
   sobre un tópico en particular, sino sobre un evento que tiene una
@@ -133,7 +132,6 @@ Es necesario definir alguna notación relevante para lo que sigue:
   necesario identificar además la importancia de la dimensión temporal
   a la hora de resumir y seleccionar contenido relevante en torno a
   eventos.\\
-
 
   Para abordar este problema, es necesario utilizar técnicas que
   permitan obtener contenido (sin suponer demasiado sobre su propio
