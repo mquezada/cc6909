@@ -84,7 +84,7 @@
 
 
 ** Conceptos Básicos
-
+   
 Es necesario definir alguna notación relevante para lo que sigue:
 
 - *Evento*: Un /evento/ se define en \cite{concerts} como una ocurrencia en el mundo real con un período de tiempo asociado y un stream de recursos ordenados por tiempo que discuten la ocurrencia del evento, y publicados dentro de ese período. Se utilizará este enfoque; más formalmente, un evento $e$ es una tupla $(T_e, D_e)$, donde $T_e$ es el par (Inicio, Fin) del evento, y $D_e$ el conjunto de recursos que tienen relación con el evento que ocurrieron en el período $T_e$.
@@ -103,24 +103,69 @@ Es necesario definir alguna notación relevante para lo que sigue:
 \newpage
 * Descripción del problema
 
-  Dada la masividad de los datos generados actualmente, es necesario contar con herramientas automatizadas que permitan seleccionar contenido relevante, útil y veraz para los usuarios y/o consumidores de este contenido.\\
+  Dada la masividad de los datos generados actualmente, es necesario
+  contar con herramientas automatizadas que permitan seleccionar
+  contenido relevante, útil y veraz para los usuarios y/o consumidores
+  de este contenido.\\
 
-  El problema de construir resúmenes a partir de eventos es un problema ya abordado con anterioridad, aunque aun no hay demasiado usando directamente multimedios o recursos provenientes de distintas fuentes o medios. En vez de afrontar el problema de analizar el texto, es interesante observar el contenido de los recursos como un concepto más general, sin suponer mucho sobre su estructura (vale decir, poder considerar contenido de imágenes, audio, video, etc.). Por lo anterior, si bien ya existen algunos trabajos sobre multimedios, su enfoque radica más en determinar la relevancia de los objetos por medio de la información que proveen los generadores de contenido, sin considerar lo que buscan los consumidores de este; por ejemplo, puede haber un evento relevante pero que no sea de la atención de los usuarios, por lo cual no será de utilidad proveerles sub-contenido relevante si no es de su interés, dado que el objetivo es además entregar información útil.\\
+  El problema de construir resúmenes a partir de eventos es un
+  problema ya abordado con anterioridad, aunque aun no hay demasiado
+  usando directamente multimedios o recursos provenientes de distintas
+  fuentes o medios. En vez de afrontar el problema de analizar el
+  texto, es interesante observar el contenido de los recursos como un
+  concepto más general, sin suponer mucho sobre su estructura (vale
+  decir, poder considerar contenido de imágenes, audio, video,
+  etc.). Por lo anterior, si bien ya existen algunos trabajos sobre
+  multimedios, su enfoque radica más en determinar la relevancia de
+  los objetos por medio de la información que proveen los generadores
+  de contenido, sin considerar lo que buscan los consumidores de este;
+  por ejemplo, puede haber un evento relevante pero que no sea de la
+  atención de los usuarios, por lo cual no será de utilidad proveerles
+  sub-contenido relevante si no es de su interés, dado que el objetivo
+  es además entregar información útil.\\
 
-  Otro aspecto importante es la faceta temporal de los eventos. Es decir, el problema no se trata de encontrar contenido relevante sobre un tópico en particular, sino sobre un evento que tiene una dimensión temporal (por ejemplo, una marcha en particular dentro del contexto de las movilizaciones estudiantiles en Chile el 2011). Es necesario identificar además la importancia de la dimensión temporal a la hora de resumir y seleccionar contenido relevante en torno a eventos.\\
 
-  Para abordar este problema, es necesario utilizar técnicas que permitan obtener contenido (sin suponer demasiado sobre su propio /contenido/) de manera automática que sea no sólo /relevante/, sino también /útil/ y veraz para los usuarios, validando la correctitud de los resultados sobre estas dimensiones contrastándolos con la información social asociada a ellos, cuyas características son diferentes a las usualmente utilizadas al momento de generar resumenes o escoger objetos relevantes a partir de eventos.\\
+  Otro aspecto importante es la faceta temporal de los eventos. Es
+  decir, el problema no se trata de encontrar contenido relevante
+  sobre un tópico en particular, sino sobre un evento que tiene una
+  dimensión temporal (por ejemplo, una marcha en particular dentro del
+  contexto de las movilizaciones estudiantiles en Chile el 2011). Es
+  necesario identificar además la importancia de la dimensión temporal
+  a la hora de resumir y seleccionar contenido relevante en torno a
+  eventos.\\
+
+
+  Para abordar este problema, es necesario utilizar técnicas que
+  permitan obtener contenido (sin suponer demasiado sobre su propio
+  /contenido/) de manera automática que sea no sólo /relevante/, sino
+  también /útil/ y veraz para los usuarios, validando la correctitud
+  de los resultados sobre estas dimensiones contrastándolos con la
+  información social asociada a ellos, cuyas características son
+  diferentes a las usualmente utilizadas al momento de generar
+  resumenes o escoger objetos relevantes a partir de eventos.\\
+
 
 \newpage
 * Descripción general de la propuesta
 
-   El trabajo de título a proponer en este informe consiste en implementar un sistema que permita Resumir y escoger Objetos Web relevantes a partir de un Dataset de eventos predefinido, presentando un prototipo funcional en base a recursos disponibles hoy en día en la Web, y obteniendo las características sociales de estos recursos mediante la red social online Twitter. \\
+  La propuesta de este informe consiste en implementar un sistema que
+  presente resumenes de eventos determinados obtenidos de la Web,
+  ordenados de acuerdo a su importancia medida de acuerdo a la
+  información social asociada a ellos. Para esto se definirán ciertos
+  módulos y etapas tanto para obtener los datos como para generar los
+  resúmenes y la presentación de los resultados.
 
-   En el siguiente diagrama se muestra de forma general el sistema a implementar, sin la componente de prototipo donde se presentarán los resultados obtenidos luego del proceso. En negrita se encuentran las etapas más importantes de la propuesta: obtener el dataset de eventos, identificar los objetos web con sus características a partir de los eventos, y el proceso de Resumen y Selección.\\
+  En el siguiente diagrama se muestra de manera general el
+  comportamiento del sistema. Se utilizarán distintas fuentes de datos
+  para obtener los eventos, y a partir de la información asociada a
+  estos eventos, se realizará el resumen que identifica los
+  sub-tópicos correspondientes, y luego, en base a la información
+  social asociada a estos recursos, generar un orden en el cual se
+  mostrarán los resultados.
 
-   #+CAPTION: Diagrama descriptivo de la propuesta, sin la presentación de resultados.
+  #+CAPTION: Diagrama descriptivo de la propuesta, sin la presentación de resultados.
    #+ATTR_LaTeX: width=15cm
-   [[./img/fw.png]]
+   [[./img/general.png]]
 
    Como no se cuenta actualmente con un dataset de tamaño considerable para realizar el trabajo, se añade como una etapa inicial el obtener el conjunto de eventos. Luego, a partir de estos, se identifican los Objetos Web asociados, y luego se utilizarán enfoques similares a los empleados en \cite{events,clusterers} para resumir y hacer el ranking.\\
 
