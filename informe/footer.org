@@ -22,5 +22,9 @@ Hila Becker, Mor Naaman, Luis Gravano. \emph{Selecting Quality Twitter Content f
 
 Hila Becker, Mor Naaman, Luis Gravano. \emph{Beyond Trending Topics: Real-World Event Identification on Twitter}. AAAI 2011.
 
+\bibitem{barbara}
+
+Castillo, C., Mendoza, M., Poblete, B.: \emph{Information Credibility on Twitter}. In The World Wide Web Conference (WWW), Hyderabad, India. 2011.
+
 \end{thebibliography}
 #+END_LaTeX
