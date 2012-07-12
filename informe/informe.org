@@ -15,7 +15,7 @@
 #+LINK_HOME: 
 #+XSLT: 
 
-###################################################### Latex Headers ##############################################################
+########################### Headers #################################
 
 ##+LATEX_HEADER: \usepackage[latin1]{inputenc}
 ##+LATEX_HEADER: \inputencoding{latin1} 
@@ -36,11 +36,11 @@
 #+LATEX_HEADER: \hyphenpenalty=10000
 #+LATEX_HEADER: \usepackage[nottoc,numbib]{tocbibind}
 
-###################################################### Portada ##############################################################
+########################### Portada #################################
 
 #+INCLUDE: "./header.org"
 
-###################################################### Resumen ##############################################################
+########################### Resumen #################################
 
 #+begin_latex
 \section*{Resumen ejecutivo}
@@ -52,7 +52,7 @@
 \newpage
 #+end_latex
 
-###################################################### Indice ##############################################################
+########################### Indice ###################################
 
 # TOC
 #+BEGIN_LaTeX
@@ -61,11 +61,40 @@
 \newpage
 #+END_LaTeX
 
-###################################################### Contenido ##############################################################
+########################### Contenido #################################
 
 * Introducción
-  
+El presente informe tiene como objetivo detallar una propuesta de
+trabajo para optar al título de Ingeniero Civil en Computación. Este
+trabajo consiste en la implementación de un sistema que permita
+identificar contenido relevante en la Web y mostrarlo en orden de
+importancia, donde ésta es medida de acuerdo a distintos indicadores
+obtenidos de las /Redes Sociales Online/.\\
+
+Este contenido, a diferencia de gran parte del trabajo existente, no
+se limitará solamente texto, sino que de modo general puede ser cualquier
+tipo de objetos multimedia, como imágenes, videos, sonidos, texto,
+etc. Por otra parte, el sistema a implementar será lo más flexible
+posible tal que no dependa de las fuentes de contenido que existen hoy
+en día en la Web, dada su obsolescencia y corta duración.
+
+Se utilizarán dos tipos de documentos para la experimentación y
+evaluación del sistema: noticias y conciertos musicales. Tanto las
+noticias como la información de los conciertos serán obtenidos de dos
+fuentes ricas en datos de este tipo: Google News[fn:1] y
+Last.fm[fn:2]. Para obtener más documentos relacionados a éstos, se
+utilizará la red social Twitter[fn:3] tanto como para obtenerlos como
+para validar su importancia respecto a los usuarios y a los mensajes
+que los mencionan. En la sección Descripción General de la Propuesta
+se detalla la forma de utilizar estas fuentes para obtener los datos y
+los resultados.\\
+
+
+
 ** Motivación
+
+Hoy en día la cantidad de datos producidos en la Web 
+
 ** Trabajo relacionado
 
 * Descripción del Problema
@@ -78,6 +107,6 @@
 * Plan de trabajo
 
 
+########################### Referencias #################################
 
-###################################################### Footer ##############################################################
 #+INCLUDE: "./footer.org"
