@@ -147,7 +147,6 @@ su relevancia, y no la información social que gira en torno a ellos.
 * Descripción del Problema
 
 
-
 * Descripción General de la propuesta
 La propuesta de solución consiste en implementar un sistema que, a
 partir de múltiples documentos de la Web sobre un cierto evento del
@@ -168,7 +167,7 @@ sólo escritas en español, y probablemente muchas más fuentes de
 noticias en inglés y otros idiomas[fn:4]. Last.fm es un servicio de
 recomendación de música, que contiene información sobre diversos
 artistas, además de eventos tales como conciertos o lanzamientos de
-álbumes. Se utilizarán como fuentes de eventos de tal forma que una
+álbumes[fn:5]. Se utilizarán como fuentes de eventos de tal forma que una
 noticia y un concierto serán considerados eventos.
 
 Luego de obtenido un evento, se procederá a generar un /dataset/ de
@@ -183,8 +182,12 @@ sub-tópicos correspondientes, y luego, en base a la información
 social asociada a estos recursos, generar un orden en el cual se
 mostrarán los resultados.
 
+#+CAPTION: Diagrama general de la propuesta
+#+ATTR_LaTeX: width=15cm
+[[./img/general.png]]
 
 [fn:4] http://news.google.com/intl/es_cl/about_google_news.html
+[fn:5] http://www.last.fm/about/
 
 * Objetivos
 ** Objetivo General
