@@ -5,7 +5,7 @@
 #+DATE:      
 #+DESCRIPTION: 
 #+KEYWORDS: 
-#+LANGUAGE:  en
+#+LANGUAGE:  es
 #+OPTIONS:   H:3 num:t toc:nil \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
 #+OPTIONS:   TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc
 #+INFOJS_OPT: view:nil toc:nil ltoc:nil mouse:underline buttons:0 path:http://orgmode.org/org-info.js
@@ -76,7 +76,7 @@ se limitará solamente texto, sino que de modo general puede ser cualquier
 tipo de objetos multimedia, como imágenes, videos, sonidos, texto,
 etc. Por otra parte, el sistema a implementar será lo más flexible
 posible tal que no dependa de las fuentes de contenido que existen hoy
-en día en la Web, dada su obsolescencia y corta duración.
+en día en la Web, dada su obsolescencia y corta duración.\\
 
 Se utilizarán dos tipos de documentos para la experimentación y
 evaluación del sistema: noticias y conciertos musicales. Tanto las
@@ -153,12 +153,12 @@ partir de múltiples documentos de la Web sobre un cierto evento del
 mundo físico, construya resúmenes automáticos y despliegue los
 resultados ordenados según importancia. Además, el contenido del
 resumen es cualquier tipo de documento: texto, imagen, vídeo, audio,
-etc.
+etc.\\
 
 Para esto, se definirán distintos módulos encargados de ciertas
 funciones para el desarrollo del sistema, tanto para obtener los
 datos, normalizarlos de forma de crear objetos aptos para ser
-resumidos, y para ser presentados en una interfaz.
+resumidos, y para ser presentados en una interfaz.\\
 
 Se utilizarán dos fuentes de datos para los eventos: Google News y
 Last.fm. El primero es un sitio de noticias generado automáticamente
@@ -168,11 +168,14 @@ noticias en inglés y otros idiomas[fn:4]. Last.fm es un servicio de
 recomendación de música, que contiene información sobre diversos
 artistas, además de eventos tales como conciertos o lanzamientos de
 álbumes[fn:5]. Se utilizarán como fuentes de eventos de tal forma que una
-noticia y un concierto serán considerados eventos.
+noticia y un concierto serán considerados eventos.\\
 
 Luego de obtenido un evento, se procederá a generar un /dataset/ de
 documentos para ese evento. Para ello, utilizando la información
-asociada al evento (como su título, su descripción y su URL)
+asociada al evento como /keywords/ (como su título, su descripción y
+su URL), se realizarán búsquedas en Twitter. Los /tweets/ y las
+páginas (documentos) que aparezcan en los resultados serán utilizados
+como parte del dataset.\\
 
 En el siguiente diagrama se muestra de manera general el
 comportamiento del sistema. Se utilizarán distintas fuentes de datos
@@ -186,8 +189,78 @@ mostrarán los resultados.
 #+ATTR_LaTeX: width=15cm
 [[./img/general.png]]
 
+Una vez obtenidos los tweets y los documentos de cada evento, el
+sistema construirá un resumen automático de cada uno de ellos. El
+resumen consiste en una serie de sub-tópicos o temas del evento en
+cuestión. Cada tema pertenecerá a un documento en particular, y éstos
+serán los documentos que producirán el ranking a desplegar en conjunto
+con el resumen. La construcción del ranking necesitará más búsquedas
+en Twitter, ya que los indicadores para realizar las comparaciones
+dependerán tanto de los mensajes que mencionan al documento como a los
+autores de estos mensajes. Denominaremos a estos indicadores los
+\emph{Social Features} del documento.\\
+
 [fn:4] http://news.google.com/intl/es_cl/about_google_news.html
 [fn:5] http://www.last.fm/about/
+
+** Social Features
+
+Para determinar la relevancia de los documentos incluidos en el
+resumen, se contrastarán con respecto a otros usando la información
+social que provee Twitter. Esto es, se obtendrán automáticamente
+distintos indicadores de los tweets que mencionan a estos documentos\cite{barbara},
+directa o indirectamente. Estos indicadores se presentan en la
+siguiente tabla.
+
+#+BEGIN_LATEX
+\begingroup
+\fontsize{8pt}{10pt}\selectfont
+#+END_LATEX
+
+#+ATTR_LaTeX: longtable align=|l|l|
+#+CAPTION: Lista de Social Features a utilizar para el ranking
+|-----------------------------------+--------------------------------------------------------------------------|
+| Social Feature                    | Descripción                                                              |
+|-----------------------------------+--------------------------------------------------------------------------|
+|-----------------------------------+--------------------------------------------------------------------------|
+| Tweet                             |                                                                          |
+|-----------------------------------+--------------------------------------------------------------------------|
+|-----------------------------------+--------------------------------------------------------------------------|
+| CONTAINS POPULAR DOMAIN TOP 100   | Contiene una URL cuyo dominio se encuentra entre los 100 más populares   |
+| CONTAINS POPULAR DOMAIN TOP 1000  | Contiene una URL cuyo dominio se encuentra entre los 1000 más populares  |
+| CONTAINS POPULAR DOMAIN TOP 10000 | Contiene una URL cuyo dominio se encuentra entre los 10000 más populares |
+| IS RETWEET                        | Es un retweet de otro tweet: contiene 'RT '                              |
+|-----------------------------------+--------------------------------------------------------------------------|
+|-----------------------------------+--------------------------------------------------------------------------|
+| Usuario                           |                                                                          |
+|-----------------------------------+--------------------------------------------------------------------------|
+|-----------------------------------+--------------------------------------------------------------------------|
+| REGISTRATION AGE                  | Fecha de registro                                                        |
+| STATUSES COUNT                    | Cantidad de tweets                                                       |
+| COUNT FOLLOWERS                   | Cantidad de followers: usuarios que siguen a este usuario                |
+| COUNT FRIENDS                     | Cantidad de usuarios que sigue este usuario                              |
+| IS VERIFIED                       | Si la cuenta del usuario está verificada                                 |
+| HAS URL IN PROFILE                | Si en la descripción del usuario hay una URL                             |
+|-----------------------------------+--------------------------------------------------------------------------|
+|-----------------------------------+--------------------------------------------------------------------------|
+| Tópico                            |                                                                          |
+|-----------------------------------+--------------------------------------------------------------------------|
+|-----------------------------------+--------------------------------------------------------------------------|
+| COUNT TWEETS                      | Cantidad de tweets del cluster                                           |
+| AVERAGE LENGTH                    | Largo promedio de los tweets                                             |
+| FRACTION TWEETS URL               | Fracción de los tweets que contienen una URL                             |
+| FRACTION TWEETS MENTION           | Fracción de los tweets que mencionan a otro usuario                      |
+| FRACTION TWEETS HASHTAG           | Fracción de los tweets que contienen un hashtag: '#'                     |
+| FRACTION RETWEETS                 | Fracción de los tweets que son un retweet: contiene 'RT '                |
+| FRACTION POPULAR DOMAIN TOP 100   | Fracción de los tweets cuya URL está entre los 100 más populares         |
+| FRACTION POPULAR DOMAIN TOP 1000  | Fracción de los tweets cuya URL está entre los 1000 más populares        |
+| FRACTION POPULAR DOMAIN TOP 10000 | Fracción de los tweets cuya URL está entre los 10000 más populares       |
+|-----------------------------------+--------------------------------------------------------------------------|
+
+#+BEGIN_LATEX
+\endgroup
+#+END_LATEX
+
 
 * Objetivos
 ** Objetivo General
