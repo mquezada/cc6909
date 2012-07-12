@@ -90,15 +90,102 @@ se detalla la forma de utilizar estas fuentes para obtener los datos y
 los resultados.\\
 
 
+[fn:1] http://news.google.com/
+[fn:2] http://last.fm/
+[fn:3] http://twitter.com/
 
 ** Motivación
 
-Hoy en día la cantidad de datos producidos en la Web 
+Hoy en día la cantidad de datos producidos en la Web y, en particular,
+en las redes sociales online, son de tal magnitud que se vuelve
+necesario encontrar formas de filtrar y buscar sólo la información
+relevante dentro de todas las fuentes que hablan del mismo tópico. Por
+otra parte, la faceta de inmidiatez que ha tomado la generación de la
+información (debido principalmente al auge de los /smartphones/), ha
+enriquecido el aporte social a este conjunto de datos, no sólo de
+fuentes privadas o institucionalizadas.
+
+
 
 ** Trabajo relacionado
+Existen varios trabajos en el área de asociar eventos del mundo real
+con la información generada en Internet que utilizan como prueba de
+concepto la plataforma de microblogging Twitter[fn:1], tales como
+\cite{events, real}. La mayoría de estos se dedican principalmente a:
+identificar eventos en base al contenido textual de los recursos, o a
+seleccionar contenido relevante del conjunto de recursos asociados a
+un evento.\\
+
+En \cite{events}, los autores comparan distintos algoritmos para
+resumir eventos deportivos identificando los sub-eventos producidos,
+todo en base a Twitter. Sin embargo, al utilizar el contenido en
+texto de los /tweets/, estas técnicas no permiten de forma directa
+generalizar el caso a contenido multimedia, ya que el resumen generado
+es sólo texto. Sin embargo, en \cite{concerts}, los autores
+generalizan el tipo de recurso al no suponer una estructura
+predefinida en ellos, sino que juntan todos sus /features/ y validan
+la relevancia de los resultados con respecto a qué tan bien calzan los
+términos de búsqueda con los resultados obtenidos, sin considerar la
+información dada por los usuarios o consumidores de este tipo de
+contenido, sino su similaridad con el evento central, sólo fiándose en
+los (meta) datos que los generadores del contenido agregan a sus
+recursos. En \cite{clusterers}, se identifican los eventos a partir de
+un dataset utilizando técnicas de Clustering, basándose en distintos
+atributos, tales como los tags, el título, la fecha, duración (en caso
+de videos), etc. Sin embargo, nuevamente no consideran la información 
+social relativa a estos recursos.\\
+
+Es por lo anterior que surge la oportunidad de considerar además la
+información social de los recursos. Es decir, si una imagen es muy
+comentada o es compartida rápidamente a lo largo de un conjunto de
+usuarios, entonces es posible suponer que esta imagen es más
+relevante que una que no fue tan comentada o compartida. Actualmente
+no existen trabajos en esta dirección específica, dado que lo más
+cercano sólo utiliza los metadatos de los recursos para determinar
+su relevancia, y no la información social que gira en torno a ellos.
 
 * Descripción del Problema
+
+
+
 * Descripción General de la propuesta
+La propuesta de solución consiste en implementar un sistema que, a
+partir de múltiples documentos de la Web sobre un cierto evento del
+mundo físico, construya resúmenes automáticos y despliegue los
+resultados ordenados según importancia. Además, el contenido del
+resumen es cualquier tipo de documento: texto, imagen, vídeo, audio,
+etc.
+
+Para esto, se definirán distintos módulos encargados de ciertas
+funciones para el desarrollo del sistema, tanto para obtener los
+datos, normalizarlos de forma de crear objetos aptos para ser
+resumidos, y para ser presentados en una interfaz.
+
+Se utilizarán dos fuentes de datos para los eventos: Google News y
+Last.fm. El primero es un sitio de noticias generado automáticamente
+que reúne titulares de más de 700 fuentes de noticias de todo el mundo
+sólo escritas en español, y probablemente muchas más fuentes de
+noticias en inglés y otros idiomas[fn:4]. Last.fm es un servicio de
+recomendación de música, que contiene información sobre diversos
+artistas, además de eventos tales como conciertos o lanzamientos de
+álbumes. Se utilizarán como fuentes de eventos de tal forma que una
+noticia y un concierto serán considerados eventos.
+
+Luego de obtenido un evento, se procederá a generar un /dataset/ de
+documentos para ese evento. Para ello, utilizando la información
+asociada al evento (como su título, su descripción y su URL)
+
+En el siguiente diagrama se muestra de manera general el
+comportamiento del sistema. Se utilizarán distintas fuentes de datos
+para obtener los eventos, y a partir de la información asociada a
+estos eventos, se realizará el resumen que identifica los
+sub-tópicos correspondientes, y luego, en base a la información
+social asociada a estos recursos, generar un orden en el cual se
+mostrarán los resultados.
+
+
+[fn:4] http://news.google.com/intl/es_cl/about_google_news.html
+
 * Objetivos
 ** Objetivo General
 ** Objetivos Específicos
