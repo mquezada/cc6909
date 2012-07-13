@@ -17,7 +17,7 @@
 
 ########################### Headers #################################
 
-#+LATEX: \setlength\parskip{5mm}
+
 
 #+LATEX_HEADER: \usepackage[latin1]{inputenc}
 #+LATEX_HEADER: \inputencoding{latin1} 
@@ -64,6 +64,8 @@
 \newpage
 #+END_LaTeX
 
+
+#+LATEX: \setlength\parskip{5mm}
 ########################### Contenido #################################
 
 * Introducción
@@ -148,6 +150,8 @@
 
 \pagebreak
 * Descripción del Problema
+
+  
 
 \pagebreak
 * Descripción General de la propuesta
@@ -266,17 +270,105 @@
    \endgroup
    #+END_LATEX
 
+** Prueba de concepto
+
+   Se obtuvo un dataset de 2.3 millones de tweets a partir de la red
+   social Twitter, utilizando la Streaming API[fn:6]. De estos,
+   aproximadamente 350 mil tweets incluían un enlace a otro sitio web
+   en su mensaje. El siguiente desafío fue obtener las fuentes de esos
+   enlaces, dado que la plataforma de Twitter utiliza un servicio de
+   "acortamiento" de enlaces[fn:7], por lo que el obtener la fuente de
+   tales enlaces fue una tarea que tomó cierto tiempo comparado con el
+   resto del análisis[fn:8].
+
+   En la Figura \ref{fig:dominios} se aprecia la frecuencia de enlaces con
+   respecto a distintos dominios de la red.
+
+   #+ATTR_LaTeX: width=15cm
+   #+CAPTION: Histograma de frecuencia de dominios en dataset de tweets con enlaces
+   #+LABEL: fig:dominios
+   [[./img/dominios.png]]
+   
+   La mayoría de los enlaces corresponden a la misma red social, lo
+   que corresponde principalmente a enlaces a imágenes subidas al
+   servicio de fotos y a actualizaciones de estado (enlaces que apuntan a otro
+   tweet). A continuación siguen YouTube (videos), Facebook (imágenes,
+   páginas, grupos, actualizaciones de estado, etc.), Tumblr
+   (nueva entrada de blog), Twitpic (imágenes), Amazon (enlaces a
+   productos o imágenes), Instagram (imágenes), YFrog (imágenes),
+   Foursquare (check-ins en lugares físicos), Blogger (nueva entrada
+   de blog, comentar un post o referenciar una imagen), etc. Una
+   mención especial al servicio SoundCloud al final de la lista, cuya
+   función es almacenar y compartir /sonidos/.
+
+   Dentro de la mayoría de los sitios asociados a los enlaces, se
+   encuentran servicios de video, imágenes y de contenido multimedia
+   (en el caso de los blogs como Tumblr, Blogspot o Wordpress).
+
+[fn:6] https://dev.twitter.com/docs/streaming-api
+[fn:7] [[http://t.co/]]
+[fn:8] Obtener los 2.3 millones de tweets tomó aproximadamente 22 horas, mientras que resolver las URLs acortadas tomó alrededor de 24 horas, a una tasa de 5 enlaces por segundo.
+
+   En la Figura \ref{fig:crecimiento} se aprecia la tasa de crecimiento de
+   enlaces con respecto al tamaño del dataset obtenido hasta ese
+   momento, mostrando un aumento lineal en la ocurrencia de enlaces a
+   medida que crece el dataset. Según la documentación de la Streaming
+   API, el método utilizado para obtener los tweets obtiene un
+   /muestreo/ de los tweets publicados desde el momento de su
+   invocación, mostrando, en caso de ser válida esa información, que
+   el número de enlaces es proporcional al tamaño del dataset.
+
+   Para el desarrollo del sistema, se utilizará otro servicio ofrecido
+   por Twitter para encontrar tweets, GET SEARCH[fn:9], ya que el
+   Streaming API no permite obtener tweets de momentos anteriores al
+   cual es llamada. Otra ventaja de usar el otro servicio, es que con
+   él es posible filtrar y obtener los enlaces no acortados por
+   Twitter, lo que acelera el proceso de obtención del dataset. Para
+   más detalles, véase la sección Metodología de Trabajo.
+
+   #+ATTR_LaTeX: width=15cm
+   #+CAPTION: Gráfico log-log del crecimiento de la ocurrencia de enlaces con respecto al tamaño del dataset. Se aprecia un aumento lineal en la cantidad de enlaces con respecto al tamaño del dataset.
+   #+LABEL: fig:crecimiento
+   [[./img/links.png]]
+
+[fn:9] https://dev.twitter.com/docs/api/1/get/search
+
 \pagebreak
 * Objetivos
 ** Objetivo General
+   El objetivo principal de este trabajo es lograr identificar
+   contenido relevante a partir de un conjunto de documentos obtenidos
+   de una o varias fuentes de datos, por medio del sistema que se
+   propone implementar.
+
 ** Objetivos Específicos
+   - Comprobar la hipótesis de que es posible adaptar estrategias de
+     construcción de resúmenes automáticos sobre fuentes de datos
+     heterogéneas y al mismo tiempo determinar contenido multimedia
+     relevante a partir de los resúmenes producidos.
+   - Determinar una buena métrica para comparar la relevancia de
+     distintos documentos a partir de la información obtenida de redes
+     sociales online.
+   - Comprobar empíricamente los resultados del sistema por medio de
+     un grupo de pruebas.
 
 \pagebreak
 * Metodología de trabajo
+  
+** Etapas
+*** Obtención del Dataset
+
+*** Construcción de Resúmenes
+
+*** Ranking y presentación de resultados
+
+** Herramientas a utilizar 
+  
 
 \pagebreak
 * Plan de trabajo
 
+** Desafíos Encontrados
 
 
 \pagebreak
