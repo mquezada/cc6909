@@ -1,5 +1,5 @@
 # PAGINA DE TITULO
-#+BEGIN_LaTeX:
+#+BEGIN_LaTeX
 \begin{titlepage}
 \begin{figure}[t]
 \includegraphics[scale=0.35]{./img/FCFM.jpg}
@@ -47,10 +47,8 @@
 \end{tabular}
 \end{flushright}
 \end{titlepage}
-#+END_LaTeX
 
-# HEADER EN CADA PAGINA
-#+BEGIN_LaTeX
+
 \fancypagestyle{encabezado}{
 \pagestyle{fancy}
 \fancyhf{}
@@ -58,6 +56,7 @@
 \fancyhead[LO,RE]{CC6908 - Introducción al Trabajo de Título}
 }
 \pagestyle{encabezado}
+
 #+END_LaTeX
 
 
