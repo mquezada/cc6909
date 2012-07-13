@@ -383,25 +383,136 @@
      un grupo de pruebas.
 
 \pagebreak
-* Metodología de trabajo
+* Metodología y Plan de trabajo
   
 ** Etapas
 *** Obtención del Dataset
+    Para obtener los eventos se utilizarán los servicios de Google
+    News y Last.fm para obtener noticias y conciertos,
+    respectivamente.
+
+    Para ambos tipos de eventos se obtendrán periódicamente datos de
+    éstos, y luego en Twitter se enriquecerá el dataset con tweets y
+    documentos que mencionen al evento correspondiente. En el caso de
+    las noticias, Google News no sólo provee la información básica de
+    una noticia y una URL de alguna fuente, sino también ofrece
+    noticias relacionadas (que el servicio denomina un 'cluster') de
+    distintas fuentes, lo cual facilitará la obtención de datos tanto
+    del mismo servicio como de Twitter. Para los conciertos, por otra parte,
+    el servicio de Last.fm no ofrece direcciones Web con más
+    información (sino sólo datos como el título, la fecha, la ubicación y el
+    grupo musical, entre otros datos de menor importancia).
+
+    Ambos servicios mantienen una API (Application Programming
+    Interface) la cual permite obtener datos en un formato de
+    intercambio ligero como es el caso de JSON (JavaScript
+    Object Notation). Los objetos obtenidos están garantizados de
+    entregar siempre ciertos campos con datos, y para el contexto de
+    este trabajo, los campos necesarios (y en común para los dos tipos
+    de objetos: noticias y conciertos) son
+
+    - =title=, corresponde al título de la noticia o del
+      concierto;
+    - =content= o =description=, corresponde a una breve descripción
+      del contenido de la noticia o del concierto;
+    - =publishedDate= o =startDate=, la fecha de la publicación de la
+      noticia y del comienzo del concierto, respectivamente y
+    - =location=, =venue/location=, la ubicación del evento.
+    
+    Además, hay campos propios de cada tipo de evento que proveen más
+    información:
+    
+    - Noticias:
+      - =relatedStories=, una lista con las noticias relacionadas a la
+        noticia principal, con URL, el publicador y el título de cada
+        una de ellas;
+      - =publisher=, la fuente que publica la noticia;
+      - =clusterUrl=, la URL del "cluster" de la noticia: despliega
+        una lista de todas las noticias relacionadas (las cuales
+        pueden ser muchas). Sin embargo, la página del cluster no está
+        en un formato de consumo automático, sino que es una página
+        para ser vista por humanos.
+
+    - Conciertos:
+      - =artists=, la lista de los artistas que participan en el
+        concierto;
+      - =attendance=, la cantidad de personas que explícitamente
+        marcaron la opción de ir a ese concierto en Last.fm;
+      - =tag=, una etiqueta generada por Last.fm que se sugiere
+        utilizar al momento de generar contenido sobre el concierto,
+        por ejemplo, al subir una foto a Flickr.
+
+    Por otra parte, según la documentación de la API de búsqueda de
+    Twitter, ésta permite obtener tweets de hasta 7 días de anticipación al
+    momento de la búsqueda, y hasta 1500 tweets por búsqueda (100
+    tweets en 15 páginas en un total de 15 búsquedas o llamadas a la
+    API). Existe una limitación de tiempo, es decir, no es posible
+    realizar más de $n$ llamadas a la API dentro de una hora. Este
+    número no es publicado por Twitter, ya que según ellos, esto evita
+    que se abuse del servicio[fn:10]. Según la investigación
+    realizada, es posible realizar una llamada a la API por segundo,
+    dando la capacidad de 4 búsquedas completas, o 6000 tweets por
+    minuto en el mejor caso.
+
+    En el caso de la Streaming API, la cual es recomendada por Twitter
+    para realizar múltiples búsquedas, la ventaja es que no tiene un
+    límite de peticiones (ya que entrega un /stream/ de tweets,
+    correspondientes a una muestra de los tweets, donde no se
+    especifica cómo se seleccionan los resultados), sin embargo,
+    según la prueba de concepto realizada, la cantidad de tweets es
+    bastante menor en el mejor caso, además que no entrega tweets de
+    días anteriores al momento en que se llama a la API. 
+
+    Con esto en consideración, sin embargo, no existen tweets
+    generados antes de una noticia que correspondan a ésta, por lo que
+    utilizar la Streaming API sería ventajoso en el caso de las
+    noticias; no tanto en el caso de los conciertos, pues si bien la
+    cantidad de tweets mencionándolos es mayor luego de ocurrido, la
+    hipótesis es que deben pasar varios días antes de disminuir
+    drásticamente los tweets que los mencionan (por ejemplo, porque
+    subir vídeos o fotos a la red aún es un proceso lento y tedioso,
+    especialmente con los vídeos). Por lo tanto, sólo se utilizará la
+    Search API.
+
+    La metodología propuesta para obtener los eventos es la siguiente:
+    - Una vez a la semana se obtendrán las noticias más importantes
+      del día[fn:11], y luego se buscará en Twitter los tweets que
+      mencionen a esas noticias.
+    - Una sola vez se obtendrán los conciertos de distintos lugares
+      del mundo: Estados Unidos, Brasil, Alemania y Chile.
+    - Cada día se harán búsquedas de tweets de las noticias
+      almacenadas.
+    - Dentro de una ventana de tiempo de 7 días, se buscarán los
+      tweets que mencionen a cada concierto.
+    - De cada documento que sea mencionado en los tweets (de la forma
+      de URLs), se obtendrá su contenido en texto y se almacenará.
+
+[fn:10] https://dev.twitter.com/docs/rate-limiting#search
+[fn:11] Por ejemplo, esta URL retorna las noticias más relevantes en la edición en inglés de Google News: https://ajax.googleapis.com/ajax/services/search/news?v=1.0&topic=h
 
 *** Construcción de Resúmenes
+    Una vez obtenido algún evento con sus tweets y documentos
+    asociados, se utilizará un algoritmo de construcción de resúmenes
+    automáticos sobre el evento normalizado. La normalización del
+    evento consiste en construir un vector de documentos y palabras, y
+    se utilizará el algoritmo \textsc{SummHMM} definido en
+    \cite{events}.
+
+    Con el resumen construido, cada cluster correspondiente a un
+    sub-tópico de éste corresponderá a su vez a un documento del
+    dataset inicial, el cual puede también abarcar contenido
+    multimedia el cual será contrastado con los demás clusters del
+    resumen para generar un orden.
 
 *** Ranking y presentación de resultados
+    
 
-** Herramientas a utilizar 
-  
+** Herramientas a utilizar
 
-\pagebreak
-* Plan de trabajo
-
-** Desafíos Encontrados
-
+** Desafíos previstos  
 
 \pagebreak
+
 ########################### Referencias #################################
 
 #+INCLUDE: "./footer.org"
