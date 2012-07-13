@@ -98,7 +98,7 @@
 [fn:2] http://last.fm/
 [fn:3] http://twitter.com/
 
-** Motivación
+** TODO Motivación
 
    Hoy en día la cantidad de datos producidos en la Web y, en particular,
    en las redes sociales online, son de tal magnitud que se vuelve
@@ -490,7 +490,7 @@
 [fn:10] https://dev.twitter.com/docs/rate-limiting#search
 [fn:11] Por ejemplo, esta URL retorna las noticias más relevantes en la edición en inglés de Google News: https://ajax.googleapis.com/ajax/services/search/news?v=1.0&topic=h
 
-*** Construcción de Resúmenes
+*** TODO Construcción de Resúmenes
     Una vez obtenido algún evento con sus tweets y documentos
     asociados, se utilizará un algoritmo de construcción de resúmenes
     automáticos sobre el evento normalizado. La normalización del
@@ -504,12 +504,80 @@
     multimedia el cual será contrastado con los demás clusters del
     resumen para generar un orden.
 
-*** Ranking y presentación de resultados
+*** TODO Ranking y presentación de resultados    
     
 
 ** Herramientas a utilizar
+   Para el desarrollo del sistema se utilizarán distintas herramientas
+   tanto para obtener datos de las fuentes determinadas anteriormente
+   como para generar los resúmenes, crear el ranking y presentar los
+   resultados.
 
-** Desafíos previstos  
+   Se utilizará el lenguaje =Python= [fn:12], dada la experiencia
+   previa, la flexibilidad del lenguaje para realizar prototipos
+   rápidos y la gran cantidad de librerías existentes para manipular
+   datos y conectarse a distintos servicios. En particular:
+
+   - =Twython= [fn:13], una librería para realizar búsquedas y acceder
+     fácilmente a la información que provee Twitter. Con esta librería
+     se realizaron algunas búsquedas para probar la factibilidad de la
+     metodología de obtención de datos descrita en esta sección.
+   - Para acceder a distintos sitios web para obtener documentos, la
+     librería =mechanize= [fn:14] emula un Web Browser en =python=, y
+     para analizar y procesar las páginas HTML de cada sitio,
+     =BeautifulSoup= [fn:15] cumple tal objetivo. Para almacenar y
+     empaquetar datos, =simplejson= [fn:16] permite el manejo de JSON
+     de manera flexible y rápida.
+
+   Para el almacenamiento de los datos, se consideró utilizar una base
+   de datos relacional como =MySQL=, sin embargo, en pos de la
+   flexibilidad, para no crear y modificar un modelo de datos
+   relacional cuando haya que realizar cambios a éste, se decidió
+   utilizar un sistema de datos /schemaless/ (sin esquema, o también
+   conocido como /NoSQL/). Se han considerado =MongoDB= [fn:17] y
+   =Redis= [fn:18] para este propósito, con las respectivas librerías
+   en =python= que se encargan de crear una interfaz entre el lenguaje
+   de programación y el software de base de datos.
+
+   La librería de minería de datos =Orange= [fn:19] ofrece varias
+   funcionalidades como Clasificación, Clustering, Reglas de
+   Asociación, entre otras. No se ha visto en detalle las capacidades
+   y utilidad de esta herramienta, pero queda en consideración su uso
+   en el futuro.
+
+   Para la presentación de los datos, se tiene en consideración
+   utilizar un framework web para crear una aplicación web que
+   despliegue los resultados obtenidos. Entre las posibilidades,
+   =Django= [fn:20] y =Flask= [fn:21] son buenas alternativas.
+
+   Para versionar y mantener los cambios del código del sistema a
+   implementar, se utilizará el sistema de control de versiones =Git=
+   [fn:22] y el servicio GitHub[fn:23] para almacenarlo
+   remotamente. Tanto el trabajo adelantado hasta la fecha y este
+   mismo informe están en este servicio[fn:24]. 
+
+   Para el desarrollo de este informe y los siguientes, se utilizó y
+   utilizará =Emacs= [fn:25] y su extensión =org-mode= [fn:26] que
+   permite escribir documentos rápidamente y generar el archivo \LaTeX
+   (y correspondientemente, PDF) equivalente.
+
+[fn:12] http://www.python.org/
+[fn:13] https://github.com/ryanmcgrath/twython
+[fn:14] http://wwwsearch.sourceforge.net/mechanize/
+[fn:15] http://www.crummy.com/software/BeautifulSoup/
+[fn:16] https://github.com/simplejson/simplejson
+[fn:17] http://www.mongodb.org/
+[fn:18] http://redis.io/
+[fn:19] http://orange.biolab.si/
+[fn:20] https://www.djangoproject.com/
+[fn:21] http://flask.pocoo.org/
+[fn:22] http://git-scm.com/
+[fn:23] http://www.github.com/
+[fn:24] https://github.com/mquezadav/cc6909
+[fn:25] http://www.gnu.org/software/emacs/
+[fn:26] http://orgmode.org/
+
+** TODO Desafíos previstos 
 
 \pagebreak
 
