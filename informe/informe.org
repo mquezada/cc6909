@@ -150,11 +150,41 @@
 
 \pagebreak
 * Descripción del Problema
+  Dada la gran cantidad de documentos y datos disponibles en la Web,
+  se hace necesario contar con herramientas que permitan distinguir
+  contenido relevante, útil y veraz para los consumidores de este
+  contenido.
 
-  
+  El problema de construir resúmenes automáticos a partir de eventos
+  determinados es un problema ya abordado con anterioridad, sin
+  embargo, los trabajos existentes \cite{events, clusterers, real},
+  por lo general sólo se enfocan en desplegar resúmenes de texto ya
+  sea de documentos como de tweets. Sería interesante abstraerse del
+  contenido y considerar cualquier tipo de recurso como parte del
+  resumen, ya sean imágenes, vídeos o texto. Por otra parte, los
+  trabajos que consideran el contenido multimedia de los documentos,
+  como \cite{concerts}, no contrastan la relevancia y la utilidad de
+  los resultados con las mismas fuentes sociales: por ejemplo, puede
+  haber un documento relevante pero que no sea de la atención de los
+  usuarios, por lo cual no sería de su interés.
+
+  Otro aspecto importante es la faceta temporal de los eventos.  Es
+  decir, el problema no se trata de encontrar contenido relevante
+  sobre un tópico en particular, sino sobre un evento que tiene una
+  dimensión temporal (por ejemplo, una marcha en particular dentro del
+  contexto de las movilizaciones estudiantiles en Chile el 2011). Es
+  necesario identificar además la importancia de la dimensión temporal
+  a la hora de resumir y seleccionar contenido relevante en torno a
+  eventos.
+
+  Para abordar este problema, es necesario no sólo abstraerse del tipo
+  de contenido de cada documento, sino también comprobar la veracidad
+  y utilidad mediante los mismos intereses de los usuarios, usualmente
+  encontrados en las redes sociales online como menciones o
+  comentarios respecto de los mismos.
 
 \pagebreak
-* Descripción General de la propuesta
+* Descripción general de la propuesta
   La propuesta de solución consiste en implementar un sistema que, a
   partir de múltiples documentos de la Web sobre un cierto evento del
   mundo físico, construya resúmenes automáticos y despliegue los
