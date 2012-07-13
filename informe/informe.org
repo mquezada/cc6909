@@ -14,6 +14,7 @@
 #+LINK_UP:   
 #+LINK_HOME: 
 #+XSLT: 
+#+TODO: TODO INPROGRESS WAITING DONE
 
 ########################### Headers #################################
 
@@ -98,7 +99,7 @@
 [fn:2] http://last.fm/
 [fn:3] http://twitter.com/
 
-** TODO Motivación
+** INPROGRESS Motivación
 
    Hoy en día la cantidad de datos producidos en la Web y, en particular,
    en las redes sociales online, son de tal magnitud que se vuelve
@@ -111,7 +112,7 @@
 
    
 
-** Trabajo relacionado
+** INPROGRESS Trabajo relacionado
    Existen varios trabajos en el área de asociar eventos del mundo real
    con la información generada en Internet que utilizan como prueba de
    concepto la plataforma de microblogging Twitter[fn:1], tales como
@@ -557,8 +558,8 @@
    mismo informe están en este servicio[fn:24]. 
 
    Para el desarrollo de este informe y los siguientes, se utilizó y
-   utilizará =Emacs= [fn:25] y su extensión =org-mode= [fn:26] que
-   permite escribir documentos rápidamente y generar el archivo \LaTeX
+   utilizará =GNU Emacs= [fn:25] y su extensión =org-mode= [fn:26] que
+   permite escribir documentos rápidamente y generar el archivo $\LaTeX$
    (y correspondientemente, PDF) equivalente.
 
 [fn:12] http://www.python.org/
