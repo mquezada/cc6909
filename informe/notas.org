@@ -13,7 +13,7 @@
 #+LINK_UP:   
 #+LINK_HOME: 
 
-#+STARTUP: content
+#+STARTUP: overview
 #+TODO: TODO | DONE IN-PROGRESS
 
 * DONE Event Summarization Using Tweets                        :SUMM:TWITTER:
@@ -75,13 +75,35 @@
    - Wang, P.; Wang, H.; Liu, M.; and Wang, W. 2010. An algorithmic
      approach to event summarization. In /SIGMOD/.
 
-* TODO Learning similarity metrics for event identification in social media
+* IN-PROGRESS Learning similarity metrics for event identification in social media :FLICKR:EVENTS:
   :PROPERTIES:
   :AUTHORS:  Becker, H.; Naaman, M.; and Gravano, L.
   :YEAR:     2010
   :LINK:     
   :END:
 ** Abstract
+   Social media sites (e.g. Flickr, YouTube, and Facebook) are a
+   popular distribution outlet for users looking to share their
+   experiences and interests on the Web. These sites host substantial
+   amounts of user contributed materials (e.g. photographs, videos,
+   and textual content) for a wide variety of real-world events of
+   different type and scale. By automatically identifying these events
+   and their associated user-contributed social media documents, which
+   is the focus of this paper, we can enable event browsing and search
+   in state-of-the-art search engines. To address this problem, we
+   exploit the rich "context" associated with social media content,
+   including user-provided annotations (e.g. title, tags) and
+   automatically generated information (e.g., content creation
+   time). Using this rich context, which includes both textual and
+   non-textual features, we can define appropriate document similarity
+   metrics to enable online clustering of media to events. As a key
+   contribution of this paper, we explore a variety of techniques for
+   learning multi-feature similarity metrics for social media
+   documents in a principled manner. We evaluate our techniques on
+   large-scale, real-world data sets of event images from Flickr. Our
+   evaluation results suggest that our approach identifies events, and
+   their associated social media documents, more effectively than the
+   state-of-the-art strategies on which we build.
 ** Notes
 ** References
   
@@ -134,7 +156,6 @@
 ** Abstract
 ** Notes
 ** References
-
 * DONE Summarizing microblogs automatically.                   :SUMM:TWITTER:
   :PROPERTIES:
   :AUTHORS:  Sharifi, B.; Hutton, M.-A.; and Kalita, J.
