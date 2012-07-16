@@ -14,8 +14,9 @@
 #+LINK_HOME: 
 
 #+STARTUP: content
+#+TODO: TODO | DONE IN-PROGRESS
 
-* DONE Event Summarization Using Tweets
+* DONE Event Summarization Using Tweets                        :SUMM:TWITTER:
   :PROPERTIES:
   :AUTHORS:  Deepayan Chakrabarti, Kunal Punera  
   :YEAR:     2011
@@ -134,20 +135,131 @@
 ** Notes
 ** References
 
-* TODO Summarizing microblogs automatically.
+* DONE Summarizing microblogs automatically.                   :SUMM:TWITTER:
   :PROPERTIES:
   :AUTHORS:  Sharifi, B.; Hutton, M.-A.; and Kalita, J.
   :YEAR:     2010
   :LINK:     http://aclweb.org/anthology-new/N/N10/N10-1100.pdf
-  :FILE:     file:./references/N10-1100.pdf
+  :FILE:     file:./refs/N10-1100.pdf
   :END:
 ** Abstract
-   
+   In this paper, we focus on recent Web trend called microblogging,
+   and in particular a site called Twitter. The content of such a site
+   is an extraordinarily large number of small textual messages,
+   posted by millions of users, at random or in response to perceived
+   events or situations. We have developed an algorithm that takes a
+   trending phrase or any phrase specified by a user, collects a large
+   number of posts containing the phrase, and provides an
+   automatically created summary of the posts related to the term. We
+   present examples of summaries we produce along with initial evaluation.
+** Notes
+   - [[http://www.whatthetrend.com][WhatTheTrend]] (2010) permite a los usuarios "explicar" por qué un
+     trending topic lo es: sufre de spam y ruido.
+   - *Resumenes automáticos* usualmente son generados para
+     - proveer un "gist" de documento(s) para humanos, o
+     - como input para sistemas de ML, ej. categorización.
+   - Usuarios /no en lista blanca/ de Twitter están limitados a 150
+     requests/hora. El /resumidor/ mostrado produce resúmenes con ~100
+     tweets.
+   - Algoritmo: Phrase Reinforcement (PR)
+     + Idea: encontrar la frase más común dentro del tópico (trending topic).
+     + Los usuarios usan las mismas palabras o hacen RT de ellas.
+     + Requiere una "starting phrase" (puede o no ser el trending
+       topic)
+       - Busca los Tweets que contengan las palabras de la frase.
+       - Filtra el spam o datos /irrelevantes/ (como los
+         links!!). Utiliza un clasificador Naïve Bayes entrenado con
+         datos de Twitter para clasificar spam. Además quitan
+         contenido que no esté en inglés y los tweets duplicados.
+       - Con el conjunto de tweets /relevantes/, aisla la oración más
+         larga de cada post que contiene la frase del tópico. Estas
+         oraciones son el input de PR.
+     + El algoritmo construye un grafo que represente las frases más
+       comunes que ocurren antes y después de la FT (frase tópico).
+     + La "raíz" es FT, y adyacente a ésta están las frases
+       anteriores.
+     + Cada nodo contiene una palabra y un contador de frecuencia, por
+       lo que recorrer el grafo desde la "raíz" genera las frases del
+       input.
+     + A cada palabra se le asigna un peso (stopwords=0), dependiendo
+       de la distancia a la raíz.
+     + Se repite el algoritmo usando la frase obtenida en la fase
+       anterior, dando el resumen.
+   - Evaluación:
+     - De los ~1500 tweets, ~100 resultantes del filtro fueron pasados
+       a humanos que generaron resúmenes.
+     - Dos métricas usadas en /Document Understanding Conference/
+       (DUC):
+       - /Content/: escala de 1 a 5 de overlap de contenido entre los
+         resúmenes manual y automático.
+         - Resultados: 3.72; 4.25 entre sólo resúmenes manuales.
+       - /ROUGE-1/: mide los unigramas coocurrentes entre los
+         resúmenes.
+         - Resultados: p=0.31, r=0.30, F1-M=0.30; mismo p,r, F1=0.34
+           entre resúmenes manuales.
+
+** References
+   - Hu, M.; and Sun, A.; and Lim, E.P. 2007. Comments-oriented blog
+     summarization by sentence extraction. ACM CIKM.
+   - Lin, C.Y. 2004. ROUGE: a Package for Automatic Evaluation of
+     Summaries. Proceedings of Workshop on Text Summarization.
+   - Lin, C.Y.; and Hovy, E. 2003. Automatic Evaluation of summaries
+     using n-gram co-occurrence statistics. NAACL.
+   - Zhou, L.; and Hovy, E. On the summarization of dynamically
+     introduced information: Online discussions and blogs. AAAI-2006.
+   - Pear Analytics. Twitter Study. 
+     http://www.scribd.com/doc/18548460/Pear-Analytics-Twitter-Study-August-2009
+* TODO Comments-oriented blog summarization by sentence extraction.
+  :PROPERTIES:
+  :AUTHORS:  Hu, M.; and Sun, A.; and Lim, E.P.
+  :YEAR:     2007
+  :LINK:
+  :END:
+** Abstract
 ** Notes
 ** References
 
+* TODO ROUGE: a Package for Automatic Evaluation of Summaries. :SUMM:EVALUATION:
+  :PROPERTIES:
+  :AUTHORS:  Lin, C.Y.
+  :YEAR:     2004
+  :LINK:
+  :END:
+** Abstract
+** Notes
+** References
 
-* TODO TEMPLATE 
+* TODO Automatic Evaluation of summaries using n-gram co-occurrence statistics. :SUMM:EVALUATION:
+  :PROPERTIES:
+  :AUTHORS:  Lin, C.Y.; and Hovy, E.
+  :YEAR:     2003
+  :LINK:
+  :END:
+** Abstract
+** Notes
+** References
+
+* TODO On the summarization of dynamically introduced information: Online discussions and blogs.
+  :PROPERTIES:
+  :AUTHORS:  Zhou, L.; and Hovy, E.
+  :YEAR:     2006
+  :LINK:
+  :END:
+** Abstract
+** Notes
+** References
+
+* TODO Pear Analytics. Twitter Study.                               :TWITTER:
+  :PROPERTIES:
+  :AUTHORS:
+  :YEAR:
+  :LINK:     http://www.scribd.com/doc/18548460/Pear-Analytics-Twitter-Study-August-2009
+  :END:
+** Abstract
+** Notes
+** References
+
+* TODO 
   :PROPERTIES:
   :AUTHORS:
   :YEAR:
