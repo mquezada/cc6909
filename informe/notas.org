@@ -137,8 +137,29 @@
        de similitud.
      - *Single-pass incremental clustering* es efectivo para detección
        de eventos en noticias textuales (3,39)
+   - Medidas para determinar threshold:
+     - Normalized Mutual Information NMI (29,34)
+     - B-Cubed (5)
+     - Maximizan la homogeneidad de los documentos dentro de cada
+       cluster,y minimizan la cantidad de clusters.
 ** References
-  
+   1. E. Agichtein, C. Castillo, D. Donato, A. Gionis, and
+      G. Mishne. Finding high-quality content in social media. WSDM
+      '08.
+   2. J. Allan, R. Papka, and V. Lavrenko. On-line new event detection
+      and tracking. SIGIR '98.
+   3. H. Becker, M. Naaman, and L. Gravano. Event identification in
+      social media. WebDB '09.
+   4. P. Berkhin. Survey of clustering data mining
+      techniques. Technical report, Accrue Software, San Jose, CA,
+      2002.
+   5. P. Heymann, G. Koutrika, and H. Garcia-Molina. Can social
+      bookmarking improve web search? WSDM '08.
+   6. L. Kennedy and M. Naaman. Less talk, more rock: Automated
+      organization of community-contributed collections of concert
+      videos. WWW '09.
+   7. Y. Yang, T. Pierce, and J. Carbonell. A study on retrospective
+      and on-line event detection. SIGIR '98.
 * TODO A survey on automatic text summarization.
   :PROPERTIES:
   :AUTHORS:  Das, D.. and Martins, A.
@@ -312,6 +333,69 @@
 ** Notes
 ** References
 
+* TODO Finding high-quality content in social media
+  :PROPERTIES:
+  :AUTHORS:  E. Agichtein, C. Castillo, D. Donato, A. Gionis, and G. Mishne.
+  :YEAR:     2008
+  :LINK:
+  :END:
+** Abstract
+** Notes
+** References
+* TODO On-line new event detection and tracking.
+  :PROPERTIES:
+  :AUTHORS:  J. Allan, R. Papka, and V. Lavrenko.
+  :YEAR:     1998
+  :LINK:
+  :END:
+** Abstract
+** Notes
+** References
+* TODO Event identification in social media.
+  :PROPERTIES:
+  :AUTHORS:  H. Becker, M. Naaman, and L. Gravano.
+  :YEAR:     2009
+  :LINK:
+  :END:
+** Abstract
+** Notes
+** References
+* TODO Survey of clustering data mining techniques.
+  :PROPERTIES:
+  :AUTHORS:  P. Berkhin
+  :YEAR:     2002
+  :LINK:
+  :END:
+** Abstract
+** Notes
+** References
+* TODO Can social bookmarking improve web search?
+  :PROPERTIES:
+  :AUTHORS:  P. Heymann, G. Koutrika, and H. Garcia-Molina.
+  :YEAR:     2008
+  :LINK:
+  :END:
+** Abstract
+** Notes
+** References
+* TODO Less talk, more rock: Automated organization of community-contributed collections of concert videos.
+  :PROPERTIES:
+  :AUTHORS:  L. Kennedy and M. Naaman.
+  :YEAR:     2009
+  :LINK:
+  :END:
+** Abstract
+** Notes
+** References
+* TODO A study on retrospective and on-line event detection.
+  :PROPERTIES:
+  :AUTHORS:  Y. Yang, T. Pierce, and J. Carbonell.
+  :YEAR:     1998
+  :LINK:
+  :END:
+** Abstract
+** Notes
+** References
 * TODO 
   :PROPERTIES:
   :AUTHORS:
