@@ -114,6 +114,29 @@
    - Objetivo: identificar eventos y los documentos respectivos en
      medios sociales. Definir métricas de similitud entre
      representaciones de documentos.
+   - Problema: a partir de un conjunto de documentos asociados a
+     eventos desconocidos, hacer clusters donde cada uno este asociado
+     a un evento.
+   - Características de contexto: fecha, tags, ubicación,
+     duración. Usa cada feature individualmente para crear métricas de
+     similitud entre documentos. Por el contrario /all-text/ (28) es
+     comúnmente usado, juntando todos los features.
+   - Textual features: tf-idf, stemming y eliminación de stopwords
+     solo cuando corresponde (por ej. no en los tags).
+     - Fecha: en minutos desde el epoch.
+     - Ubicacion: distancia de Haversine.
+   - Estrategias:
+     - $k$-means ni EM sirven, ya que no se conoce a priori el numero
+       de clusters.
+     - Particionamiento de grafos (23) tampoco, "no capturan la
+       distribución sesgada de eventos, dada la tendencia a hacer
+       balanceo de las particiones".
+     - Se usan técnicas de umbral (threshold), ya que pueden ser
+       ajustadas con training sets. Algoritmos de clustering
+       jerárquicos no sirve, pues no escalan debido al uso de matrices
+       de similitud.
+     - *Single-pass incremental clustering* es efectivo para detección
+       de eventos en noticias textuales (3,39)
 ** References
   
 * TODO A survey on automatic text summarization.
