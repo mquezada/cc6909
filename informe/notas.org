@@ -105,6 +105,15 @@
    their associated social media documents, more effectively than the
    state-of-the-art strategies on which we build.
 ** Notes
+   - Pag 2: diferencias entre identificar eventos en social media que
+     en medios "tradicionales": los segundos implican técnicas
+     conocidas, NLP, etc. 
+   - Características de los datos: ruidosos, breves, faltas de
+     ortografía / gramática, etc. Pero ofrecen información contextual:
+     tags, categorías, etc.
+   - Objetivo: identificar eventos y los documentos respectivos en
+     medios sociales. Definir métricas de similitud entre
+     representaciones de documentos.
 ** References
   
 * TODO A survey on automatic text summarization.
