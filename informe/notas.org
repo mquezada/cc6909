@@ -75,7 +75,7 @@
    - Wang, P.; Wang, H.; Liu, M.; and Wang, W. 2010. An algorithmic
      approach to event summarization. In /SIGMOD/.
 
- * IN-PROGRESS Learning similarity metrics for event identification in social media :FLICKR:EVENTS:
+* IN-PROGRESS Learning similarity metrics for event identification in social media  :FLICKR:EVENTS:
   :PROPERTIES:
   :AUTHORS:  Becker, H.; Naaman, M.; and Gravano, L.
   :YEAR:     2010
