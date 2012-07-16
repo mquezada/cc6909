@@ -1,0 +1,158 @@
+#+TITLE:     Apuntes de paperss
+#+AUTHOR:    Mauricio
+#+EMAIL:     mquezada@gargola
+#+DATE:      2012-07-15 Sun
+#+DESCRIPTION: 
+#+KEYWORDS: 
+#+LANGUAGE:  en
+#+OPTIONS:   H:3 num:t toc:nil \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+OPTIONS:   TeX:t LaTeX:nil skip:nil d:nil todo:t pri:nil tags:not-in-toc
+#+INFOJS_OPT: view:nil toc:nil ltoc:t mouse:underline buttons:0 path:http://orgmode.org/org-info.js
+#+EXPORT_SELECT_TAGS: export
+#+EXPORT_EXCLUDE_TAGS: noexport
+#+LINK_UP:   
+#+LINK_HOME: 
+
+#+STARTUP: content
+
+* DONE Event Summarization Using Tweets
+  :PROPERTIES:
+  :AUTHORS:  Deepayan Chakrabarti, Kunal Punera  
+  :YEAR:     2011
+  :END:
+** Abstract
+   Twitter has become exceedingly popular, with hundreds of millions
+   of tweets being posted every day on a wide variety of topics. This
+   has helped make real-time search applications possible with leading
+   search engines routinely displaying relevant tweets in response to
+   user queries. Recent research has shown that a considerable
+   fraction of these tweets are about "events", and the detection of
+   novel events in the tweet-stream has attracted a lot of research
+   interest. However, very little research has focused on properly
+   displaying this real-time information about events. For instance,
+   the leading search engines simply display all tweets matching the
+   queries in reverse chronological order. In this paper we argue that
+   for some highly structured and recurring events, such as sports, it
+   is better to use more sophisticated techniques to summarize the
+   relevant tweets. We formalize the problem of summarizing
+   event-tweets and give a solution based on learning the underlying
+   hidden state representation of the event via Hidden Markov
+   Models. In addition, through extensive experiments on real-world
+   data we show that our model significantly outperforms some
+   intuitive and competitive baselines.
+   
+** Notes
+   Hidden Markov Models sobre eventos deportivos. 2 algoritmos 'base':
+   - SummAllText: tf-idf sobre el corpus, y tomar los $n$ mejores
+     segun coseno
+   - SummTimeInt: tomando segmentos de tiempo fijos y aplicando el
+     algoritmo anterior sobre los tweets dentro de cada segmento (con
+     un threshold de actividad)
+   - SummHMM: usando HMM modificado para aprender los parámetros
+     ocultos (básicamente la distribución de segmentos de tiempo para
+     mejorar el algoritmo anterior).
+
+   La ventaja es que permite resumir eventos estructurados sobre
+   tweets (cortos y ruidosos). La desventaja es la misma estructura de
+   los eventos, debe aprender en base al tipo de evento que se está
+   queriendo resumir.
+   
+** References
+   - Becker, H.; Naaman, M.; and Gravano, L. 2010. Learning similarity
+     metrics for event identification in social media. In /WSDM/.
+   - Das, D.. and Martins, A. 2007. A survey on automatic text
+     summarization.
+   - Gong, Y., and Liu, X. 2001. Generic text summarization using
+     relevance measure and latent semantic analysis
+   - Luo, G.; Tang, C.; and Yu, P. 2007. Resource-adaptive real-time
+     new event detection. In /SIGMOD/.
+   - Sakaki, T.; Okazaki, M.; and Matsuo, Y. 2010. Earthquake shakes
+     twitter users: Real-time event detection by social sensors. In
+     /WWW/.
+   - Sharifi, B.; Hutton, M.-A.; and Kalita, J. 2010. Summarizing
+     microblogs automatically. In /HLT/.
+   - Wang, P.; Wang, H.; Liu, M.; and Wang, W. 2010. An algorithmic
+     approach to event summarization. In /SIGMOD/.
+
+* TODO Learning similarity metrics for event identification in social media
+  :PROPERTIES:
+  :AUTHORS:  Becker, H.; Naaman, M.; and Gravano, L.
+  :YEAR:     2010
+  :LINK:     
+  :END:
+** Abstract
+** Notes
+** References
+  
+* TODO A survey on automatic text summarization.
+  :PROPERTIES:
+  :AUTHORS:  Das, D.. and Martins, A.
+  :YEAR:     2007
+  :LINK:
+  :END:
+** Abstract
+** Notes
+** References
+
+* TODO Generic text summarization using relevance measure and latent semantic analysis
+  :PROPERTIES:
+  :AUTHORS:  Gong, Y., and Liu, X.
+  :YEAR:     2001
+  :LINK:
+  :END:
+** Abstract
+** Notes
+** References
+
+* TODO Resource-adaptive real-time new event detection.
+  :PROPERTIES:
+  :AUTHORS:  Luo, G.; Tang, C.; and Yu, P.
+  :YEAR:     2007
+  :LINK:
+  :END:
+** Abstract
+** Notes
+** References
+
+* TODO Earthquake shakes twitter users: Real-time event detection by social sensors.
+  :PROPERTIES:
+  :AUTHORS:  Sakaki, T.; Okazaki, M.; and Matsuo, Y.
+  :YEAR:     2010
+  :LINK:
+  :END:
+** Abstract
+** Notes
+** References
+
+* TODO An algorithmic approach to event summarization.
+  :PROPERTIES:
+  :AUTHORS:  Wang, P.; Wang, H.; Liu, M.; and Wang, W.
+  :YEAR:     2010
+  :LINK:
+  :END:
+** Abstract
+** Notes
+** References
+
+* TODO Summarizing microblogs automatically.
+  :PROPERTIES:
+  :AUTHORS:  Sharifi, B.; Hutton, M.-A.; and Kalita, J.
+  :YEAR:     2010
+  :LINK:     http://aclweb.org/anthology-new/N/N10/N10-1100.pdf
+  :FILE:     file:./references/N10-1100.pdf
+  :END:
+** Abstract
+   
+** Notes
+** References
+
+
+* TODO TEMPLATE 
+  :PROPERTIES:
+  :AUTHORS:
+  :YEAR:
+  :LINK:
+  :END:
+** Abstract
+** Notes
+** References
