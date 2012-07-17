@@ -160,7 +160,7 @@
       videos. WWW '09.
    7. Y. Yang, T. Pierce, and J. Carbonell. A study on retrospective
       and on-line event detection. SIGIR '98.
-* IN-PROGRESS A survey on automatic text summarization.
+* DONE A survey on automatic text summarization.                :SUMM:SURVEY:
   :PROPERTIES:
   :AUTHORS:  Das, D.. and Martins, A.
   :YEAR:     2007
@@ -171,7 +171,7 @@
    The increasing availability of online information has necessitated intensive
    research in the area of automatic text summarization within the Natural Lan-
    guage Processing (NLP) community. Over the past half a century, the prob-
-   lem has been addressed from many dierent perspectives, in varying domains
+   lem has been addressed from many different perspectives, in varying domains
    and using various paradigms. This survey intends to investigate some of the
    most relevant approaches both in the areas of single-document and multiple-
    document summarization, giving special emphasis to empirical methods and
@@ -207,7 +207,112 @@
      + Evaluacion
        - campo abierto
          - TREC, DUC, MUC son competencias donde se evaluan resumenes
-         - no hay una estrategia universal para evaluar sistemas de resumen
+         - no hay una estrategia universal para evaluar sistemas de
+           resumen
+       - referencias
+         - http://trec.nist.gov/
+         - http://duc.nist.gov/
+     + Single-document
+       - early work
+         - documentos tecnicos
+         - la frecuencia de las palabras era importante
+         - se quitan las stopwords y se hace stemming
+         - por otra parte, en la mayoria de los parrafos la oracion
+           mas importante estaba al principio, y a veces al final
+       - ML methods
+         - Naive-Bayes classifier
+         - Decision Trees
+         - Hidden Markov Models
+         - Log-Linear models
+         - Neural Networks
+     + Multi-Document
+       - SUMMarizing Online NewS articles: SUMMONS (McKeown and Radev,1995).
+       - Tecnicas extractivas usando medidas de similitud entre pares
+         de oraciones.
+         * Algunos identifican temas en común por clustering y
+           escogiendo una oración representativa de cada cluster
+           (McKeown et al., 1999; Radev et al., 2000).
+         * Otros generan una oración compuesta de cada cluster.
+         * Otros incluyen cada pasaje candidato sólo si es considerado
+           original respecto de los anteriores, usando maximal
+           marginal relevance (Carbonell and Goldstein, 1998) (ver
+           evernote).
+         * Trabajos recientes consideran ambientes de múltiples
+           idiomas (Evans, 2005.)
+       - SUMMONS es el primer summarizer multi-documento
+         - Su dominio es muy estricto (noticias de terrorismo)
+         - Utiliza templates definidos y hechos manualmente para
+           rellenar con información de distintas fuentes.
+         - Para "multi-temas" hay otros approaches
+       - McKeown et al. (1999) y Barzilay et al. (1999) crearon otro
+         sistema donde el input es un conjunto de documentos
+         relacionados en texto plano. 
+         - El sistema identifica temas (clustering) mediante TF-IDF
+           - noun phrases
+           - proper nouns
+           - synsets (Wordnet database)
+           - db of semantic classes of verbs
+         - En vez de juntar frases representativas de cada tema,
+           proponen un algoritmo que toma las frases que se repiten lo
+           suficiente.
+       - Topic-driven summarization
+         - Carbonell, Goldstein (1998): Maximal Marginal Relevance
+           (MMR)
+         - requiere la query o perfil de usuario y la lista de
+           documentos
+         - combina la relevancia de la query con la originalidad de la
+           información
+       - Centroid-based summarization (*bag-of-words*) (MEAD, Radev et
+         al., 2004)
+         - Los documentos son modelados como bags-of-words
+         - Topic detection usando un agglomerative clustering
+           algorithm sobre la representación tf-idf de los documentos,
+           recalculando los centroides de acuerdo a $c_j =
+           \frac{\sum_{d \in C_j} d'}{|C_j|}$. Donde $c_j$ es el
+           centroide del cluster $j$-ésimo, $C_j$ es el conjunto de
+           documentos que pertenece a ese cluster, y $d'$ es una
+           versión truncada de $d$ que "vanishes on those words whose
+           TF-IDF score are below a threshold".
+   - Evaluación
+     - No existe un resumen ideal.
+     - Hay algunas maneras propuestas para evaluar 
+       - (Summary Evaluation Environment) Evaluación por oraciones:
+         similitud del significado, gramática, cohesión y coherencia;
+         mediante una medida de 1-4. Luego se mide el recall ponderado
+         con respecto a un umbral de la medida y los resúmenes
+         automáticos y manuales.(DUC 2001) 
+       - Accumulative n-gram matching score (NAMS), que evalúa las
+         coincidencias de n-gramas entre los resúmenes.
+       - ROUGE: Recall Oriented Understudy for Gisting Evaluation (el
+         estandar) (Lin, 2004)
+       - Evaluación por teoría de la información.
+   - Conclusión (*motivación*)
+     #+begin_quote
+     The rate of information growth due to the World Wide Web has called for a need
+     to develop efficient and accurate summarization systems. Although research on
+     summarization started about 50 years ago, there is still a long trail to walk in
+     this field. Over time, attention has drifted from summarizing scientific articles to
+     news articles, electronic mail messages, advertisements, and blogs. Both abstractive
+     and extractive approaches have been attempted, depending on the application at
+     hand. Usually, abstractive summarization requires heavy machinery for language
+     generation and is difficult to replicate or extend to broader domains. In contrast,
+     simple extraction of sentences have produced satisfactory results in large-scale ap-
+     plications, specially in multi-document summarization. The recent popularity of
+     effective newswire summarization systems confirms this claim.
+     This survey emphasizes extractive approaches to summarization using statisti-
+     cal methods. A distinction has been made between single document and multi-
+     document summarization. Since a lot of interesting work is being done far from
+     the mainstream research in this field, we have chosen to include a brief discussion
+     on some methods that we found relevant to future research, even if they focus only
+     on small details related to a general summarization process and not on building an
+     entire summarization system.
+     Finally, some recent trends in automatic evaluation of summarization systems
+     have been surveyed. The low inter-annotator agreement figures observed during
+     manual evaluations suggest that the future of this research area heavily depends on
+     the ability to find efficient ways of automatically evaluating these systems and on
+     the development of measures that are objective enough to be commonly accepted
+     by the research community.
+     #+end_quote
 
 ** References
 
