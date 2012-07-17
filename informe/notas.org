@@ -75,7 +75,7 @@
    - Wang, P.; Wang, H.; Liu, M.; and Wang, W. 2010. An algorithmic
      approach to event summarization. In /SIGMOD/.
 
-* IN-PROGRESS Learning similarity metrics for event identification in social media  :FLICKR:EVENTS:
+* DONE Learning similarity metrics for event identification in social media :FLICKR:EVENTS:
   :PROPERTIES:
   :AUTHORS:  Becker, H.; Naaman, M.; and Gravano, L.
   :YEAR:     2010
@@ -160,14 +160,55 @@
       videos. WWW '09.
    7. Y. Yang, T. Pierce, and J. Carbonell. A study on retrospective
       and on-line event detection. SIGIR '98.
-* TODO A survey on automatic text summarization.
+* IN-PROGRESS A survey on automatic text summarization.
   :PROPERTIES:
   :AUTHORS:  Das, D.. and Martins, A.
   :YEAR:     2007
-  :LINK:
+  :LINK:     http://www.cs.cmu.edu/~nasmith/LS2/das-martins.07.pdf
+  :FILE:     file:./refs/das-martins.07.pdf
   :END:
 ** Abstract
+   The increasing availability of online information has necessitated intensive
+   research in the area of automatic text summarization within the Natural Lan-
+   guage Processing (NLP) community. Over the past half a century, the prob-
+   lem has been addressed from many dierent perspectives, in varying domains
+   and using various paradigms. This survey intends to investigate some of the
+   most relevant approaches both in the areas of single-document and multiple-
+   document summarization, giving special emphasis to empirical methods and
+   extractive techniques. Some promising approaches that concentrate on specific
+   details of the summarization problem are also discussed. Special attention is
+   devoted to automatic evaluation of summarization systems, as future research
+   on summarization is strongly dependent on progress in this area.
 ** Notes
+   - Caracteristicas de un resumen
+     - Summaries may be produced from a single document or multiple documents,
+     - Summaries should preserve important information,
+     - Summaries should be short.
+   - Definiciones (Radev et al., 2002)
+     - /extracción/: proceso de identificar secciones importantes del
+       texto y producirlas literalmente.
+     - /abstracción/ apunta a producir material importante de una
+       nueva forma.
+     - /fusión/ combina las partes extraídas coherentemente.
+     - /compresión/ apunta a excluir las partes que no son importantes
+       del texto.
+   - Paradigmas:
+     + Estrategias
+       - usando la frecuencia de palabras y frases (Luhn, 1958)
+       - posición en el texto (Baxendale, 1958)
+       - frases clave (Edmundson, 1969)
+     + Tipos
+       - extractive summarization (lo que el contenido del resumen
+         deberia ser)
+       - abstractive summarization (la forma, resumen gramatical)
+       - topic-driven summarization: el resumen depende de las
+         preferencias del usuario y puede ser evaluado mediante una
+         consulta
+     + Evaluacion
+       - campo abierto
+         - TREC, DUC, MUC son competencias donde se evaluan resumenes
+         - no hay una estrategia universal para evaluar sistemas de resumen
+
 ** References
 
 * TODO Generic text summarization using relevance measure and latent semantic analysis
