@@ -25,5 +25,21 @@ Hila Becker, Mor Naaman, Luis Gravano. \emph{Beyond Trending Topics: Real-World 
 
 Castillo, C., Mendoza, M., Poblete, B.: \emph{Information Credibility on Twitter}. In The World Wide Web Conference (WWW), Hyderabad, India. 2011.
 
+\bibitem{survey}
+
+Das, D.. and Martins, A.: \emph{A survey on automatic text
+summarization}. Language Technologies Institute, Carnegie Mellon
+University. 2007.
+
+\bibitem{microblogs}
+
+Sharifi, B.; Hutton, M.-A.; and Kalita, J. 2010. \emph{Summarizing
+     microblogs automatically}. In HLT.
+
+\bibitem{earthquakes}
+
+Sakaki, T.; Okazaki, M.; and Matsuo, Y. \emph{Earthquake shakes
+twitter users: Real-time event detection by social sensors}. In WWW 2010.
+
 \end{thebibliography}
 #+END_LaTeX

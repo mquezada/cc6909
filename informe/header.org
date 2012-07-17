@@ -41,6 +41,7 @@
 \begin{tabular}{ll}
 \textbf{Profesora Guía}	&: Bárbara Poblete \\
 \textbf{Alumno} 	&: Mauricio Quezada\\
+\textbf{Matrícula}&: 237000738\\
 \textbf{E-mail} 	&: mquezada@dcc.uchile.cl\\
 \textbf{Teléfono}	&: (+569) 9 150 4487 \\
 \textbf{Fecha de Entrega} &: Miércoles 18 de Julio de 2012. \\
