@@ -1,3 +1,4 @@
+# -*- mode: latex -*-
 # BIBLIOGRAFIA
 #+BEGIN_LaTeX
 \begin{thebibliography}{9}
