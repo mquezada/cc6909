@@ -40,7 +40,7 @@
 \begin{flushright}
 \begin{tabular}{ll}
 \textbf{Profesora Guía}	&: Bárbara Poblete \\
-\textbf{Alumno} 	&: Mauricio Quezada\\
+\textbf{Alumno} 	&: Mauricio Daniel Quezada Veas\\
 \textbf{Matrícula}&: 237000738\\
 \textbf{E-mail} 	&: mquezada@dcc.uchile.cl\\
 \textbf{Teléfono}	&: (+569) 9 150 4487 \\

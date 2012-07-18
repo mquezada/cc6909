@@ -50,10 +50,37 @@
 
 #+begin_latex
 \section*{Resumen ejecutivo}
+\begin{spacing}{1.5}
 #+end_latex
+
+El objetivo de este trabajo es definir la construcción de un sistema
+que permita obtener contenido relevante y descriptivo de diferentes
+tópicos o eventos emergentes en las redes sociales. Se trabajará con
+dos tipos de eventos: noticias y conciertos musicales. Se obtendrán de
+dos fuentes respectivas: \textsc{Google News} y \textsc{Last.fm}. 
+Esta información será enriquecida con datos publicados en las redes
+sociales, principalmente \textsc{Twitter}. Con estos datos, se realizará una selección
+automática del contenido más relevante de acuerdo a diferentes
+métricas que serán investigadas y evaluadas en el desarrollo de esta
+memoria. \\
+
+Usualmente, en la generación de resúmenes automáticos sólo se considera
+el texto de los documentos, siendo el resultado, a su vez, sólo
+resúmenes de texto, los cuales además no consideran la relevancia de
+acuerdo a los mismos usuarios que consumen este contenido. Esta
+propuesta considera la obtención de documentos relevantes
+generalizando el tipo de contenido y a la vez ponderando la relevancia
+dada en las redes sociales con respecto a éste. \\
+
+La propuesta considera un trabajo de 17 semanas que incluye la
+obtención de datos de interés, la generación de prototipos de
+generación de resúmenes automáticos y la selección de contenido
+relevante a partir de estos resultados, presentándolos de forma de
+poder ser evaluados.
 
 
 #+begin_latex
+\end{spacing}
 \newpage
 #+end_latex
 
@@ -66,24 +93,31 @@
 \newpage
 #+END_LaTeX
 
-
 #+LATEX: \setlength\parskip{5mm}
 ########################### Contenido #################################
 
 * Introducción
-  El presente informe tiene como objetivo detallar una propuesta de
-  trabajo para optar al título de Ingeniero Civil en Computación. Este
-  trabajo consiste en la implementación de un sistema que permita
-  identificar contenido relevante en la Web y mostrarlo en orden de
-  importancia, donde ésta es medida de acuerdo a distintos indicadores
-  obtenidos de las /Redes Sociales Online/.
-
+  El presente informe tiene como objetivo definir una propuesta de
+  trabajo para optar al título de Ingeniero Civil en Computación. El
+  objetivo de este trabajo es construir un sistema que permita obtener
+  contenido relevante y descriptivo de diferentes tópicos o eventos
+  emergentes en las /redes sociales online/. Para esto, principalmente
+  se trabajará con dos tipos de eventos: noticias y conciertos
+  musicales. El listado de eventos noticiosos y conciertos será
+  obtenido de fuentes como Google News y Last.fm. Luego, esta
+  información será enriquecida con datos publicados en las redes
+  sociales, principalmente la plataforma de /microblogging/ Twitter. A
+  partir de esta información, se realizará una selección automática
+  del contenido más relevante de acuerdo a diferentes métricas que se
+  investigarán en el desarrollo de esta memoria.
+ 
   Este contenido, a diferencia de gran parte del trabajo existente, no
-  se limitará solamente texto, sino que de modo general puede ser cualquier
-  tipo de objetos multimedia, como imágenes, videos, sonidos, texto,
+  se limitará solamente a documentos de texto, sino que de modo general puede ser cualquier
+  tipo de /objeto multimedia/, como: imágenes, videos, sonidos, texto,
   etc. Por otra parte, el sistema a implementar será lo más flexible
   posible tal que no dependa de las fuentes de contenido que existen hoy
-  en día en la Web, dada su obsolescencia y corta duración.
+  en día en la Web, dada su obsolescencia y corta duración; ni de las
+  fuentes sociales.
 
   Se utilizarán dos tipos de documentos para la experimentación y
   evaluación del sistema: noticias y conciertos musicales. Tanto las
@@ -97,30 +131,43 @@
   detalla la forma de utilizar estas fuentes para obtener los datos y
   los resultados. 
 
+  La estructura del informe es como sigue: a continuación, dentro de
+  esta sección, se expone la motivación y el trabajo
+  relacionado. Luego se describe el problema a abordar, para luego dar
+  paso a la descripción de la solución planteada, mostrando los
+  resultados de una pequeña prueba de concepto realizada durante el
+  semestre. Se detallan los objetivos del trabajo propuesto, y
+  finalmente la metodología de trabajo: herramientas encontradas,
+  etapas del desarrollo y finalmente un plan de trabajo.
+
 ** Motivación
 
-   La tasa de crecimiento de la cantidad de datos en la WWW, y en
+   La tasa de crecimiento de la cantidad de datos en la red, y en
    particular, en las redes sociales online, son de tal magnitud que
    se vuelve necesario encontrar formas de filtrar y buscar sólo la
    información relevante dentro de todas las fuentes que hablan del
-   mismo tópico. Por otra parte, la faceta de inmidiatez que ha tomado
-   la generación de la información (debido principalmente al auge de
-   los /smartphones/), ha enriquecido el aporte social a este conjunto
-   de datos, no sólo de fuentes privadas o institucionalizadas. 
+   mismo tópico. 
+   
+   Dentro del contexto de las redes sociales, cada día se publican
+   millones de actualizaciones de estado y mensajes (usualmente
+   breves) respecto a distintos tópicos, ya sean conversacionales,
+   personales o sobre algún evento o tópico en particular[fn::Pear
+   Analytics. Twitter
+   Study. http://www.scribd.com/doc/18548460/Pear-Analytics-Twitter-Study-August-2009]. 
+   Surge la necesidad, dado el volumen de datos, de poder automatizar
+   formas de generación de resúmenes que contengan los aspectos
+   relevantes de estos eventos en el tiempo, y generalizando el /tipo/
+   de contenido de estos aspectos, es decir, considerar que la
+   información y documentos asociados a estos eventos muchas veces
+   contienen multimedia, y no sólo 
+   texto [fn::Por ejemplo, en
+   https://github.com/mquezadav/cc6909/wiki/Links-from-Protests 
+   hay una pequeña lista de blogs que publicaron distinto material
+   multimedia acerca del movimiento estudiantil chileno del año 2011.], 
+   siendo un punto importante que no es usualmente considerado
+   por las estrategias o sistemas de generación de resúmenes actuales.
 
-   Aunque la investigación en el área de resúmenes automáticos tiene
-   casi 50 años\cite{survey}, aun hay mucho que desarrollar en esta
-   área. Numerosos esfuerzos de despliegue de información breve y
-   concisa sobre eventos, tales como Google News o los Trending Topics
-   de Twitter[fn::https://twitter.com/i/discover]. Sin embargo, gran
-   parte del esfuerzo se ha enfocado en generar resúmenes sobre
-   fuentes de noticias, páginas web (blogs), o incluso resumir eventos
-   en base a los tweets de Twitter acerca de algún suceso
-   importante\cite{microblogs}. El contenido multimedia en general no
-   se considera debido al nivel de abstracción de estos tipos de
-   datos al momento de generar resúmenes.
-
-** TODO Trabajo relacionado
+** Trabajo relacionado
 
    Existen varios trabajos en el área de asociar eventos del mundo real
    con la información generada en Internet que utilizan como prueba de
@@ -130,14 +177,11 @@
    contenido textual de los recursos, o a seleccionar contenido
    relevante del conjunto de recursos asociados a un evento. 
 
-   En cuanto a identificar eventos del mundo real en Twitter, en
-   \cite{events} se describe un algoritmo que permite resumir un
-   conjunto de tweets en base a eventos deportivos (football
-   americano) utilizando Modelos ocultos de Márkov (Hidden Markov
-   Models). 
-
-
-
+# En cuanto a identificar eventos del mundo real en Twitter, en
+# \cite{events} se describe un algoritmo que permite resumir un
+# conjunto de tweets en base a eventos deportivos (football
+# americano) utilizando Modelos ocultos de Márkov (Hidden Markov
+# Models). 
 
    En \cite{events}, se comparan distintos algoritmos para
    resumir eventos deportivos identificando los sub-eventos producidos,
@@ -150,7 +194,7 @@
    la relevancia de los resultados con respecto a qué tan bien calzan los
    términos de búsqueda con los resultados obtenidos, sin considerar la
    información dada por los usuarios o consumidores de este tipo de
-   contenido, sino su similaridad con el evento central, sólo fiándose en
+   contenido, sino su similitud con el evento central, sólo fiándose en
    los (meta) datos que los generadores del contenido agregan a sus
    recursos. En \cite{clusterers}, se identifican los eventos a partir de
    un dataset utilizando técnicas de Clustering, basándose en distintos
@@ -322,8 +366,10 @@
 
 ** Prueba de concepto
 
-   Se obtuvo un dataset de 2.3 millones de tweets a partir de la red
-   social Twitter, utilizando la Streaming
+   Para analizar la factibilidad del enfoque propuesto, se realizó un
+   análisis preliminar de los datos publicados en Twitter. Se obtuvo
+   un dataset de 2.3 millones de tweets a partir de la red 
+   social, utilizando la Streaming
    API[fn::https://dev.twitter.com/docs/streaming-api]. De estos,
    aproximadamente 350 mil tweets incluían un enlace a otro sitio web
    en su mensaje. El siguiente desafío fue obtener las fuentes de esos
@@ -511,7 +557,7 @@
     - De cada documento que sea mencionado en los tweets (de la forma
       de URLs), se obtendrá su contenido en texto y se almacenará.
 
-*** TODO Construcción de Resúmenes
+*** Construcción de Resúmenes
     Una vez obtenido algún evento con sus tweets y documentos
     asociados, se utilizará un algoritmo de construcción de resúmenes
     automáticos sobre el evento normalizado. La normalización del
@@ -525,8 +571,19 @@
     multimedia el cual será contrastado con los demás clusters del
     resumen para generar un orden.
 
-*** TODO Ranking y presentación de resultados    
+*** Ranking y presentación de resultados    
     
+    Con cada clustering correspondiente a un tópico o evento, la
+    siguiente fase consiste en tomar los documentos representativos de
+    cada cluster del tópico y generar un orden mediante una
+    ponderación de sus /social features/ descritos en la descripción de
+    la propuesta. Con esto se medirá la importancia de un documento con
+    respecto a la popularidad, relevancia y reputación de éste.
+
+    Finalmente, los documentos seleccionados serán presentados en una
+    interfaz (web) en este orden de importancia, ya sea para ser
+    consumido por humanos como por máquinas (por ejemplo, en algún formato
+    como =JSON=).
 
 ** Herramientas a utilizar
    Para el desarrollo del sistema se utilizarán distintas herramientas
@@ -592,34 +649,36 @@
    permite escribir documentos rápidamente y generar el archivo $\LaTeX$
    (y correspondientemente, PDF) equivalente.
 
-** TODO Desafíos previstos 
-** Planificación de Trabajo
-   En el Cuadro \ref{tab:plan} se aprecia el plan de trabajo propuesto
-   para el desarrollo. Se considera el desarrollo de dos prototipos
-   incrementales (=P1= y =P2=) que consideren el feedback y el ajuste
-   de parámetros y algoritmos que sea necesario realizar.
+#** TODO Desafíos previstos 
+\pagebreak
+* Plan de Trabajo
+  En el Cuadro \ref{tab:plan} se aprecia el plan de trabajo propuesto
+  para el desarrollo. Se considera el desarrollo de dos prototipos
+  incrementales (=P1= y =P2=) que consideren la retroalimentación y el ajuste
+  de parámetros y algoritmos que sea necesario realizar, dentro del
+  contexto de 17 semanas de trabajo.
+  
+  #+BEGIN_LATEX
+  \begingroup
+  \fontsize{8pt}{10pt}\selectfont
 
-   #+BEGIN_LATEX
-   \begingroup
-   \fontsize{8pt}{10pt}\selectfont
-
-   \newcommand{\x}{\checkmark}
-   #+END_LATEX
-
-   #+ATTR_LaTeX: longtable align=|l||l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|
-   #+CAPTION: Plan de trabajo
-   #+LABEL: tab:plan
-   |---------------------------------+-------+-----+------+----+----+----+----+----+----+----+----+----+----+----+----+----+----|
-   | Módulo / Semana                 | 1     | 2   | 3    | 4  | 5  | 6  | 7  | 8  | 9  | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 |
-   |---------------------------------+-------+-----+------+----+----+----+----+----+----+----+----+----+----+----+----+----+----|
-   | Obtención del dataset           | \x    | \x  | \x   | \x | \x | \x | \x | \x | \x | \x | \x | \x | \x |    |    |    |    |
-   | Construcción de resúmenes (P1)  | \x    | \x  | \x   | \x |    |    |    |    |    |    |    |    |    |    |    |    |    |
-   | Construcción de resúmenes (P2)  |       |     |      |    | \x | \x | \x | \x |    |    |    |    |    |    |    |    |    |
-   | Ranking (P1)                    |       |     | \x   | \x | \x | \x |    |    |    |    |    |    |    |    |    |    |    |
-   | Ranking (P2)                    |       |     |      |    |    |    | \x | \x | \x | \x |    |    |    |    |    |    |    |
-   | Presentación de resultados      |       |     |      |    |    |    |    |    |    |    | \x | \x | \x |    |    |    |    |
-   | Redacción de informe de memoria |       |     |      |    |    |    |    |    |    |    | \x | \x | \x | \x | \x | \x | \x |
-   |---------------------------------+-------+-----+------+----+----+----+----+----+----+----+----+----+----+----+----+----+----|
+  \newcommand{\x}{\checkmark}
+  #+END_LATEX
+   
+  #+ATTR_LaTeX: longtable align=|l||l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|
+  #+CAPTION: Plan de trabajo
+  #+LABEL: tab:plan
+  |---------------------------------+----+----+----+----+----+----+----+----+----+----+----+----+----+----+----+----+----|
+  | Módulo / Semana                 | 1  | 2  | 3  | 4  | 5  | 6  | 7  | 8  | 9  | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 |
+  |---------------------------------+----+----+----+----+----+----+----+----+----+----+----+----+----+----+----+----+----|
+  | Obtención del dataset           | \x | \x | \x | \x | \x | \x | \x | \x | \x | \x | \x | \x | \x |    |    |    |    |
+  | Construcción de resúmenes (P1)  | \x | \x | \x | \x |    |    |    |    |    |    |    |    |    |    |    |    |    |
+  | Construcción de resúmenes (P2)  |    |    |    |    | \x | \x | \x | \x |    |    |    |    |    |    |    |    |    |
+  | Ranking (P1)                    |    |    | \x | \x | \x | \x |    |    |    |    |    |    |    |    |    |    |    |
+  | Ranking (P2)                    |    |    |    |    |    |    | \x | \x | \x | \x |    |    |    |    |    |    |    |
+  | Presentación de resultados      |    |    |    |    |    |    |    |    |    |    | \x | \x | \x |    |    |    |    |
+  | Redacción de informe de memoria |    |    |    |    |    |    |    |    |    |    | \x | \x | \x | \x | \x | \x | \x |
+  |---------------------------------+----+----+----+----+----+----+----+----+----+----+----+----+----+----+----+----+----|
    
    #+BEGIN_LATEX
    \endgroup
