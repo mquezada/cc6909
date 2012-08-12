@@ -46,7 +46,7 @@ class TwitterCrawler(object):
         
         for key in keys:
             url = self.redis.get(key)            
-            key_id = key.split(":")[0]
+            key_id = key.split(":")[1]
             
             if self.redis.get('news:%s:crawled_tweets') is None:                
                 t = Thread(target=self.search, args=(url, key_id))

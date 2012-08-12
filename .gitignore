@@ -2,4 +2,5 @@
 *.tex
 *.out
 *.log
+*.pyc
 informe/refs/

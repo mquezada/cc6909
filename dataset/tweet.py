@@ -66,3 +66,5 @@ class Tweet(object):
         
         for k,v in self.__dict__.items():
             r_key = 'tweet:%s:%s' % (self.id, k)
+            r_value = v
+            r.set(r_key, r_value)
