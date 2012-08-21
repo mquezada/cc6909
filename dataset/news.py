@@ -1,53 +1,37 @@
-'''
-Created on 24/06/2012
 
-@author: mquezada
-'''
-
+"""
+Formato basado en
+https://ajax.googleapis.com/ajax/services/search/news?v=1.0&topic=w&ned=es_cl
+"""
 from hashlib import md5
-from redis import Redis
-import sys, traceback
+from redis import Redis 
 
 class News(object):
-    '''
-    Wrapper object for a google news entry
-    '''
 
+	def __init__(self, data):
 
-    def __init__(self, data):
-        '''
-        Creates a news object from data param
-        @param data: dictionary of news data        
-        '''
-        
-        try:
-            self.id = md5(data['link']).hexdigest()
-            
-            self.link = data['link']
-            self.links = data['links']
-            self.lang = data['lang']
-            self.title = data['title']
-            self.published = data['published']
-            self.published_parsed = data['published_parsed']
-            self.summary = data['summary']
-            self.summary_detail = data['summary_detail']
-            self.tags = data['tags']
-            self.guidislink = data['guidislink']
-        
-        except:
-            print "Exception in user code:"
-            print '-'*60
-            traceback.print_exc(file=sys.stdout)
-            print '-'*60
-        
-    def save(self):
-        '''
-        saves this object in current redis instance as
-        - key: news:<id>:<key>
-        - value: <value>
-        '''
-        r = Redis()
-        for k,v in self.__dict__.items():
-            key = 'news:%s:%s' % (self.id, k)
-            value = v
-            r.set(key, value)
+		#self.content = data['content']
+		self.url = data['url']
+		self.title = data['titleNoFormatting']
+		self.location = data['location']
+		self.publisher = data['publisher']
+		self.publishedDate = data['publishedDate']
+		self.language = data['language']
+		self.id = md5(data['url']).hexdigest()
+
+		self.topic = data['topic']
+		self.edition = data['edition']
+
+		self.parent_id = self.id
+
+	def save(self):
+		'''
+		saves this object in current redis instance as
+		- key: news:<id>:<key>
+		- value: <value>
+		'''
+		r = Redis()
+		for k,v in self.__dict__.items():
+			key = 'news:%s:%s' % (self.id, k)
+			value = v
+			r.set(key, value)
