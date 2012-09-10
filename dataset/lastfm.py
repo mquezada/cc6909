@@ -1,6 +1,6 @@
 import urllib, urllib2
-from event import Event
-from logger import log
+from model.event import Event
+from util.logger import log
 import simplejson as json
 
 """

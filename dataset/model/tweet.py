@@ -24,7 +24,8 @@ class Tweet(object):
         try: 
             #data = json.loads(json_string)
         
-            self.news_id = data['news_id']
+            self.page_id = data['page_id']
+
             self.created_at = data['created_at']
             self.from_user = data['from_user']
             self.from_user_id = data['from_user_id']

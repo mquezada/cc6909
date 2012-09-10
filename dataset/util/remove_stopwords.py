@@ -1,7 +1,7 @@
 import re
 from nltk.corpus import stopwords
 
-def remove_stopwords(sentence):
+def remove_stopwords(sentence, lang='english'):
 
 	#We only want to work with lowercase for the comparisons
 	sentence = sentence.lower()
@@ -10,6 +10,6 @@ def remove_stopwords(sentence):
 	words = re.findall(r'\w+', sentence, flags = re.UNICODE | re.LOCALE) 
 
 	#This is the more pythonic way
-	important_words = filter(lambda x: x not in stopwords.words('spanish'), words)
+	important_words = filter(lambda x: x not in stopwords.words(lang), words)
 
-	return important_words 
+	return " ".join(important_words)

@@ -6,7 +6,7 @@ http://www.lastfm.es/api/show/geo.getEvents
 from hashlib import md5
 from redis import Redis 
 
-class Event(object):
+class Festival(object):
 
 	def __init__(self, data):
 		self.id = data['id']

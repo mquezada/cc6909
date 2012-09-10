@@ -1,6 +1,6 @@
 import urllib, urllib2
 import simplejson as json
-from tweet import Tweet
+from model.tweet import Tweet
 import time
 from threading import Thread
 
@@ -27,16 +27,16 @@ def search(query, result_type, rpp, since_id, include_entities):
 
 	return js
 
-def search_term(query, newsid):
+def search_term(query, page_id=None):
 	results = []
 	max_id = ''
 
 	print "search term: '%s'" % (query)
-	for i in range(1,16): # 15 times at most		
+	for i in range(1,16): # 15 times at most
 		js = search(query, 'mixed', '100', max_id, True)
 
 		if len(js) == 0 or len(js['results']) == 0:
-			break
+			continue
 
 		max_id = js['max_id_str']
 		results.append(js)
@@ -45,9 +45,9 @@ def search_term(query, newsid):
 	tot = 0
 	for result in results:
 		for tweet_data in result['results']:
-			tweet_data['news_id'] = newsid
-			tweet = Tweet(tweet_data)
+			tweet_data['page_id'] = page_id
 
+			tweet = Tweet(tweet_data)			
 			tot += 1
 			tweet.save()
 
