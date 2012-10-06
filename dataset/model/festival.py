@@ -36,6 +36,6 @@ class Festival(object):
 		'''
 		r = Redis()
 		for k,v in self.__dict__.items():
-			key = 'event:%s:%s' % (self.id, k)
+			key = 'festival:%s:%s' % (self.id, k)
 			value = v
 			r.set(key, value)

@@ -5,10 +5,12 @@ import urllib2
 import time
 from util import remove_stopwords
 from redis import Redis
-from util.logger import log
+import sys
 
 queue = Queue.Queue()
 r = Redis()
+
+F = "[webpage_retriever]"
 
 class ThreadUrl(threading.Thread):
     """Threaded Url Grab"""
@@ -27,13 +29,13 @@ class ThreadUrl(threading.Thread):
                 content = url.read()    
             except Exception, e:
                 self.queue.task_done()
-                log(str(e))
+                print F, str(e)
                 continue                            
 
             # gets redis instance
             r = Redis()
 
-            print "Saving page %s" % page
+            print F, "saving page %s" % page
 
             #saves content into redis instance
             r.set('%s:%s:content' % (obj_type, redis_id), content)

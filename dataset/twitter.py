@@ -3,9 +3,12 @@ import simplejson as json
 from model.tweet import Tweet
 import time
 from threading import Thread
+import sys
 
 URL = "http://search.twitter.com/search.json?%s"
 SLEEP_TIME = 24
+
+F = "[twitter]"
 
 def search(query, result_type, rpp, since_id, include_entities):
 	params = {
@@ -16,10 +19,14 @@ def search(query, result_type, rpp, since_id, include_entities):
 		#'max_id':max_id,
 		'include_entities':include_entities
 	}
-	enc = urllib.urlencode(params)
-	net = urllib2.urlopen(URL % enc)
-		
-	data = net.read()
+	try:
+		enc = urllib.urlencode(params)
+		net = urllib2.urlopen(URL % enc)
+		data = net.read()
+	except Exception, e:
+		print F, e
+		return []	
+
 	try:
 		js = json.loads(data)
 	except Exception, e:
@@ -31,8 +38,8 @@ def search_term(query, page_id=None):
 	results = []
 	max_id = ''
 
-	print "search term: '%s'" % (query)
-	for i in range(1,16): # 15 times at most
+	print F, "search term: '%s'" % (query)
+	for i in range(1,2): # 15 times at most
 		js = search(query, 'mixed', '100', max_id, True)
 
 		if len(js) == 0 or len(js['results']) == 0:

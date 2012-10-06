@@ -1,16 +1,18 @@
 import simplejson as json
 import urllib2
-from util.logger import log
 from model.page import Page
 from model.event import Event
 from hashlib import md5
+import sys
+
+F = "[google_news]"
 
 class GoogleNews(object):
 	
 	#https://ajax.googleapis.com/ajax/services/search/news?v=1.0&topic=s
 
 	@staticmethod
-	def get_topnews(results=3):
+	def get_topnews(results=1):
 		URL = 'https://ajax.googleapis.com/ajax/services/search/news?v=1.0&ned=%s&topic=%s&rsz=%d'
 		editions = ('es_cl', 'en_us')
 		topics = {'w':'Internacional', 'h':'Titulares'}
@@ -19,7 +21,7 @@ class GoogleNews(object):
 		for edition in editions:			
 			for topic in topics:
 				url = URL % (edition, topic, results)
-				print url
+				print F, url
 				response = urllib2.urlopen(url)
 				data = response.read()
 
@@ -43,7 +45,7 @@ class GoogleNews(object):
 						event['date'] = data['date']
 						e_id = event['id'] = md5("%s %s" % (repr(data['title']), data['url'])).hexdigest()
 
-						print repr("Crawled news: %s" % data['title'])
+						print F, repr("Crawled news: %s" % data['title'])
 						e = Event(event)
 						e.save()
 
@@ -62,14 +64,15 @@ class GoogleNews(object):
 								data['type'] = 'news'
 								data['content'] = ''
 
-								print repr("\tRelated news: %s" % data['title'])
+								print F, repr("\tRelated news: %s" % data['title'])
 								n = Page(data)
 								n.parent_id = e_id
 								n.save()
 								i += 1
 				else:
-					log(news['responseDetails'])					
-		print "total news collected: %d" % i
+					print F, news['responseDetails']
+
+		print F, "total news collected: %d" % i
 
 def main():
 	GoogleNews.get_topnews()
