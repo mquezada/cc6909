@@ -4,8 +4,10 @@ import threading
 import urllib2
 import time
 from util import remove_stopwords
+from boilerpipe.extract import Extractor
 from redis import Redis
 import sys
+import webarticle2text
 
 queue = Queue.Queue()
 r = Redis()
@@ -38,7 +40,14 @@ class ThreadUrl(threading.Thread):
             print F, "saving page %s" % page
 
             #saves content into redis instance
-            r.set('%s:%s:content' % (obj_type, redis_id), content)
+            r.set('%s:%s:raw_content' % (obj_type, redis_id), content.decode('utf-8', errors='ignore'))
+
+            #extracts main content from page
+            #real_content = webarticle2text.extractFromHTML(content)
+            if content != '':
+                extractor = Extractor(extractor='ArticleExtractor', html=content.decode('utf-8', errors='ignore'))
+                real_content = extractor.getText()
+                r.set('%s:%s:content' % (obj_type, redis_id), real_content.decode('utf-8', errors='ignore'))
 
             #signals to queue job is done
             self.queue.task_done()
@@ -62,12 +71,12 @@ sites_list is a list of tuples
     #wait on the queue until everything has been processed
     queue.join()
 
-def check_dataset():
+def download_pages():
     """
 checks current redis instance and downloads pages if necessary
     """
     r = Redis()
-    keys = r.keys("page:*:content")
+    keys = r.keys("page:*:raw_content")
 
     sites = []
     for elem in keys:

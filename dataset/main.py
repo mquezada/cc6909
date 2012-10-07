@@ -15,7 +15,7 @@ def main():
 
 	#crawl_current_day()
 	#crawl_week_later()	
-	#check_dataset()
+	#download_pages()
 
 	print F, "getting news from google news; done"
 	print F, "getting festivals from lastfm (santiago, london)"
