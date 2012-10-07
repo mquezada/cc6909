@@ -12,7 +12,7 @@ class GoogleNews(object):
 	#https://ajax.googleapis.com/ajax/services/search/news?v=1.0&topic=s
 
 	@staticmethod
-	def get_topnews(results=1):
+	def get_topnews(results=8):
 		URL = 'https://ajax.googleapis.com/ajax/services/search/news?v=1.0&ned=%s&topic=%s&rsz=%d'
 		editions = ('es_cl', 'en_us')
 		topics = {'w':'Internacional', 'h':'Titulares'}
@@ -64,7 +64,7 @@ class GoogleNews(object):
 								data['type'] = 'news'
 								data['content'] = ''
 
-								print F, repr("\tRelated news: %s" % data['title'])
+								print F, repr("Related news: %s" % data['title'])
 								n = Page(data)
 								n.parent_id = e_id
 								n.save()

@@ -23,7 +23,13 @@ class ThreadUrl(threading.Thread):
     def run(self):
         while True:
             #grabs host from queue
-            redis_id , page, obj_type = self.queue.get()
+            redis_id , page, obj_type, lang = self.queue.get()
+
+            #language
+            if lang == 'es_cl':
+                lang = 'spanish'
+            else:
+                lang = 'english'
 
             #grabs urls of hosts and prints first 1024 bytes of page
             try:
@@ -45,9 +51,12 @@ class ThreadUrl(threading.Thread):
             #extracts main content from page
             #real_content = webarticle2text.extractFromHTML(content)
             if content != '':
-                extractor = Extractor(extractor='ArticleExtractor', html=content.decode('utf-8', errors='ignore'))
+                extractor = Extractor(extractor='ArticleExtractor', html=content)#.decode('utf-8', errors='ignore'))
                 real_content = extractor.getText()
-                r.set('%s:%s:content' % (obj_type, redis_id), real_content.decode('utf-8', errors='ignore'))
+                #real_content.decode('utf-8', errors='ignore')
+                real_content = remove_stopwords(real_content, lang)
+                
+                r.set('%s:%s:content' % (obj_type, redis_id), real_content)
 
             #signals to queue job is done
             self.queue.task_done()
@@ -83,11 +92,12 @@ checks current redis instance and downloads pages if necessary
         if r.get(elem) == '':
             key = elem.split(":")[1]
             url = urllib2.unquote(r.get("page:%s:url" % key))
+            locale = r.get(r.get("page:%s:locale" % key))
             # tpe = r.get("page:%s:type" % key)
             # type is always 'page'
             tpe = 'page'
 
-            entry = (key, url, tpe)
+            entry = (key, url, tpe, locale)
             sites.append(entry)
 
     get_pages(sites)

@@ -1,5 +1,5 @@
 from news_crawler import crawl_current_day, crawl_week_later
-from webpage_retriever import check_dataset
+from webpage_retriever import download_pages
 from festivals_crawler import crawl_tweets_for_event
 from lastfm import save_events
 import datetime
@@ -13,15 +13,15 @@ def main():
 
 	print F, "getting news from google news"
 
-	#crawl_current_day()
+	crawl_current_day()
 	#crawl_week_later()	
-	#download_pages()
+	download_pages()
 
 	print F, "getting news from google news; done"
 	print F, "getting festivals from lastfm (santiago, london)"
 
-	#save_events('santiago')
-	#save_events('london')
+	save_events('santiago')
+	save_events('london')
 
 	print F, "getting festivals from lastfm; done"
 	print F, "current festivals in dataset"

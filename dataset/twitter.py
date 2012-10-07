@@ -39,7 +39,7 @@ def search_term(query, page_id=None):
 	max_id = ''
 
 	print F, "search term: '%s'" % (query)
-	for i in range(1,2): # 15 times at most
+	for i in range(1,16): # 15 times at most
 		js = search(query, 'mixed', '100', max_id, True)
 
 		if len(js) == 0 or len(js['results']) == 0:

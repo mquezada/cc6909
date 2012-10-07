@@ -37,7 +37,7 @@ def crawl_current_day():
 			else: 
 				lang = 'english'
 
-			news_title_stopwords = p.unescape(strip_accents(r.get(key_news_title).decode('utf-8')))
+			news_title_stopwords = p.unescape(strip_accents(r.get(key_news_title).decode('utf-8', errors='ignore')))
 			news_title = remove_stopwords(news_title_stopwords, lang=lang)
 
 			print F, "searching tweets for news (w/ sw): \"%s\"" % news_title_stopwords			
@@ -72,7 +72,7 @@ def crawl_week_later():
 			else: 
 				lang = 'english'
 
-			news_title_stopwords = p.unescape(strip_accents(r.get(key_news_title).decode('utf-8')))
+			news_title_stopwords = p.unescape(strip_accents(r.get(key_news_title).decode('utf-8', errors='ignore')))
 			news_title = remove_stopwords(news_title_stopwords, lang=lang)
 			print F, "searching tweets for news (w/ sw): \"%s\"" % news_title_stopwords			
 			print F, "searching tweets for news (w/o sw): \"%s\"" % news_title

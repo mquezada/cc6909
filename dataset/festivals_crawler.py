@@ -14,7 +14,7 @@ def crawl_tweets_for_event(event_id):
 
 	total_tweets = 0
 
-	event_title = r.get("festival:%s:title" % event_id).decode('utf-8')
+	event_title = r.get("festival:%s:title" % event_id).decode('utf-8', errors='ignore')
 	event_title = strip_accents(event_title)
 	event_title = p.unescape(event_title)
 	event_title = remove_stopwords(event_title)
