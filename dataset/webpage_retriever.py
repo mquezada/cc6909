@@ -101,3 +101,25 @@ checks current redis instance and downloads pages if necessary
             sites.append(entry)
 
     get_pages(sites)
+
+def resolve_tweet_pages():
+    """
+checks tweets for urls in them and download pages if necessary
+    """
+    """
+    import ttp
+
+    p = ttp.Parser()
+    r = Redis()
+    keys = r.keys("tweet:*:text")
+    for k in keys:
+        id = k.split(":")[1]
+        text = r.get(k)
+
+        urls = p.parse(text.decode('utf-8', errors='ignore')).urls
+        print "Tweet: '%s', urls: %s" % (repr(text), " ".join(urls))
+
+        insert_key = "tweet:%s:urls" % id
+        for u in urls:
+            r.rpush(insert_key, u)
+    """
