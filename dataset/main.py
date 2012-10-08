@@ -2,6 +2,7 @@ from news_crawler import crawl_current_day, crawl_week_later
 from webpage_retriever import *
 from festivals_crawler import crawl_tweets_for_event
 from lastfm import save_events
+from twitter import get_access_token
 import datetime
 from redis import Redis
 import sys
@@ -10,6 +11,7 @@ F = "[main]"
 
 def main():
 	r = Redis()
+	#get_access_token()
 
 	print F, "getting news from google news"
 
