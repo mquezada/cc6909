@@ -13,16 +13,15 @@ def main():
 
 	print F, "getting news from google news"
 
-	#crawl_current_day()
+	crawl_current_day()
 	#crawl_week_later()	
-	#download_pages()
-	resolve_tweet_pages()
+	download_pages()
 
 	print F, "getting news from google news; done"
 	print F, "getting festivals from lastfm (santiago, london)"
 
-	#save_events('santiago')
-	#save_events('london')
+	save_events('santiago')
+	save_events('london')
 
 	print F, "getting festivals from lastfm; done"
 	print F, "current festivals in dataset"
@@ -39,7 +38,8 @@ def main():
 	try:
 		while True:
 			to_crawl = raw_input("%s Enter festival id: " % F)
-			crawl_tweets_for_event(to_crawl)
+			if to_crawl != '':
+				crawl_tweets_for_event(to_crawl)
 	except KeyboardInterrupt:
 		print ""
 		print F, "exit"

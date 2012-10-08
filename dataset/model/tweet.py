@@ -59,6 +59,8 @@ class Tweet(object):
             self.user_url = data['user']['url']
             self.user_created_at = data['user']['created_at']
             self.user_timezone = data['user']['time_zone']
+          
+
 
             """
             self.from_user = data['from_user']
@@ -111,5 +113,5 @@ class Tweet(object):
                 r_value = v
                 r.set(r_key, r_value)
             return 1
-            
+
         return 0

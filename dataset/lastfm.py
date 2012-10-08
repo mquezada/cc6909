@@ -38,7 +38,7 @@ def save_events(location):
 
 	tot = 0
 	for event_data in js['events']['event']:
-		print F, "festival title: %s" % event_data['title']
+		print F, "festival: %s - %s " % (event_data['title'], event_data['startDate'])
 		e = Festival(event_data)
 		tot += 1
 		e.save()

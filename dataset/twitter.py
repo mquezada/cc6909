@@ -5,6 +5,7 @@ import time
 from threading import Thread
 import oauth2 as oauth
 import sys
+import constants
 
 F = "[twitter]"
 SLEEP_TIME = 5
@@ -42,10 +43,7 @@ def search_11(query, result_type, rpp, since_id, include_entities, user_params =
 
 	url = "https://api.twitter.com/1.1/search/tweets.json"
 
-	CONSUMER_KEY = "RH7hKZS8NtUgtNTFB4GHMQ"
-	CONSUMER_SECRET = "Dp4uKEmqGM5z8NzcbZ6BjPXQDUGNrwqknGCPOYlXQg"	
-	key = "21123704-NRej4tA3tKxfonEUPIb07SxcQYZ7i2Cu6GEBVf1U"
-	secret = "b6lEz5Mmq5EymsvyqleeqXBVInCjDVvEZqn2ANw"
+	
 
 	if user_params == None:
 		params = {
@@ -72,6 +70,7 @@ def search_11(query, result_type, rpp, since_id, include_entities, user_params =
 	)
 	
 	try:
+		print str(resp)
 		if resp['status'] == '200':
 			return json.loads(content)
 		else:
@@ -88,7 +87,7 @@ def search_term(query, page_id=None):
 
 	print F, "search term: '%s'" % (query)
 
-	for i in range(1,15): # 15 times at most
+	for i in range(1,16): # 15 times at most
 		js = search_11(query, result_type='mixed', rpp='100', since_id=max_id, include_entities=True, user_params=params)
 
 		if len(js) == 0 or len(js['statuses']) == 0:						
