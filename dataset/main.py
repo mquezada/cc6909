@@ -15,15 +15,15 @@ def main():
 
 	print F, "getting news from google news"
 
-	crawl_current_day()
+	#crawl_current_day()
 	#crawl_week_later()	
 	download_pages()
 
 	print F, "getting news from google news; done"
 	print F, "getting festivals from lastfm (santiago, london)"
 
-	save_events('santiago')
-	save_events('london')
+	#save_events('santiago')
+	#save_events('london')
 
 	print F, "getting festivals from lastfm; done"
 	print F, "current festivals in dataset"

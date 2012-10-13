@@ -13,6 +13,8 @@ class Page(object):
 		self.id = data['id']				
 		self.parent_id = self.id
 
+		self.raw_content = ''
+		
 	def save(self):
 		'''
 		saves this object in current redis instance as

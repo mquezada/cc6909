@@ -3,7 +3,7 @@ import Queue
 import threading
 import urllib2
 import time
-from util import remove_stopwords
+from util import remove_stopwords, strip_accents
 from boilerpipe.extract import Extractor
 from redis import Redis
 import sys
@@ -25,8 +25,8 @@ class ThreadUrl(threading.Thread):
             #grabs host from queue
             redis_id , page, obj_type, lang = self.queue.get()
 
-            #language
-            if lang == 'es_cl':
+            #language            
+            if lang == 'es_cl':                
                 lang = 'spanish'
             else:
                 lang = 'english'
@@ -51,10 +51,12 @@ class ThreadUrl(threading.Thread):
             #extracts main content from page
             #real_content = webarticle2text.extractFromHTML(content)
             if content != '':
+                content = strip_accents.strip_accents(content.decode('utf-8', errors='ignore'))
+
                 extractor = Extractor(extractor='ArticleExtractor', html=content)#.decode('utf-8', errors='ignore'))
                 real_content = extractor.getText()
-                #real_content.decode('utf-8', errors='ignore')
-                real_content = remove_stopwords(real_content, lang)
+                #real_content = real_content.decode('utf-8', errors='ignore')
+                real_content = remove_stopwords.remove_stopwords(real_content, lang)
                 
                 r.set('%s:%s:content' % (obj_type, redis_id), real_content)
 
@@ -92,7 +94,7 @@ checks current redis instance and downloads pages if necessary
         if r.get(elem) == '':
             key = elem.split(":")[1]
             url = urllib2.unquote(r.get("page:%s:url" % key))
-            locale = r.get(r.get("page:%s:locale" % key))
+            locale = r.get("page:%s:locale" % key)
             tpe = 'page'
 
             entry = (key, url, tpe, locale)

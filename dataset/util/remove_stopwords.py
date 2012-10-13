@@ -13,3 +13,11 @@ def remove_stopwords(sentence, lang='english'):
 	important_words = filter(lambda x: x not in stopwords.words(lang), words)
 
 	return " ".join(important_words)
+
+def main():
+	s = raw_input("String: ")
+	l = raw_input("Lang: ")
+	print remove_stopwords(s, l)
+
+if __name__ == '__main__':
+	main()

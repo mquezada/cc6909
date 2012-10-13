@@ -8,7 +8,6 @@ import simplejson as json
 from simplejson import JSONDecodeError
 from redis import Redis
 import sys, traceback
-import ttp
 
 class Tweet(object):
     '''
