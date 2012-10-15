@@ -9,8 +9,8 @@ import sys
 
 F = "[main]"
 
-
-def main():
+# DEPRECATED
+def main(): 
     r = Redis()
     #get_access_token()
 
