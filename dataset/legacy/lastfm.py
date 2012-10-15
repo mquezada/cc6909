@@ -4,7 +4,7 @@ import simplejson as json
 import sys
 
 """
-Geo.getEvents
+DEPRECATED!!!
 """
 
 API_KEY = '92b7d449964a3e43a78529d51a30bde7'

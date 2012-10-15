@@ -1,0 +1,21 @@
+
+# twitter
+CONSUMER_KEY = ''
+CONSUMER_SECRET = ''
+
+OAUTH_TOKEN = ''
+OAUTH_TOKEN_SECRET = ''
+
+# last.fm
+LASTFM_API_KEY = ''
+LASTFM_BASE_URL = 'http://ws.audioscrobbler.com/2.0/'
+LASTFM_LOCATIONS = {'santiago': 'spanish', 'london': 'english'}
+
+# google news
+GN_BASE_URL = "https://ajax.googleapis.com/ajax/services/search/news"
+GN_EDITIONS = ('es_cl', 'en_us')
+GN_TOPICS = {
+    'w': 'Internacional',
+    'h': 'Titulares',
+}
+GN_NUM_NEWS = 4

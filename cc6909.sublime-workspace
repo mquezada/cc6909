@@ -1,0 +1,233 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"event",
+				"event_data"
+			],
+			[
+				"resul",
+				"result_type"
+			],
+			[
+				"tw",
+				"tweet_obj"
+			],
+			[
+				"try",
+				"try	Try/Except"
+			],
+			[
+				"get",
+				"get_pages"
+			],
+			[
+				"tt",
+				"titleNoFormatting"
+			],
+			[
+				"redi",
+				"redis_id"
+			],
+			[
+				"related",
+				"relatedStories"
+			]
+		]
+	},
+	"buffers":
+	[
+	],
+	"build_system": "",
+	"command_palette":
+	{
+		"height": 75.0,
+		"selected_items":
+		[
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"pinstall",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: install ",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: ",
+				"Package Control: Discover Packages"
+			]
+		],
+		"width": 602.0
+	},
+	"console":
+	{
+		"height": 0.0
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/home/mquezada/git/cc6909/clusters/bow.py",
+		"/home/mquezada/git/cc6909/cc6909.sublime-workspace",
+		"/home/mquezada/.config/sublime-text-2/Packages/User/Base File.sublime-settings",
+		"/home/mquezada/git/cc6909/.gitignore",
+		"/home/mquezada/tmp/test.c",
+		"/home/mquezada/tmp/test.java",
+		"/home/mquezada/.cache/.fr-6EGOOf/pkrgraphanonym.tlp",
+		"/home/mquezada/tmp/asdas.json",
+		"/home/mquezada/Downloads/JPype-0.5.4.2/setup.py",
+		"/home/mquezada/Downloads/JPype-0.5.4.2/README-LINUX.TXT",
+		"/home/mquezada/Downloads/JPype-0.5.4.2/examples/linux/findjvm.py",
+		"/usr/local/lib/python2.7/dist-packages/jpype/_core.py",
+		"/home/mquezada/git/cc6909/dataset/webpage_retriever.py",
+		"/home/mquezada/git/cc6909/dataset/google_news.py",
+		"/home/mquezada/git/cc6909/dataset/model/event.py",
+		"/home/mquezada/git/cc6909/dataset/model/page.py",
+		"/home/mquezada/git/cc6909/dataset/twitter.py",
+		"/home/mquezada/git/cc6909/dataset/model/tweet.py",
+		"/home/mquezada/git/cc6909/dataset/news_crawler.py",
+		"/home/mquezada/git/cc6909/dataset/main.py",
+		"/home/mquezada/git/cc6909/dataset/out.txt",
+		"/home/mquezada/git/cc6909/dataset/model/festival.py",
+		"/home/mquezada/git/cc6909/dataset/util/remove_stopwords.py",
+		"/home/mquezada/git/cc6909/dataset/events_crawler.py",
+		"/home/mquezada/git/cc6909/dataset/lastfm.py",
+		"/home/mquezada/git/cc6909/dataset/event.py",
+		"/home/mquezada/git/cc6909/dataset/remove_stopwords.py",
+		"/home/mquezada/git/cc6909/informe/notas.org",
+		"/home/mquezada/org/todo.org",
+		"/home/mquezada/org/android-x86.org",
+		"/home/mquezada/org/index.org",
+		"/home/mquezada/org/mobileorg.org",
+		"/home/mquezada/.config/sublime-text-2/Packages/Rails/180-rails-form_tag.sublime-snippet"
+	],
+	"find":
+	{
+		"height": 35.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"254375796666421247",
+			"statuses\n\n254375796666421247\n255035651626528769",
+			"remove",
+			")\n",
+			"data",
+			"news",
+			"news_id",
+			"self.news_id = data['news_id']",
+			"newsid",
+			"e",
+			"\n						",
+			"											",
+			"result",
+			"publishedDate",
+			"publisher",
+			"location"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 0.0
+	},
+	"input":
+	{
+		"height": 33.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"replace":
+	{
+		"height": 0.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+			[
+				"clus",
+				"clusters/bow.py"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 182.0,
+	"status_bar_visible": true
+}

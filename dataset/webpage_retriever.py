@@ -2,12 +2,8 @@
 import Queue
 import threading
 import urllib2
-import time
-from util import remove_stopwords, strip_accents
 from boilerpipe.extract import Extractor
 from redis import Redis
-import sys
-import webarticle2text
 
 queue = Queue.Queue()
 r = Redis()
@@ -25,7 +21,7 @@ class ThreadUrl(threading.Thread):
             #grabs host from queue
             redis_id , page, obj_type, lang = self.queue.get()
 
-            #language            
+            #language
             if lang == 'es_cl':                
                 lang = 'spanish'
             else:
@@ -35,10 +31,10 @@ class ThreadUrl(threading.Thread):
             try:
                 url = urllib2.urlopen(page)
                 content = url.read()    
-            except Exception, e:
+            except Exception, ex:
                 self.queue.task_done()
-                print F, str(e)
-                continue                            
+                print F, str(ex)
+                continue
 
             # gets redis instance
             r = Redis()
@@ -55,9 +51,7 @@ class ThreadUrl(threading.Thread):
 
                 extractor = Extractor(extractor='ArticleExtractor', html=content)#.decode('utf-8', errors='ignore'))
                 real_content = extractor.getText()
-                #real_content = real_content.decode('utf-8', errors='ignore')
-                real_content = remove_stopwords.remove_stopwords(real_content, lang)
-                
+                                
                 r.set('%s:%s:content' % (obj_type, redis_id), real_content)
 
             #signals to queue job is done
@@ -70,10 +64,10 @@ sites_list is a list of tuples
     """
 
     #spawn a pool of threads, and pass them queue instance
-    for i in range(60):
-        t = ThreadUrl(queue)
-        t.setDaemon(True)
-        t.start()
+    for _ in range(60):
+        thr = ThreadUrl(queue)
+        thr.setDaemon(True)
+        thr.start()
 
     #populate queue with data
     for entry in sites_list:
