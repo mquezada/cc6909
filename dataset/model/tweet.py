@@ -42,6 +42,11 @@ class Tweet(object):
             self.hashtags = data['entities']['hashtags']
             self.urls = data['entities']['urls']
 
+            self.expanded_urls = []
+            if len(self.urls) > 0:
+                for url in self.urls:
+                    self.expanded_urls.append(url['expanded_url'])
+
             # user
             self.user_id = data['user']['id_str']
             self.user_is_verified = data['user']['verified']

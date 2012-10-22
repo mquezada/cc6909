@@ -3,7 +3,7 @@ import simplejson as json
 from model.tweet import Tweet
 import time
 import oauth2 as oauth
-import constants
+import settings
 import urlparse
 
 F = "[twitter]"
@@ -18,7 +18,7 @@ def get_access_token():
     access_token_url = 'http://twitter.com/oauth/access_token'
     authorize_url = 'http://twitter.com/oauth/authorize'
 
-    consumer = oauth.Consumer(key=constants.CONSUMER_KEY, secret=constants.CONSUMER_SECRET)
+    consumer = oauth.Consumer(key=settings.CONSUMER_KEY, secret=settings.CONSUMER_SECRET)
     client = oauth.Client(consumer)
 
     # Step 1: Get a request token. This is a temporary token that is used for
@@ -71,8 +71,8 @@ def get_access_token():
     print "You may now access protected resources using the access tokens above."
     print
 
-    constants.OAUTH_TOKEN = access_token['oauth_token']
-    constants.OAUTH_TOKEN_SECRET = access_token['oauth_token_secret']
+    settings.OAUTH_TOKEN = access_token['oauth_token']
+    settings.OAUTH_TOKEN_SECRET = access_token['oauth_token_secret']
 
 
 def search_11(query, result_type, rpp, since_id, include_entities, user_params=None):
@@ -94,8 +94,8 @@ def search_11(query, result_type, rpp, since_id, include_entities, user_params=N
     else:
         url = "%s%s" % (url, user_params)
 
-    consumer = oauth.Consumer(key=constants.CONSUMER_KEY, secret=constants.CONSUMER_SECRET)
-    token = oauth.Token(key=constants.OAUTH_TOKEN, secret=constants.OAUTH_TOKEN_SECRET)
+    consumer = oauth.Consumer(key=settings.CONSUMER_KEY, secret=settings.CONSUMER_SECRET)
+    token = oauth.Token(key=settings.OAUTH_TOKEN, secret=settings.OAUTH_TOKEN_SECRET)
     client = oauth.Client(consumer, token)
 
     resp, content = client.request(
@@ -115,7 +115,7 @@ def search_11(query, result_type, rpp, since_id, include_entities, user_params=N
 
             if try_again == 'y':
                 get_access_token()
-                print F, constants.OAUTH_TOKEN, constants.OAUTH_TOKEN_SECRET
+                print F, settings.OAUTH_TOKEN, settings.OAUTH_TOKEN_SECRET
 
             return search_11(query, result_type, rpp, since_id, include_entities, user_params)
     except Exception, e:
@@ -134,14 +134,14 @@ def search_term(query):
     for i in range(1, 16):
         js = search_11(query, result_type='mixed', rpp='100', since_id=max_id, include_entities=True, user_params=params)
 
+        time.sleep(SLEEP_TIME)
+
         if len(js) == 0 or len(js['statuses']) == 0:
             continue
 
         for tweet_data in js['statuses']:
             tweet = Tweet(tweet_data)
             tweets.append(tweet)
-
-        time.sleep(SLEEP_TIME)
 
         if 'next_results' in js['search_metadata']:
             params = js['search_metadata']['next_results']
@@ -152,7 +152,7 @@ def search_term(query):
 
 
 def main():
-    search_term('metallica', 'asdf')
+    print search_term('metallica')
 
 if __name__ == '__main__':
     main()

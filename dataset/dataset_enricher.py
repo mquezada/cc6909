@@ -90,16 +90,14 @@ def enrich_news(redis):
     if len(keys) == 0:
         return
 
-    id_first = keys[0].split(':')[1]
-    first = redis.get('news:%s:locale' % id_first)
-
-    if first == 'en_us':
-        lang = 'english'
-    else:
-        lang = 'spanish'
-
     news_tweets = []
     for key in keys:
+        locale = redis.get('news:%s:locale' % key.split(':')[1])
+
+        if locale == 'en_us':
+            lang = 'english'
+        else:
+            lang = 'spanish'
 
         id = key.split(':')[1]
         terms = get_search_terms_news(redis, id, lang)
@@ -116,14 +114,61 @@ def enrich_news(redis):
     return news_tweets
 
 
+def generate_pages_from(tweets, redis):
+    """downloads content from urls in tweets' text and generates
+        pages from each one"""
+    import page_downloader
+
+    def save_content(content, params):
+        import lxml.html
+        import model.page
+        lcontent = lxml.html.fromstring(content)
+        url = params[0]
+        tweet_id = params[1]
+
+        data = {}
+        data['url'] = url
+        data['title'] = lcontent.find('.//title').text
+        data['date'] = ''
+        data['type'] = 'from_tweet'
+
+        page = model.page.Page(data)
+        page.parent_id = tweet_id
+        page.raw_content = content
+
+        print tag, "got page from tweet: '%s' - %s" % (page.title, page.url)
+        r_key = 'page:%s:%s' % (page.id, tweet_id)
+        redis.set(r_key, 0)
+
+        for key, value in page.__dict__.iteritems():
+            r_key = 'page:%s:%s' % (page.id, key)
+            r_value = value
+
+            redis.set(r_key, r_value)
+
+    sites = []
+    method = save_content
+    for tweet in tweets:
+        for url in tweet.expanded_urls:
+            params = (url, tweet.id)
+            entry = (url, method, params)
+            sites.append(entry)
+
+    page_downloader.get_pages(sites)
+
+
 def save_tweets(redis, tweets):
     count = 0
+
     for tweet in tweets:
+        r_key = 'tweet:%s:%s' % (tweet.id, tweet.event_id)
+        redis.set(r_key, 0)
+
         for key, value in tweet.__dict__.iteritems():
             r_key = 'tweet:%s:%s' % (tweet.id, key)
             r_value = value
 
             if redis.set(r_key, r_value):
                 count += 1
-    # TODO marcar tweets que tengan URLs!
+
     print tag, 'saved', count, 'objects'

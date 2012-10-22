@@ -81,7 +81,6 @@ class Crawler(object):
                     data['date'] = result['publishedDate']
                     data['url'] = result['url']
                     data['type'] = 'news'
-                    data['content'] = ''
 
                     event = {}
                     event['title'] = data['title']
@@ -108,7 +107,6 @@ class Crawler(object):
                         data['date'] = related['publishedDate']
                         data['url'] = related['url']
                         data['type'] = 'news'
-                        data['content'] = ''
 
                         page = Page(data)
                         page.parent_id = event.id

@@ -6,7 +6,7 @@ class Page(object):
         self.url = data['url']
         self.title = data['title']
         self.raw_content = ''
-        self.content = data['content']
+        self.content = ''
         self.date = data['date']
         self.type = data['type']
         self.id = md5(data['url']).hexdigest()
