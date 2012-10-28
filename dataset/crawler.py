@@ -10,11 +10,14 @@ from redis import Redis
 
 class Crawler(object):
     """docstring for Crawler"""
+
     def __init__(self,):
         super(Crawler, self).__init__()
 
     def __save_events(self, events, pages):
+        import utils
         redis = Redis()
+        pipe = redis.pipeline()
 
         count = 0
         for event in events:
@@ -22,21 +25,23 @@ class Crawler(object):
                 r_key = '%s:%s:%s' % (event.type, event.id, key)
                 r_value = value
 
-                if redis.set(r_key, r_value):
+                if pipe.set(r_key, r_value):
                     count += 1
 
         for page in pages:
             # para saber en la llave el evento padre sin tener que acceder
-            r_key = 'page:%s:%s' % (page.id, page.parent_id)
-            redis.set(r_key, 0)
+            r_key = 'page:%s:news_%s' % (page.id, page.parent_id)
+            pipe.set(r_key, 0)
 
             for key, value in page.__dict__.iteritems():
                 r_key = 'page:%s:%s' % (page.id, key)
                 r_value = value
 
-                if redis.set(r_key, r_value):
+                if pipe.set(r_key, r_value):
                     count += 1
 
+        print '[crawler/redis]', "executing redis pipeline"
+        print '[crawler/redis]', reduce(utils.andl, pipe.execute(), True)
         print '[crawler/redis]', 'saved', count, 'objects'
 
     def get_top_news(self):

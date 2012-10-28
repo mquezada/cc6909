@@ -14,17 +14,16 @@
 - Flujo de la aplicación:
   - get events:
     - top 10 noticias de google news de la edicion principal de EEUU y Chile
-    - festivales de Londres y Santiago en lastfm
-  - download pages
-    - para cada pagina del dataset:
-      - descargar su contenido (HTML)      
+    - festivales de Londres y Santiago en lastfm     
   - get tweets:
     - para cada evento del dataset:
       - para cada pagina del evento:
         - obtener tweets que las mencionen
     - para cada tweet obtenido
       - buscar urls y agregarlas como paginas
-      - descargar su contenido
+  - download pages
+    - para cada pagina del dataset:
+      - descargar su contenido (HTML) 
   - extraer contenido
     - para cada evento:
       - para cada pagina del evento:

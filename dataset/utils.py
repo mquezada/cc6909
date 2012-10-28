@@ -1,6 +1,7 @@
 import re
 from nltk.corpus import stopwords
 import unicodedata
+from HTMLParser import HTMLParser
 
 
 def remove_stopwords(sentence, lang='english'):
@@ -19,3 +20,13 @@ def remove_stopwords(sentence, lang='english'):
 
 def strip_accents(s):
     return ''.join((c for c in unicodedata.normalize('NFD', s) if unicodedata.category(c) != 'Mn'))
+
+
+def stem(s, lang='english'):
+    from nltk.stem import SnowballStemmer
+    stemmer = SnowballStemmer(lang)
+    return " ".join(map(stemmer.stem, s.split()))
+
+
+def andl(x, y):
+    return x and y

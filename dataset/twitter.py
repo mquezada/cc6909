@@ -129,10 +129,12 @@ def search_term(query):
     params = None
 
     print F, "search term: '%s'" % (query)
+    num_tweets = str(settings.NUM_TWEETS_PER_PAGE)
+    num_pages = settings.NUM_PAGES_PER_SEARCH + 1
 
     # 15 times at most
-    for i in range(1, 16):
-        js = search_11(query, result_type='mixed', rpp='100', since_id=max_id, include_entities=True, user_params=params)
+    for i in range(1, num_pages):
+        js = search_11(query, result_type='mixed', rpp=num_tweets, since_id=max_id, include_entities=True, user_params=params)
 
         time.sleep(SLEEP_TIME)
 
