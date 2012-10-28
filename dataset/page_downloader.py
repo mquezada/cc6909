@@ -16,22 +16,22 @@ class ThreadUrl(threading.Thread):
     def run(self):
         while True:
             # grabs host from queue
-            # print threading.currentThread().name, "get"
+
             url, method, params = self.queue.get()
-            # print threading.currentThread().name, "got"
+
             self.queue.task_done()
-            # print threading.currentThread().name, "done"
+
             #grabs urls of hosts from the interwebz
             try:
                 url = urllib2.unquote(url)
-                # print threading.currentThread().name, "downloading"
+
                 page = urllib2.urlopen(url)
                 url_expanded = page.url
                 content = page.read()
                 method(content, url_expanded, params)
-                # print threading.currentThread().name, "saved"
+
             except Exception, ex:
-                # print threading.currentThread().name, "exception"
+
                 print F, str(ex)
                 continue
 
@@ -55,21 +55,38 @@ def get_pages(sites_list):
 
 def download_pages():
     import utils
+    import guess_language
+    from content_extractor import extract_content, process_content
     """checks current redis instance and downloads pages if necessary"""
     redis = Redis()
     pipe = redis.pipeline()
 
     def save_page(content, url_expanded, params):
         page_id = params[0]
-        url = params[1]
-        pipe = params[2]
+        pipe = params[1]
 
-        print F, threading.currentThread().name, "- page_id:", page_id, ". Saving url", urllib2.unquote(url)
         rkey = '%s:%s:raw_content' % ('page', page_id)
         pipe.set(rkey, content.decode('utf-8', errors='ignore'))
 
         rkey = '%s:%s:expanded_url' % ('page', page_id)
         pipe.set(rkey, url_expanded)
+
+        if content is not None and content != '':
+            try:
+                content = extract_content(content)
+                lang = guess_language.guessLanguageName(content)
+                lang = lang.lower()
+                try:
+                    content = process_content(content, lang)
+                except Exception:
+                    content = process_content(content, 'english')
+
+                pipe.set('page:%s:extracted' % page_id, 1)
+                pipe.set('page:%s:content' % page_id, content)
+            except Exception:
+                pass
+
+        print F, "saved page", url_expanded
 
     pages = redis.keys("page:*:raw_content")
     sites = []
@@ -78,7 +95,7 @@ def download_pages():
         if redis.get(elem) == '':
             page_id = elem.split(":")[1]
             url = redis.get("page:%s:url" % page_id)
-            params = (page_id, url, pipe)
+            params = (page_id, pipe)
 
             entry = (url, method, params)
             sites.append(entry)

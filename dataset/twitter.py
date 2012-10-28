@@ -124,7 +124,10 @@ def search_11(query, result_type, rpp, since_id, include_entities, user_params=N
 
 
 def search_term(query):
+    import urllib2
+    import model.page
     tweets = []
+    pages = []
     max_id = ''
     params = None
 
@@ -136,13 +139,27 @@ def search_term(query):
     for i in range(1, num_pages):
         js = search_11(query, result_type='mixed', rpp=num_tweets, since_id=max_id, include_entities=True, user_params=params)
 
-        time.sleep(SLEEP_TIME)
-
         if len(js) == 0 or len(js['statuses']) == 0:
+            time.sleep(SLEEP_TIME)
             continue
 
+        t = time.time()
         for tweet_data in js['statuses']:
             tweet = Tweet(tweet_data)
+            # extract pages from tweet text
+            for url in tweet.expanded_urls:
+                data = {}
+                data['url'] = urllib2.quote(url)
+                data['title'] = ''
+                data['date'] = ''
+                data['type'] = 'from_tweet'
+
+                page = model.page.Page(data)
+                page.parent_id = tweet.id
+
+                print F, "got page from tweet: %s" % page.url
+                pages.append(page)
+
             tweets.append(tweet)
 
         if 'next_results' in js['search_metadata']:
@@ -150,7 +167,14 @@ def search_term(query):
         else:
             break
 
-    return tweets
+        elapsed = time.time() - t
+        delta = SLEEP_TIME - elapsed
+        if delta < 0:
+            continue
+
+        time.sleep(delta)
+
+    return (tweets, pages)
 
 
 def main():

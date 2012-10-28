@@ -18,6 +18,7 @@ def process_content(real_content, lang):
     return real_content
 
 
+# se usa el codigo en page_downloader y no aca
 def process_dataset(redis):
     import guess_language
     pages = redis.keys('page:*:raw_content')
@@ -29,15 +30,18 @@ def process_dataset(redis):
         if extracted is None:
             html = redis.get(page)
             if html is not None and html != '':
-                content = extract_content(html)
-                lang = guess_language.guessLanguageName(content)
-                lang = lang.lower()
                 try:
-                    print tag, "extracting", page_id
-                    content = process_content(content, lang)
-                except Exception, e:
-                    print tag, e
-                    content = process_content(content, 'english')
+                    content = extract_content(html)
+                    lang = guess_language.guessLanguageName(content)
+                    lang = lang.lower()
+                    try:
+                        print tag, "extracting", page_id
+                        content = process_content(content, lang)
+                    except Exception, e:
+                        print tag, e
+                        content = process_content(content, 'english')
 
-                redis.set('page:%s:extracted' % page_id, 1)
-                redis.set('page:%s:content' % page_id, content)
+                    redis.set('page:%s:extracted' % page_id, 1)
+                    redis.set('page:%s:content' % page_id, content)
+                except Exception:
+                    pass

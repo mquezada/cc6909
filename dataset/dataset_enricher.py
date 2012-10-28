@@ -110,41 +110,8 @@ def enrich_news(redis):
     return news_tweets
 
 
-def generate_pages_from(tweets, redis):
-    """downloads content from urls in tweets' text and generates
-        pages from each one"""
-    import urllib2
-    import model.page
-
-    pipe = redis.pipeline()
-    for tweet in tweets:
-        for url in tweet.expanded_urls:
-            data = {}
-            data['url'] = urllib2.quote(url)
-            data['title'] = ''
-            data['date'] = ''
-            data['type'] = 'from_tweet'
-
-            page = model.page.Page(data)
-            page.parent_id = tweet.id
-
-            print tag, "got page from tweet: '%s' - %s" % (page.title, page.url)
-
-            # save page
-            r_key = 'page:%s:tweet_%s' % (page.id, tweet.id)
-            pipe.set(r_key, 0)
-            for key, value in page.__dict__.iteritems():
-                r_key = 'page:%s:%s' % (page.id, key)
-                r_value = value
-
-                pipe.set(r_key, r_value)
-
-    print tag, "Executing redis pipeline:"
-    print tag, reduce(utils.andl, pipe.execute(), True)
-
-
 def save_tweets(redis, tweets):
-    count = 0
+    count = 1
     pipe = redis.pipeline()
 
     for tweet in tweets:
@@ -153,6 +120,26 @@ def save_tweets(redis, tweets):
 
         for key, value in tweet.__dict__.iteritems():
             r_key = 'tweet:%s:%s' % (tweet.id, key)
+            r_value = value
+
+            if pipe.set(r_key, r_value):
+                count += 1
+
+    print tag, "executing redis pipeline"
+    print tag, reduce(utils.andl, pipe.execute(), True)
+    print tag, 'saved', count, 'objects'
+
+
+def save_pages(redis, pages):
+    count = 1
+    pipe = redis.pipeline()
+
+    for page in pages:
+        r_key = 'page:%s:tweet_%s' % (page.id, page.parent_id)
+        pipe.set(r_key, 0)
+
+        for key, value in page.__dict__.iteritems():
+            r_key = 'page:%s:%s' % (page.id, key)
             r_value = value
 
             if pipe.set(r_key, r_value):
