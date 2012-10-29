@@ -1,22 +1,33 @@
 #-*- coding: utf-8 -*-
+import HTMLParser
 import twitter
 import utils
 
 tag = '[enricher]'
+h = HTMLParser.HTMLParser()
 
 
 def get_search_terms_news(redis, news_id, lang):
     # obtener todas las paginas hijas del event id=news_id
+    # que no hayan sido procesadas antes*
     keys = redis.keys('page:*:news_%s' % news_id)
 
     terms = []
     for key in keys:
         id = key.split(':')[1]
-        title = redis.get('page:%s:title' % id)
-        title = title.decode('utf-8', errors='ignore')
-        title = utils.strip_accents(title)
-        title = utils.remove_stopwords(title, lang=lang)
-        terms.append(title)
+
+        got = redis.get('page:%s:searched' % id)
+
+        # para poder buscar 2 veces tweets de una pagina de un evento
+        if got is None or got < 2:
+            title = redis.get('page:%s:title' % id)
+            title = title.decode('utf-8', errors='ignore')
+            title = h.unescape(title)
+            title = utils.strip_accents(title)
+            title = utils.remove_stopwords(title, lang=lang)
+            terms.append(title)
+
+            redis.incr('page:%s:searched' % id)
 
     print tag, 'got', len(terms), 'search terms for news'
     return terms
@@ -63,21 +74,22 @@ def enrich_festivals(redis):
         return
 
     festivals_tweets = []
-
+    pages = []
     for key in to_search_keys:
         id = key.split(':')[1]
         terms = get_search_terms_festivals(redis, id)
 
         for term in terms:
-            tweets = twitter.search_term(term)
+            tweets, pages = twitter.search_term(term)
 
             for tweet in tweets:
                 tweet.event_id = id
 
             festivals_tweets.extend(tweets)
+            pages.extend(pages)
 
     print tag, "got", len(festivals_tweets), 'tweets for festivals'
-    return festivals_tweets
+    return (festivals_tweets, pages)
 
 
 def enrich_news(redis):
@@ -87,6 +99,7 @@ def enrich_news(redis):
         return
 
     news_tweets = []
+    pages = []
     for key in keys:
         locale = redis.get('news:%s:locale' % key.split(':')[1])
 
@@ -99,15 +112,16 @@ def enrich_news(redis):
         terms = get_search_terms_news(redis, id, lang)
 
         for term in terms:
-            tweets = twitter.search_term(term)
+            tweets, pages = twitter.search_term(term)
 
             for tweet in tweets:
                 tweet.event_id = id
 
             news_tweets.extend(tweets)
+            pages.extend(pages)
 
     print tag, "got", len(news_tweets), 'tweets for news'
-    return news_tweets
+    return (news_tweets, pages)
 
 
 def save_tweets(redis, tweets):

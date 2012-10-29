@@ -149,7 +149,12 @@ def search_term(query):
             # extract pages from tweet text
             for url in tweet.expanded_urls:
                 data = {}
-                data['url'] = urllib2.quote(url)
+
+                # quitar la query para tener una unica url
+                par = urlparse.urlparse(url)
+                url = urllib2.quote(par.scheme + '://' + par.netloc + par.path)
+
+                data['url'] = url
                 data['title'] = ''
                 data['date'] = ''
                 data['type'] = 'from_tweet'
@@ -157,7 +162,7 @@ def search_term(query):
                 page = model.page.Page(data)
                 page.parent_id = tweet.id
 
-                print F, "got page from tweet: %s" % page.url
+                print F, "got page from tweet: %s" % urllib2.unquote(page.url)
                 pages.append(page)
 
             tweets.append(tweet)

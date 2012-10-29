@@ -2,10 +2,12 @@ import settings
 import simplejson as json
 from urllib import urlencode
 from urllib2 import urlopen
+from urllib2 import quote, unquote
 from model.page import Page
 from model.event import Event
 from model.festival import Festival
 from redis import Redis
+import urlparse
 
 
 class Crawler(object):
@@ -87,6 +89,10 @@ class Crawler(object):
                     data['url'] = result['url']
                     data['type'] = 'news'
 
+                    # quitar la query para tener una unica url
+                    par = urlparse.urlparse(unquote(data['url']))
+                    data['url'] = quote(par.scheme + '://' + par.netloc + par.path)
+
                     event = {}
                     event['title'] = data['title']
                     event['locale'] = edition
@@ -112,6 +118,10 @@ class Crawler(object):
                         data['date'] = related['publishedDate']
                         data['url'] = related['url']
                         data['type'] = 'news'
+
+                        # quitar la query para tener una unica url
+                        par = urlparse.urlparse(unquote(data['url']))
+                        data['url'] = quote(par.scheme + '://' + par.netloc + par.path)
 
                         page = Page(data)
                         page.parent_id = event.id

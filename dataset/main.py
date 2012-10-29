@@ -15,23 +15,29 @@ def get_events():
 
 # paso 2
 def get_tweets():
-    from dataset_enricher import enrich_festivals, enrich_news, generate_pages_from, save_tweets
+    from dataset_enricher import enrich_festivals, enrich_news, save_tweets, save_pages
     from redis import Redis
 
     redis = Redis()
 
     # news tweets
-    tweets = enrich_news(redis)
+    tweets, pages = enrich_news(redis)
 
     # festival tweets
-    tweets.extend(enrich_festivals(redis))
+    ftweets, fpages = enrich_festivals(redis)
+
+    tweets.extend(ftweets)
+    pages.extend(fpages)
 
     # save tweets
     save_tweets(redis, tweets)
 
+    # save pages
+    save_pages(redis, pages)
+
     # create pages from tweets
     # this downloads and saves pages from tweets text url
-    generate_pages_from(tweets, redis)
+    #generate_pages_from(tweets, redis)
 
 
 # paso 3
@@ -51,13 +57,13 @@ def process_dataset():
 
 def main():
     print F, "getting news and festivals"
-    #get_events()
+    get_events()
 
     print F, "getting tweets from news and festivals, and pages from tweets, saving them"
-    #get_tweets()
+    get_tweets()
 
     print F, "downloading pages from news"
-    #download_pages_from_events()
+    download_pages_from_events()
 
     print F, "extracting content from pages"
     process_dataset()

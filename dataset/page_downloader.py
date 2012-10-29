@@ -1,6 +1,7 @@
 import Queue
 import threading
 import urllib2
+import urlparse
 from redis import Redis
 
 queue = Queue.Queue()
@@ -18,8 +19,14 @@ class ThreadUrl(threading.Thread):
             # grabs host from queue
 
             url, method, params = self.queue.get()
+            url = url.lower()
 
             self.queue.task_done()
+
+            # descartar urls con solo el domino, eg 'http://www.google.com/?q=1'
+            p = urlparse.urlparse(url)
+            if p.path == '/':
+                continue
 
             #grabs urls of hosts from the interwebz
             try:
