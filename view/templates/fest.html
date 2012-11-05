@@ -1,0 +1,34 @@
+{% extends "layout.html" %}
+{% block content %}
+<h2>Event</h2>
+    <dl>
+    	<dt>Title</dt>
+    		<dd>{{ item.title }}</dd>
+    	<dt>Lang</dt>
+    		<dd>{{ item.lang }}</dd>
+    	<dt>Description</dt>
+    		<dd>{{ item.description }}</dd>
+    	<dt>Type</dt>
+    		<dd>{{ item.type }}</dd>
+        <dt>Venue</dt>
+            <dd>{{ item.venue }}</dd>
+        <dt>URL</dt>
+            <dd>{{ item.url }}</dd>
+        <dt>Website</dt>
+            <dd>{{ item.website }}</dd>
+        <dt>startDate</dt>
+            <dd>{{ item.startDate }}</dd>
+        <dt>Artists</dt>
+            <dd>{{ item.artists }}</dd>
+        <dt>Image</dt>
+            <dd>{{ item.image }}</dd>                                  
+    </dl>
+
+<h2>Tweets ({{ tcount }})</h2>
+{% for tweet in tweets %}
+	<ul>
+		<li><a href="{{ tweet.href }}">^</a> <a href="{{ tweet.user_name_href }}">{{ tweet.user_name }}</a>: {{ tweet.text }}</li>
+	</ul>
+{% endfor %}
+
+{% endblock %}

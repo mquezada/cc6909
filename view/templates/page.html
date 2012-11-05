@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+{% block content %}
+<h2>Page</h2>
+    <dl>
+    	<dt>Title</dt>
+    		<dd>{{ item.title }}</dd>
+    	<dt>URL</dt>
+    		<dd><a href="{{ item.url }}" target="_blank">{{ item.url }}</a></dd>
+    	<dt>Type</dt>
+    		<dd>{{ item.type }}</dd>    	
+    </dl>
+{% endblock %}

@@ -1,4 +1,5 @@
 import urllib
+import unicodedata
 import simplejson as json
 from model.tweet import Tweet
 import time
@@ -81,6 +82,7 @@ def search_11(query, result_type, rpp, since_id, include_entities, user_params=N
     """
 
     url = "https://api.twitter.com/1.1/search/tweets.json"
+    query = unicodedata.normalize('NFKD', query).encode('ascii', 'ignore')
 
     if user_params == None:
         params = {
@@ -109,7 +111,7 @@ def search_11(query, result_type, rpp, since_id, include_entities, user_params=N
     try:
         if resp['status'] == '200':
             return json.loads(content)
-        else:
+        elif resp['status'] == '429':
             print F, str(resp), content
             try_again = raw_input('%s Recreate access tokens? [y/n] ' % F)
 
@@ -117,7 +119,7 @@ def search_11(query, result_type, rpp, since_id, include_entities, user_params=N
                 get_access_token()
                 print F, settings.OAUTH_TOKEN, settings.OAUTH_TOKEN_SECRET
 
-            return search_11(query, result_type, rpp, since_id, include_entities, user_params)
+        return search_11(unicode(query), result_type, rpp, since_id, include_entities, user_params)
     except Exception, e:
         print F, 'Exception:', e
         return {}
@@ -143,7 +145,6 @@ def search_term(query):
             time.sleep(SLEEP_TIME)
             continue
 
-        t = time.time()
         for tweet_data in js['statuses']:
             tweet = Tweet(tweet_data)
             # extract pages from tweet text
@@ -151,8 +152,8 @@ def search_term(query):
                 data = {}
 
                 # quitar la query para tener una unica url
-                par = urlparse.urlparse(url)
-                url = urllib2.quote(par.scheme + '://' + par.netloc + par.path)
+                #par = urlparse.urlparse(url)
+                #url = urllib2.quote(par.scheme + '://' + par.netloc + par.path)
 
                 data['url'] = url
                 data['title'] = ''
@@ -172,18 +173,14 @@ def search_term(query):
         else:
             break
 
-        elapsed = time.time() - t
-        delta = SLEEP_TIME - elapsed
-        if delta < 0:
-            continue
-
-        time.sleep(delta)
+        time.sleep(SLEEP_TIME)
 
     return (tweets, pages)
 
 
 def main():
-    print search_term('metallica')
+    s = raw_input('search term: ').decode('utf-8')
+    print search_term(s)
 
 if __name__ == '__main__':
     main()

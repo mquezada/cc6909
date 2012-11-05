@@ -33,11 +33,11 @@ def get_search_terms_news(redis, news_id, lang):
     return terms
 
 
+# test: dataset_enricher.get_search_terms_festivals(r, '394e017af204c6b3e78474277b87cf0c')
 def get_search_terms_festivals(redis, festival_id):
     title = redis.get('festival:%s:title' % festival_id)
     title = title.decode('utf-8', errors='ignore')
-    #title = utils.strip_accents(title)
-    #title = utils.remove_stopwords(title, lang)
+    title = title.lower()
 
     terms = [title]
 
@@ -47,9 +47,11 @@ def get_search_terms_festivals(redis, festival_id):
     for _, v in artists.iteritems():
         if type(v) == list:
             for artist in v:
-                terms.append(artist)
+                terms.append(title + ' ' + artist)
+                terms.append(artist + ' festival')
         elif type(v) == str:
-            terms.append(v)
+            terms.append(title + ' ' + v)
+            terms.append(v + ' festival')
 
     print tag, 'got', len(terms), 'search terms for festivals'
     return terms

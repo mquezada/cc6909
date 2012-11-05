@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+{% block content %}
+<h2>News</h2>
+    {% for item in news %}
+    	<li><a href="{{ item.href }}">{{ item.title }}</a></li>
+    {% endfor %}
+
+<h2>Festivals</h2>
+    {% for item in fests %}
+    	<li><a href="{{ item.href }}">{{ item.title }}</a> - {{ item.startDate }}</li>
+    {% endfor %}
+{% endblock %}

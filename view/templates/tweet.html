@@ -1,0 +1,10 @@
+{% extends "layout.html" %}
+{% block content %}
+<h2>Tweet</h2>
+    <dl>
+    	{% for attr in attrs %}
+    	<dt>{{ attr }}</dt>
+    		<dd>{{ item[attr] }}</dd>    	
+    	{% endfor %}
+    </dl>
+{% endblock %}

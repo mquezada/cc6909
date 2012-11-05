@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+{% block content %}
+<h2>Event</h2>
+    <dl>
+    	<dt>Title</dt>
+    		<dd>{{ item.title }}</dd>
+    	<dt>Locale</dt>
+    		<dd>{{ item.locale }}</dd>
+    	<dt>Description</dt>
+    		<dd>{{ item.description }}</dd>
+    	<dt>Date</dt>
+    		<dd>{{ item.date }}</dd>
+    </dl>
+
+<h2>Pages ({{ pcount }})</h2>
+{% for page in pages %}
+	<ul>
+		<li><a href="{{ page.href }}">{{ page.title }}</a></li>
+	</ul>
+{% endfor %}
+
+<h2>Tweets ({{ tcount }})</h2>
+{% for tweet in tweets %}
+	<ul>
+		<li><a href="{{ tweet.href }}">^</a> <a href="{{ tweet.user_name_href }}">{{ tweet.user_name }}</a>: {{ tweet.text }}</li>
+	</ul>
+{% endfor %}
+
+{% endblock %}
