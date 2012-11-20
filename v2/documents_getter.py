@@ -19,6 +19,11 @@ def generate_documents():
 
         for t_key in tweets_keys:
             tweet_id = t_key.split(':')[1]
+            cont = redis.get('tweet:' + tweet_id + ':documented')
+
+            if cont is None:
+                continue
+
             urls = eval(redis.get('tweet:' + tweet_id + ':urls'))
 
             if len(urls) == 0:
@@ -47,6 +52,8 @@ def generate_documents():
                 except Exception, e:
                     print tag, e
                     print tag, 'url=', possibly_short_url
+
+            redis.incr('tweet:' + tweet_id + ':documented')
 
 
 def main():

@@ -1,0 +1,74 @@
+#+TITLE:     IDENTIFICACIÓN DE CONTENIDO MULTIMEDIA RELEVANTE A PARTIR DE EVENTOS UTILIZANDO SU INFORMACIÓN SOCIAL
+#+AUTHOR:    MAURICIO DANIEL QUEZADA VEAS
+#+EMAIL:     mquezada@dcc.uchile.cl
+#+DATE:      DICIEMBRE 2012
+#+DESCRIPTION: 
+#+KEYWORDS: 
+#+LANGUAGE:  en
+#+OPTIONS:   H:3 num:t toc:nil \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+OPTIONS:   TeX:t LaTeX:nil skip:nil d:nil todo:t pri:nil tags:nil
+#+INFOJS_OPT: view:nil toc:nil ltoc:t mouse:underline buttons:0 path:http://orgmode.org/org-info.js
+#+EXPORT_SELECT_TAGS: export
+#+EXPORT_EXCLUDE_TAGS: noexport
+#+LINK_UP:   
+#+LINK_HOME: 
+
+#+LATEX_CLASS: umemoria
+#+LATEX_HEADER: \depto{Ciencias de la Computación}
+#+LATEX_HEADER: \carrera{Ingeniero Civil en Computación}
+#+LATEX_HEADER: \comision{Sergio Ochoa Delorenzi}{Mauricio Marín Caihuan}{}
+#+LATEX_HEADER: \guia{Bárbara Poblete Labra}
+
+#+LATEX_HEADER: 
+
+#+BEGIN_LATEX
+
+\begin{abstract}
+asdf
+\end{abstract}
+
+\begin{dedicatoria}
+Jason Funk disipa patitos
+\end{dedicatoria}
+
+\begin{thanks}
+asdf
+\end{thanks}
+
+\cleardoublepage
+\tableofcontents
+%\cleardoublepage
+%\listoftables
+%\cleardoublepage
+%\listoffigures
+
+\mainmatter
+#+END_LATEX
+
+#####################################################################################3
+
+* Introducción
+  asdasdsa
+
+* Antecedentes
+** Conceptos involucrados
+** Metología de desarrollo
+** Soluciones existentes
+
+* Especificación del Problema
+** Descripción detallada
+** Relevancia de una solución
+** Características de calidad
+** Criterios de aceptación
+
+* Descripción de la Solución
+
+* Conclusiones
+
+####################################################################################4
+
+#+BEGIN_LATEX
+\nocite{*}
+\bibliographystyle{plain}
+\bibliography{bibliografia}
+#+END_LATEX
