@@ -6,7 +6,7 @@ import documents_getter
 def main():
     # step 1
     events_crawler.get_news()
-    #events_crawler.get_festivals()
+    events_crawler.get_festivals()
 
     # step 2
     events_enricher.enrich_events()

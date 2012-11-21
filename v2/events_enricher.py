@@ -74,6 +74,9 @@ def enrich_event(redis_key):
 
 
 def enrich_events():
+    """
+    solo buscar en la ventana de 1 dia antes a 1 semana despues
+    """
     tag = '[events_enricher]'
     redis = Redis()
     keys = redis.keys('event:*:title')
@@ -90,11 +93,32 @@ def enrich_events():
                 enrich_event(terms_key)
                 redis.incr('event:' + id + ':searched')
         elif e_type == 'fest':
+            is_festival = redis.get('event:' + id + ':is_festival')
+            sevenDays = datetime.timedelta(hours=7 * 24)
+            oneDay = datetime.timedelta(hours=24)
+            today = datetime.datetime.today()
+
             startDate = redis.get('event:' + id + ':startDate')
             startDate = datetime.datetime.strptime(startDate, '%a, %d %b %Y %H:%M:%S')
-            if datetime.datetime.today() >= startDate:
-                print tag, 'enriching event:', redis.get('event:' + id + ':title')
-                enrich_event(terms_key)
+
+            endDate = redis.get('event:' + id + ':endDate')
+
+            if is_festival:
+                if endDate is None:
+                    if startDate - oneDay <= today and today <= startDate + sevenDays:
+                        print tag, 'enriching event:', redis.get('event:' + id + ':title')
+                        enrich_event(terms_key)
+                else:
+                    endDate = datetime.datetime.strptime(endDate, '%a, %d %b %Y %H:%M:%S')
+                    endDate = endDate + datetime.timedelta(hours=24)
+
+                    if startDate - oneDay <= today and today <= endDate + sevenDays:
+                        print tag, 'enriching event:', redis.get('event:' + id + ':title')
+                        enrich_event(terms_key)
+            else:
+                if startDate - oneDay <= today and today <= startDate + sevenDays:
+                    print tag, 'enriching event:', redis.get('event:' + id + ':title')
+                    enrich_event(terms_key)
 
 
 def main():

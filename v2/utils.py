@@ -29,6 +29,13 @@ def clean(s, lang):
     return s
 
 
+def clean2(s):
+    s = strip_accents(s)
+    s = remove_stopwords(s, 'spanish')
+    s = remove_stopwords(s, 'english')
+    return s
+
+
 def stem(s, lang='english'):
     from nltk.stem import SnowballStemmer
     stemmer = SnowballStemmer(lang)

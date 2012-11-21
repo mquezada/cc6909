@@ -14,7 +14,14 @@ NUM_PAGES_PER_SEARCH = 15
 # last.fm
 LASTFM_API_KEY = '92b7d449964a3e43a78529d51a30bde7'
 LASTFM_BASE_URL = 'http://ws.audioscrobbler.com/2.0/'
-LASTFM_LOCATIONS = {'santiago': 'spanish', 'london': 'english'}
+LASTFM_LOCATIONS = {
+    'santiago': 'spanish',
+    'london': 'english',
+    'glastonbury': 'english',
+    'new york': 'english',
+    'las vegas': 'english',
+    'estocolmo': 'english',
+}
 
 # google news
 GN_BASE_URL = "https://ajax.googleapis.com/ajax/services/search/news"

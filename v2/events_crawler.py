@@ -60,6 +60,10 @@ def get_news():
                 redis.set(key + 'type', n_type)
                 redis.set(key + 'date', n_date)
                 redis.set(key + 'desc', n_desc)
+                redis.set(key + 'id', n_id)
+
+                title = utils.clean(parser.unescape(n_title), lang)
+                redis.rpush(key + 'terms', title)
 
                 if not 'relatedStories' in result:
                     continue
@@ -81,60 +85,71 @@ def get_festivals():
         'location': '',
         'api_key': api_key,
         'format': 'json',
-        'festivalsonly': 1
+        #'festivalsonly': 1
     }
 
-    for location, lang in settings.LASTFM_LOCATIONS.iteritems():
-        params['location'] = location
-        url = base_url + '?' + urlencode(params)
-        response = urlopen(url)
-        data = response.read()
+    # festivals first, then concerts
+    for fest in [1, 0]:
+        params['festivalsonly'] = fest
+        for location, lang in settings.LASTFM_LOCATIONS.iteritems():
+            params['location'] = location
+            url = base_url + '?' + urlencode(params)
+            response = urlopen(url)
+            data = response.read()
+            print url
 
-        try:
-            js = json.loads(data)
-        except Exception, e:
-            print tag, e
-            continue
+            try:
+                js = json.loads(data)
+            except Exception, e:
+                print tag, e
+                continue
 
-        if 'error' in js:
-            print tag, js['message']
-            continue
+            if 'error' in js:
+                print tag, js['message']
+                continue
 
-        for data in js['events']['event']:
-            key = 'event:' + md5('event:' + data['id']).hexdigest() + ':'
+            for data in js['events']['event']:
+                f_id = md5('event:' + data['id']).hexdigest()
+                key = 'event:' + f_id + ':'
 
-            title = data['title']
+                title = data['title']
 
-            redis.set(key + 'type', 'fest')
-            redis.set(key + 'title', data['title'])
-            redis.set(key + 'artists', data['artists'])
-            redis.set(key + 'venue', data['venue'])
-            redis.set(key + 'startDate', data['startDate'])
-            redis.set(key + 'description', data['description'])
-            redis.set(key + 'image', data['image'])
-            redis.set(key + 'url', data['url'])
-            redis.set(key + 'website', data['website'])
-            redis.set(key + 'lang', lang)
+                redis.set(key + 'type', 'fest')
+                redis.set(key + 'title', data['title'])
+                redis.set(key + 'artists', data['artists'])
+                redis.set(key + 'venue', data['venue'])
+                redis.set(key + 'startDate', data['startDate'])
+                redis.set(key + 'description', data['description'])
+                redis.set(key + 'image', data['image'])
+                redis.set(key + 'url', data['url'])
+                redis.set(key + 'website', data['website'])
+                redis.set(key + 'lang', lang)
+                redis.set(key + 'id', f_id)
 
-            if 'endDate' in data:
-                redis.set(key + 'endDate', data['endDate'])
-            if 'tags' in data:
-                redis.set(key + 'tags', data['tags'])
+                if redis.get(key + 'is_festival') is None:
+                    redis.set(key + 'is_festival', fest)
 
-            print tag, 'festival: %s - %s' % (title, data['startDate'])
+                if 'endDate' in data:
+                    redis.set(key + 'endDate', data['endDate'])
+                    print tag, 'festival: %s - %s -> %s' % (title, data['startDate'], data['endDate'])
+                else:
+                    print tag, 'festival: %s - %s' % (title, data['startDate'])
 
-            term = utils.clean(title, lang)
-            redis.rpush(key + 'terms', term)
+                if 'tags' in data:
+                    redis.set(key + 'tags', data['tags'])
 
-            artists = data['artists']
-            for _, v in artists.iteritems():
-                if type(v) == list:
-                    for artist in v:
-                        redis.rpush(key + 'terms', utils.clean(artist, lang))
-                        redis.rpush(key + 'terms', utils.clean(title + ' ' + artist, lang))
-                elif type(v) == str:
-                    redis.rpush(key + 'terms', utils.clean(v, lang))
-                    redis.rpush(key + 'terms', utils.clean(title + ' ' + v, lang))
+                term = utils.clean(title, lang)
+                redis.rpush(key + 'terms', term)
+
+                artists = data['artists']
+                for _, v in artists.iteritems():
+                    if type(v) == list:
+                        for artist in v:
+                            redis.rpush(key + 'terms', utils.clean(artist, lang))
+                            #redis.rpush(key + 'terms', utils.clean(title + ' ' + artist, lang))
+                    elif type(v) == str:
+                        redis.rpush(key + 'terms', utils.clean(v, lang))
+                        #redis.rpush(key + 'terms', utils.clean(title + ' ' + v, lang))
 
 
 def main():
