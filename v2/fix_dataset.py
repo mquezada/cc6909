@@ -32,7 +32,7 @@ for k in r.keys('event:*:title'):
     print 'event:' + id + ':id', id
     r.set('event:' + id + ':id', id)
 
-"""
+
 
 for k in r.keys('document:*:*'):
 
@@ -41,3 +41,21 @@ for k in r.keys('document:*:*'):
 
     if last != 'url' and last != 'tweets':
         r.set('document:' + id + ':event_id', last)
+
+
+# eliminar duplicados de los terminos
+for k in r.keys('event:*:type'):
+    if r.get(k) == 'fest':
+        key = 'event:' + k.split(':')[1] + ':terms'
+        terms = list(set(r.lrange(key, 0, -1)))
+        r.delete(key)
+        for term in terms:
+            r.rpush(key, term)
+"""
+
+for k in r.keys('event:*:type'):
+    if r.get(k) == 'fest':
+        key = 'event:' + k.split(':')[1] + ':terms'
+        terms = r.lrange(key, 0, -1)
+        if len(terms) != len(set(terms)):
+            print terms

@@ -61,7 +61,7 @@ def save_tweets(tweets, event_id):
 def enrich_event(redis_key):
     tag = '[events_enricher]'
     redis = Redis()
-    queries = redis.lrange(redis_key, 0, -1)
+    queries = list(set(redis.lrange(redis_key, 0, -1)))
     tweets = []
 
     for query in queries:
@@ -94,7 +94,7 @@ def enrich_events():
                 redis.incr('event:' + id + ':searched')
         elif e_type == 'fest':
             is_festival = redis.get('event:' + id + ':is_festival')
-            sevenDays = datetime.timedelta(hours=7 * 24)
+            threeDays = datetime.timedelta(hours=3 * 24)
             oneDay = datetime.timedelta(hours=24)
             today = datetime.datetime.today()
 
@@ -105,18 +105,18 @@ def enrich_events():
 
             if is_festival:
                 if endDate is None:
-                    if startDate - oneDay <= today and today <= startDate + sevenDays:
+                    if startDate - oneDay <= today and today <= startDate + threeDays:
                         print tag, 'enriching event:', redis.get('event:' + id + ':title')
                         enrich_event(terms_key)
                 else:
                     endDate = datetime.datetime.strptime(endDate, '%a, %d %b %Y %H:%M:%S')
                     endDate = endDate + datetime.timedelta(hours=24)
 
-                    if startDate - oneDay <= today and today <= endDate + sevenDays:
+                    if startDate - oneDay <= today and today <= endDate + threeDays:
                         print tag, 'enriching event:', redis.get('event:' + id + ':title')
                         enrich_event(terms_key)
             else:
-                if startDate - oneDay <= today and today <= startDate + sevenDays:
+                if startDate - oneDay <= today and today <= startDate + threeDays:
                     print tag, 'enriching event:', redis.get('event:' + id + ':title')
                     enrich_event(terms_key)
 

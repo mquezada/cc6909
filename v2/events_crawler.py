@@ -110,6 +110,11 @@ def get_festivals():
 
             for data in js['events']['event']:
                 f_id = md5('event:' + data['id']).hexdigest()
+
+                if redis.get('event:' + f_id + ':id') is not None:
+                    print tag, 'event:', data['title'], 'already in dataset, skipping..'
+                    continue
+
                 key = 'event:' + f_id + ':'
 
                 title = data['title']

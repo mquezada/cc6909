@@ -18,51 +18,49 @@ class ThreadDoc(threading.Thread):
         self.queue = queue
 
     def run(self):
-        while True:
+        with redis.pipeline() as pipe:
+            while True:
 
-            event_id, tweet_id, urls = self.queue.get()
+                event_id, tweet_id, urls = self.queue.get()
+                self.queue.task_done()
 
-            for url in urls:
-                field = url['expanded_url']
-                if field is not None and field != '':
-                    possibly_short_url = url['expanded_url']
-                else:
-                    possibly_short_url = url['url']
+                for url in urls:
+                    field = url['expanded_url']
+                    if field is not None and field != '':
+                        possibly_short_url = url['expanded_url']
+                    else:
+                        possibly_short_url = url['url']
 
-                try:
-                    doc = utils.unshorten_url(possibly_short_url)
-                    #print tag, 'got url', doc
-                    id = md5(quote(doc)).hexdigest()
-                    pipe = redis.pipeline()
-                    pipe.set('document:' + id + ':url', doc)
-                    pipe.set('document:' + id + ':' + event_id, 0)
-                    pipe.set('document:' + id + ':event_id', event_id)
-                    pipe.rpush('document:' + id + ':tweets', tweet_id)
-                    print tag, 'saved:', reduce(lambda x, y: x > 0 and y > 0, pipe.execute(), True), '[' + event_id, doc + ']'
-
-                    redis.incr('tweet:' + tweet_id + ':documented')
-
-                except Exception, e:
-                    print tag, e
-                    print tag, 'url=', possibly_short_url
-
-            self.queue.task_done()
+                    try:
+                        doc = utils.unshorten_url(possibly_short_url)
+                        #print tag, 'got url', doc
+                        id = md5(quote(doc)).hexdigest()
+                        pipe.set('document:' + id + ':url', doc)
+                        pipe.set('document:' + id + ':' + event_id, 0)
+                        pipe.set('document:' + id + ':event_id', event_id)
+                        pipe.rpush('document:' + id + ':tweets', tweet_id)
+                        pipe.incr('tweet:' + tweet_id + ':documented')
+                        print tag, 'saved:', reduce(lambda x, y: x > 0 and y > 0, pipe.execute(), True), '[' + event_id, doc + ']'
+                    except Exception, e:
+                        print tag, e
+                        print tag, 'url=', possibly_short_url
 
 
 def send_to_threads(entries):
-    for _ in range(15):
+    for entry in entries:
+        queue.put(entry)
+
+    for _ in range(100):
         thr = ThreadDoc(queue)
         thr.setDaemon(True)
         thr.start()
-
-    for entry in entries:
-        queue.put(entry)
 
     queue.join()
 
 
 def generate_documents():
     keys = redis.keys('event:*:title')
+    pipe = redis.pipeline()
     entries = []
     no = 0
 
@@ -84,12 +82,13 @@ def generate_documents():
                 t_id = redis.get('tweet:' + tweet_id + ':id_str')
                 doc = TWITTER % t_id
                 id = md5(quote(doc)).hexdigest()
-                redis.set('document:' + id + ':url', doc)
-                redis.set('document:' + id + ':' + event_id, 0)
-                redis.set('document:' + id + ':event_id', event_id)
-                redis.rpush('document:' + id + ':tweets', tweet_id)
+                pipe.set('document:' + id + ':url', doc)
+                pipe.set('document:' + id + ':' + event_id, 0)
+                pipe.set('document:' + id + ':event_id', event_id)
+                pipe.rpush('document:' + id + ':tweets', tweet_id)
                 no += 1
-                redis.incr('tweet:' + tweet_id + ':documented')
+                pipe.incr('tweet:' + tweet_id + ':documented')
+                pipe.execute()
             else:
                 entry = (event_id, tweet_id, urls)
                 entries.append(entry)
