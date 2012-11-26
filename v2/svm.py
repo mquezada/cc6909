@@ -4,64 +4,90 @@ import nltk
 import utils
 import numpy
 import HTMLParser
-
-parser = HTMLParser.HTMLParser()
-
-
-def remove_entities(tweet_id):
-    r = Redis()
-    key = 'tweet:' + tweet_id
-    text = r.get(key + ':text').decode('utf-8')
-    mentions = eval(r.get(key + ':user_mentions'))
-    hashtags = eval(r.get(key + ':hashtags'))
-    urls = eval(r.get(key + ':urls'))
-
-    for entity in mentions + hashtags + urls:
-        i = entity['indices']
-        text = text.replace(text[i[0]:i[1] + 1], ' ' * (i[1] - i[0] + 1))
-
-    return text
+from nltk.cluster import KMeansClusterer, cosine_distance
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.feature_extraction.text import TfidfVectorizer
+from time import time
 
 
 r = Redis()
 r_events = r.keys('event:*:title')
+parser = HTMLParser.HTMLParser()
+
 
 test = []
-for k in r_events:
-    print r.get(k)
-    id = k.split(':')[1]
-    docs = r.keys('document:*:' + id)
-    for doc in docs:
-        d_id = doc.split(':')[1]
-        d_tweets_key = 'document:' + d_id + ':tweets'
-        tweets = r.lrange(d_tweets_key, 0, -1)
-        for t in tweets:
-            tweet = remove_entities(t)
-            test.append(tweet)
-    break
+documents = []
+k = r_events[126]
+print "event:", r.get(k)
+id = k.split(':')[1]
+docs = r.keys('document:*:' + id)
+lang = r.get('event:' + id + ':lang')
+ds = 0
+ts = 0
+for doc in docs:
+    document = []
+    ds = ds + 1
+    d_id = doc.split(':')[1]
+    d_tweets_key = 'document:' + d_id + ':tweets'
+    tweets = r.lrange(d_tweets_key, 0, -1)
+    for t in tweets:
+        tweet = utils.remove_entities(t)
+        document.append(parser.unescape(' '.join(tweet.split())))
+        ts = ts + 1
+    documents.append(' '.join(document))
+
+"""
+stemmers = {
+    'english': SnowballStemmer('english'),
+    'spanish': SnowballStemmer('spanish'),
+}
+"""
+
+print "docs: ", ds
+print "tweets: ", ts
+
+norml = []
+for tweet in documents:
+    #stemmer = stemmers[lang]
+    if type(tweet) == str:
+        tweet = tweet.decode('utf-8')
+    text = utils.strip_accents(tweet)
+    text = utils.remove_stopwords(text, lang)
+
+    norml.append(text)
+
+t0 = time()
+vectorizer = TfidfVectorizer()
+X = vectorizer.fit_transform(norml)
+
+print "done in %fs" % (time() - t0)
+print "n_samples: %d, n_features: %d" % X.shape
+print
+
+from sklearn import metrics
+
+from sklearn.cluster import KMeans, MiniBatchKMeans
 
 
-stemmer = SnowballStemmer('spanish')
-texts = []
-for tweet in test:
-    text = utils.clean2(parser.unescape(tweet))
-    col = nltk.Text(nltk.word_tokenize(text))
-    texts.append(col)
+km = MiniBatchKMeans(n_clusters=5, init='k-means++', n_init=1,
+                         init_size=1000,
+                         batch_size=1000, verbose=1)
 
-corpus = nltk.TextCollection(texts)
-unique_terms = list(set(corpus))
+"""    km = KMeans(n_clusters=true_k, init='random', max_iter=100, n_init=1,
+            verbose=1)"""
 
+print "Clustering sparse data with %s" % km
+t0 = time()
+km.fit(X)
+print "done in %0.3fs" % (time() - t0)
+print
 
-def TFIDF(document):
-    word_tfidf = []
-    for word in unique_terms:
-        word_tfidf.append(corpus.tf_idf(word, document))
-    return word_tfidf
+#print "Homogeneity: %0.3f" % metrics.homogeneity_score(labels, km.labels_)
+#print "Completeness: %0.3f" % metrics.completeness_score(labels, km.labels_)
+#print "V-measure: %0.3f" % metrics.v_measure_score(labels, km.labels_)
+#print "Adjusted Rand-Index: %.3f" % \
+#    metrics.adjusted_rand_score(labels, km.labels_)
+#print "Silhouette Coefficient: %0.3f" % metrics.silhouette_score(
+#    X, labels, sample_size=1000)
 
-
-### And here we actually call the function and create our array of vectors.
-vectors = [numpy.array(TFIDF(f)) for f in texts]
-print vectors[0]
-print "Vectors created."
-print "First 10 words are", unique_terms[:10]
-print "First 10 stats for first document are", vectors[0][0:10]
+print

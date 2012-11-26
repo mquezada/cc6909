@@ -14,7 +14,7 @@ def remove_stopwords(sentence, lang='english'):
     words = re.findall(r'\w+', sentence, flags=re.UNICODE | re.LOCALE)
 
     #This is the more pythonic way
-    important_words = filter(lambda x: x not in stopwords.words(lang), words)
+    important_words = filter(lambda x: x not in stopwords.words(lang) and len(x) > 1, words)
 
     return " ".join(important_words)
 
@@ -26,13 +26,6 @@ def strip_accents(s):
 def clean(s, lang):
     s = strip_accents(s)
     s = remove_stopwords(s, lang)
-    return s
-
-
-def clean2(s):
-    s = strip_accents(s)
-    s = remove_stopwords(s, 'spanish')
-    s = remove_stopwords(s, 'english')
     return s
 
 
@@ -58,3 +51,19 @@ def unshorten_url(url):
         return unshorten_url(response.getheader('Location'))  # changed to process chains of short urls
     else:
         return url
+
+
+def remove_entities(tweet_id):
+    from redis import Redis
+    r = Redis()
+    key = 'tweet:' + tweet_id
+    text = r.get(key + ':text').decode('utf-8')
+    mentions = eval(r.get(key + ':user_mentions'))
+    #hashtags = eval(r.get(key + ':hashtags'))
+    urls = eval(r.get(key + ':urls'))
+
+    for entity in mentions + urls:
+        i = entity['indices']
+        text = text.replace(text[i[0]:i[1] + 1], ' ' * (i[1] - i[0] + 1))
+
+    return text.replace('#', '')
