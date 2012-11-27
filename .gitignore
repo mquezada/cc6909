@@ -1,5 +1,5 @@
-*.pdf
-*.tex
+#*.pdf
+#*.tex
 *.txt
 *.out
 *.log

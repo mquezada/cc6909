@@ -1,0 +1,64 @@
+\documentclass[upright, contnum]{umemoria}
+\depto{CIENCIAS DE LA COMPUTACI\'ON}
+\author{MAURICIO DANIEL QUEZADA VEAS}
+\title{IDENTIFICACI\'ON DE CONTENIDO MULTIMEDIA RELEVANTE A PARTIR DE EVENTOS UTILIZANDO SU INFORMACI\'ON SOCIAL}
+\auspicio{}
+\date{DICIEMBRE 2012}
+\guia{B\'ARBARA POBLETE LABRA}
+\carrera{INGENIERO CIVIL EN COMPUTACI\'ON}
+\comision{SERGIO OCHOA DELORENZI}{MAURICIO MAR\'IN CAIHUAN}{}
+
+\usepackage{lipsum}
+\usepackage{verbatim}
+
+\usepackage[latin1]{inputenc}
+\usepackage[T1]{fontenc}
+\inputencoding{latin1}
+
+\usepackage[T1]{fontenc}
+\usepackage{fontspec}
+\usepackage{graphicx}
+\defaultfontfeatures{Mapping=tex-text}
+\setmainfont{Linux Libertine O}
+\setmonofont[Scale=0.8]{DejaVu Sans Mono}
+
+\let\evensidemargin\oddsidemargin
+\reversemarginpar
+
+\begin{document}
+
+\frontmatter
+\maketitle
+
+\begin{abstract}
+\lipsum[1-4]
+\end{abstract}
+
+\begin{dedicatoria}
+Una dedicatoria corta.
+\end{dedicatoria}
+
+\begin{thanks}
+\lipsum[1-2]
+\end{thanks}
+
+\cleardoublepage
+\tableofcontents
+\cleardoublepage
+\listoftables
+\cleardoublepage
+\listoffigures
+
+\mainmatter
+
+\input{./capitulos/1-introduccion.tex}
+\input{./capitulos/2-antecedentes.tex}
+\input{./capitulos/3-problema.tex}
+\input{./capitulos/4-solucion.tex}
+\input{./capitulos/5-conclusiones.tex}
+\input{./capitulos/6-anexos.tex}
+
+\nocite{*}
+\bibliographystyle{plain}
+\bibliography{bibliografia}
+\end{document}
