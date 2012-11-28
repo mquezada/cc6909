@@ -68,7 +68,8 @@ se hace necesario poder encontrar lo más atractivo de acuerdo a la
 preferencia del usuario o usuarios. Se está haciendo otra suposición
 importante con esta analogía, y es que se está considerando que la
 información es íntegramente para ser /consumida/, y no, por ejemplo, para
-generar más contenido, o para ser utilizada por máquinas, etc. Dentro de
+generar más contenido, conocimiento, o para ser utilizada por
+máquinas, etc. Dentro de
 este contexto se plantea la pregunta de cómo seleccionar el contenido
 más atractivo dentro de todo lo que hay disponible en un momento dado.
 
@@ -81,8 +82,56 @@ documentos. Luego, utilizando las recomendaciones de otros usuarios es
 posible ordenar estos resultados de acuerdo a la relevancia que éstos
 les dan.
 
+Este trabajo consistió en el desarrollo de un sistema que permite
+generar resúmenes automáticos de contenido general (/multimedios/:
+texto, imágenes, vídeos, sonidos) a partir de eventos bien
+definidos. El contenido es filtrado o seleccionado de acuerdo a
+indicadores sociales: los objetos más comentados en la Web son
+considerados más importantes.
+
+El sistema implementado consideró dos tipos de eventos: noticias y
+conciertos musicales. Para obtenerlos, se utilizó el servicio de
+Google News[fn::http://news.google.com] y
+Last.fm[fn::http://last.fm]. Para medir la relevancia de los
+documentos y obtener los mismos se utilizó la red social
+Twitter[fn::http://twitter.com], que provee una 
+/Aplication Programming Interface/ (o API) para realizar búsquedas y
+obtener información sobre los /tweets/ o mensajes cortos que publican
+los usuarios del servicio.
+
+
+
 ** Contexto
+   
+   La tasa de crecimiento de la cantidad de datos en la red, y en
+   particular, de las /redes sociales online/ (OSN, /Online Social Networks/),
+   es de tal magnitud que se vuelve necesario encontrar formas de
+   filtrar y buscar sólo la información relevante dentro de todas las
+   fuentes que hablan del mismo tópico o tema.
+
+   En el contexto de las redes sociales online, cada día se publican
+   millones de /actualizaciones de estado/ (mensajes breves sobre el
+   estado actual del usuario) con respecto a distintos tópicos, ya
+   sean conversacionales, personales o sobre algún evento en
+   particular[fn::Pear Analytics. Twitter Study TODO!!!!]. Además, el
+   auge de los teléfonos inteligentes o /smartphones/ con mayor
+   capacidad de procesamiento e integrados con todo tipo de sensores
+   (cámaras fotográficas, de vídeo, acelerómetro, barómetro,
+   osciloscopio, etc.), hace posible el generar aun más información y
+   en tiempo real con respecto a eventos que suceden en el mundo, o
+   bien con respecto al estado particular de los usuarios de estas
+   redes y dispositivos.
+
+   Este aumento de la generación de datos no sólo influye en la
+   riqueza en la variedad de éstos, sino también en el
+   comportamiento de los usuarios a lo largo del tiempo. Actualmente,
+   una gran parte de los usuarios valora más el contenido multimedia
+   en las redes sociales online.
+
 ** Motivación
+
+   
+
 ** Contribuciones
 ** Alternativas analizadas
 ** Objetivos
@@ -92,7 +141,7 @@ les dan.
 ** Resultados obtenidos
 
 * Antecedentes
-** Conceptos involucrados
+** Marco teórico
 ** Soluciones existentes
 
 * Especificación del Problema
@@ -112,18 +161,51 @@ les dan.
 ** Relevancia del trabajo realizado
 ** Trabajo futuro
 
-
+   
 * Unclassified D:
   
 
 ** Twitter
-Twitter es un servicio que permite conectar a personas mediante
-mensajes cortos, rápidos y frecuentes. Estos mensajes son publicados
-en el perfil del usuario que los emite, pueden ser vistos directamente
-por los seguidores de este usuario o ser vistos directamente en el
-perfil o buscándolos mediante una funcionalidad que provee el
-servicio. Además, un usuario puede /seguir/ a otros para poder ver en
-su /timeline/ los mensajes de todos a quienes sigue.
+Twitter es una red social online que permite conectar a
+personas mediante la comunicación de mensajes cortos, rápidos y frecuentes. Estos
+mensajes son publicados en el perfil del usuario que los emite, pueden
+ser vistos directamente por los seguidores de este usuario o ser
+vistos directamente en el perfil o buscándolos mediante una
+funcionalidad que provee el servicio. Además, un usuario puede
+/seguir/ a otros para poder ver en su /timeline/ los mensajes de todos
+a quienes sigue.
+
+Estos mensajes, o /tweets/, pueden además /mencionar/ a otros
+usuarios, mediante la convención "@usuario" que indica que se está
+mencionando a la persona con el nombre "usuario". Adicionalmente,
+existen varias convenciones o costumbres que han surgido a lo largo
+del tiempo en esta red:
+
+
+- Respuestas o /replies/: son mensajes del tipo =@usuario [texto]...=,
+  que ocurren usualmente en una conversación entre dos usuarios.
+- Menciones o /mentions/: un poco más general a una respuesta, el
+  nombre del usuario mencionado puede estar en cualquier parte del
+  mensaje. La diferencia semántica es que no se le habla
+  "directamente" al usuario mencionado, como en una respuesta, sino
+  que sólo es mencionado por si el mensajes es de su interés o no.
+- /Retweets/: son mensajes del tipo =RT @usuario: [texto]=. Ocurren
+  cuando se quiere compartir el mensaje de otro usuario, o citarlo
+  para mencionarlo en el mismo mensaje.
+- /Hashtags/: son palabras precedidas por el caracter \#, que indican
+  un identificador a cierto evento o suceso dentro o fuera de la
+  red. Suelen usarse para categorizar de cierta forma un tópico, pero
+  son libres de usarse como los usuarios quieran.
+- Mensaje simple: un mensaje sin menciones ni hashtags.
+
+Ejemplos:
+
+- Mensaje simple: =Jason Funk disipa patitos=;
+- Respuesta: =@jason estoy de acuerdo con lo que dices=;
+- Mención: =creo que @jason es una cumbre de sabiduría=;
+- Retweet: =RT @jason: Jason Funk disipa patitos=; y
+- Hashtag: =Estoy escribiendo mi memoria #dcc #summarization=
+
 
 # https://support.twitter.com/groups/31-twitter-basics/topics/104-welcome-to-twitter-support/articles/13920-get-to-know-twitter-new-user-faq
 

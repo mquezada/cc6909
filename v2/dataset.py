@@ -7,13 +7,13 @@ from time import time
 def main():
     tt0 = time()
     # step 1
-    t0 = time()
-    events_crawler.get_news()
-    print "time:", str((time() - t0))
+    #t0 = time()
+    #events_crawler.get_news()
+    #print "time:", str((time() - t0))
 
-    t0 = time()
-    events_crawler.get_festivals()
-    print "time:", str((time() - t0))
+    #t0 = time()
+    #events_crawler.get_festivals()
+    #print "time:", str((time() - t0))
 
     t0 = time()
     # step 2
