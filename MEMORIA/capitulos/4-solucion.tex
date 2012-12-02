@@ -1,15 +1,214 @@
-\chapter{Descripci\'on de la Soluci\'on}
+\chapter{Descripción de la Solución}
 \label{sec-4}
 
-\section{Desafíos t\'ecnicos}
+\section{Modelo formal}
 \label{sec-4.1}
 
-\section{Metolog\'ia de desarrollo}
+\section{Metodología de desarrollo}
 \label{sec-4.2}
 
-
-\section{Casos de estudio}
+\section{Metodología de obtencion del dataset}
 \label{sec-4.3}
 
-\section{Validaci\'on}
+
+Se describe a continuación el proceso diseñado para la obtención de
+datos para alimentar al sistema implementado.
+
+Las etapas de generación del dataset son las siguientes:
+
+\begin{itemize}
+\item Recolección de eventos (noticias y conciertos);
+\item Enriquecimiento de los eventos existentes mediante tweets; e
+\item Identificación de documentos a partir de los tweets por cada evento.
+\end{itemize}
+Se recolectaron datos (eventos y tweets) desde el 19 de noviembre de
+2012 hasta XXXXXXXXXXXX todos los días desde la medianoche hasta que
+el proceso termina exitosamente.
+
+\subsection{Recolección de eventos}
+\label{sec-4.3.1}
+
+
+Se consideraron dos tipos de eventos para el sistema: noticias y
+conciertos musicales. Los conciertos incluyen festivales de varios
+artistas.
+
+\begin{itemize}
+\item Noticias
+  Para obtener las noticias, se utilizó el servicio de Google
+  News\footnote{\href{http://news.google.com}{http://news.google.com} }. Existe una API (en proceso de
+  obsolescencia, pero funcional a la fecha de este trabajo) que permite
+  obtener no sólo los titulares y breve descripción de cada noticia,
+  sino también un conjunto de entre 4-10 noticias relacionadas de otras
+  fuentes. Esto sirvió para alimentar los términos de búsqueda para la
+  etapa siguiente. Se guardaron los siguientes datos de una noticia:
+
+\begin{itemize}
+\item Título,
+\item Descripción,
+\item URL de la fuente, y
+\item Titulares de las noticias relacionadas.
+\end{itemize}
+
+\item Conciertos
+  Utilizando el servicio de Last.fm para obtener los conciertos y
+  festivales de una ubicación en
+  particular\footnote{\href{http://www.lastfm.es/api/show/geo.getEvents}{http://www.lastfm.es/api/show/geo.getEvents} }, se
+  obtuvieron los conciertos y festivales de las siguientes
+  ubicaciones:
+
+\begin{itemize}
+\item Santiago, Chile;
+\item Londres, Inglaterra;
+\item Glastonbury, Inglaterra;
+\item Las Vegas, Nevada, EE.UU.; y
+\item Estocolmo, Suecia.
+\end{itemize}
+
+\item Título del evento (concierto o festival);
+\item Artistas que participan; y
+\item Fechas de inicio y término (esta última no siempre está como
+    dato).
+
+  Además de otros datos descriptivos, como la ubicación, descripción
+  breve, sitio web de la banda o festival, etc.
+\end{itemize}
+Cada vez que se obtienen los eventos se vuelven a obtener los
+conciertos, pero sólo agregando los nuevos. Las noticias siempre son
+nuevas, aun así por implementación no se consideraron los repetidos.
+
+\subsection{Enriquecimiento de eventos}
+\label{sec-4.3.2}
+
+
+Se obtuvieron tweets utilizando el servicio de búsqueda que provee
+Twitter en su
+API\footnote{\href{https://dev.twitter.com/docs/api/1.1/get/search/tweets}{https://dev.twitter.com/docs/api/1.1/get/search/tweets} }. El
+objetivo es enriquecer los eventos con la información social que hay
+en la Web sobre éstos.
+
+Para cada uno de los eventos obtenidos en la fase anterior, se
+utilizaron los términos de búsqueda asociados a ellos: los titulares
+de las noticias relacionadas y los nombres de los artistas para los
+eventos noticiosos y musicales, respectivamente.
+
+\begin{itemize}
+\item Para las noticias, se hace una búsqueda en Twitter de los titulares
+  al mismo tiempo en que se obtienen de Google News, y nuevamente al
+  día siguiente, es decir, 2 búsquedas por cada titular de un evento.
+  Se quitan las tildes y caracteres no ASCII y las stopwords, para
+  evitar problemas con la implementación y no hacer calce de stopwords
+  en la búsqueda de Twitter, respectivamente.
+\item Para los conciertos y festivales, se utilizaron los nombres de los
+  artistas y del evento como términos de búsqueda. De acuerdo a la
+  información asociada al evento, se busca por una mayor cantidad de
+  días:
+
+\begin{itemize}
+\item Se busca desde un día antes de inicio del evento;
+\item Si está presente la fecha de término del evento, se busca cada día
+    dentro del intervalo ``fecha de inicio'' a ``fecha de término'' hasta
+    tres días terminado el evento.
+\item Si no está presente la fecha de término (por ejemplo, un concierto
+    o un festival de un día), se busca hasta tres días pasada la fecha
+    de inicio.
+\end{itemize}
+
+\end{itemize}
+\subsection{Identificación de documentos a partir de tweets}
+\label{sec-4.3.3}
+
+
+    Luego de obtener los tweets asociados a cada evento, el siguiente
+    paso fue generar los documentos que fueron usados para la
+    generación de los resúmenes. Nuevamente, el modelo consistió en que cada
+    documento se modeló como un vector de palabras, donde el
+    identificador del documento es una URL, y sus componentes
+    corresponden al contenido de los tweets que tienen esa URL en el
+    texto del mensaje.
+
+    El caso en el que un tweet no tenía ninguna URL en su contenido
+    fue abordado de la siguiente forma: la URL asociada es una tal que
+    representa al mismo tweet (utilizando el servicio de Twitter), y
+    el contenido de ese documento es el mismo tweet, de forma de no
+    dejar el tweet sin ser representado.
+
+    Este proceso fue abordado recorriendo todos los eventos del
+    dataset, observando todos los tweets asociados a cada evento,
+    extrayendo la URL si es que hay alguna y guardando el documento
+    con el nuevo tweet. Se marcan los tweets observados para no tener
+    que repetir el proceso, ya que es intensivo en conexión a la red.
+
+    Dada la condición breve de los mensajes publicados en la red
+    social, muchos de los usuarios y/o servicios que publican mensajes
+    con una URL n su interior suelen utilizar \emph{acortadores} (\emph{url shorteners})
+    para los enlaces, y así no utilizar mucho espacio dentro de un
+    mensaje. Otra ventaja que ofrecen es que algunos servicios como
+    \hyperref[sec-4.3.3]{bit.ly} dan estadísticas sobre los visitantes a estos enlaces (y
+    así saber quiénes vienen de cierta red social u otra, por
+    ejemplo). Twitter, a su vez, actualmente también ofrece
+    acortamiento de URLs por defecto. Esto suele producir que un enlace
+    acortado se resuelva a otro enlace también acortado, por lo que es
+    necesario resolver la URL completa para evitar duplicados o
+    \emph{pseudo-duplicados} (en el caso en que dos URLs sintácticamente
+    distintas apunten al mismo recurso). EN LA FIGURA\ldots{}...
+
+    FIGURA DE LINKS CORTOS
+
+    Por lo anterior, una vez identificada la URL del texto de un
+    tweet, se resuelve su URL completa (que puede ya serlo de
+    antemano), lo que consume recursos de ancho de banda y
+    tiempo.
+
+\section{Desafíos técnicos}
 \label{sec-4.4}
+
+\section{Restricciones de la API de Twitter}
+\label{sec-4.5}
+
+
+   La API de búsqueda de Twitter permite obtener tweets de acuerdo a un
+   término de búsqueda. Se utilizó este servicio para enriquecer los
+   eventos con información social utilizando como términos de búsqueda
+   tanto los títulos de las noticias como los nombres de los artistas
+   para las noticias y los conciertos, respectivamente.
+
+   Funciona de la siguiente forma: cada vez que se hace un request a la
+   URL dada por el servicio, éste retorna a lo más 100 tweets por página, con un
+   máximo de 15 páginas (indicando en el request qué página queremos
+   consultar), dando como total hasta 1500 tweets por búsqueda. Existirán
+   términos de búsqueda que no presenten ningún resultado  (ya sea por
+   estar mal escritos o simplemente que no sean un tópico de discusión), o por
+   el contrario, que se generen más tweets que los retornados por la
+   búsqueda por cada ventana de tiempo que demore ésta (por ejemplo, un
+   \emph{trending topic} o tópico que sea muy mencionado en la red social).
+
+   Existe una limitación de uso de este servicio: sólo es posible hacer
+   hasta 180 requests por cada 15 minutos, o 1 request cada 5
+   segundos. Además, sólo retorna tweets de hasta 7 días de antigüedad, y
+   sus resultados no son necesariamente en tiempo real y su estabilidad
+   varía de acuerdo a factores externos.
+
+   Los tweets retornados vienen en formato \texttt{JSON} (\emph{Javascript Simple Object Notation}),
+   e incluyen varios metadatos sobre el tweet aparte de los principales,
+   como autor, fecha, contenido. Algunos de estos metadatos son:
+
+\begin{itemize}
+\item Cantidad de \emph{retweets} hechos hasta la fecha;
+\item Si posee alguna URL o \emph{hashtag} en el texto;
+\item Si es una \emph{mención} a otro usuario;
+\item La ubicación de donde se envió el tweet;
+\item etc.
+\end{itemize}
+  Además incluye datos sobre el autor, como por ejemplo:
+
+\begin{itemize}
+\item Si la cuenta está \emph{verificada};
+\item La cantidad de seguidores del usuario;
+\item Cantidad de amigos (seguidores que también lo siguen);
+\item Cantidad de tweets;
+\item Su descripción, y si incluye alguna URL, etc;
+\item Ubicación (dada por el mismo usuario);
+\item Fecha de creación de la cuenta;
+\item etc.
+\end{itemize}

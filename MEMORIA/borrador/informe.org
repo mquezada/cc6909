@@ -49,62 +49,83 @@ asdf
 
 * Introducción
 
-Al igual que en el buffet de un restaurante, por mucho que se quisieran
-comer todos los platos favoritos, es imposible comer todo lo que uno
-quisiera por razones obvias. Una posibilidad es probar un poco de cada
-comida, para luego saber qué es lo más delicioso y comer hasta
-hartarse.
+  Al igual que en el buffet de un restaurante, por mucho que se quisieran
+  comer todos los platos favoritos, es imposible comer todo lo que uno
+  quisiera por razones obvias. Una posibilidad es probar un poco de cada
+  comida, para así saber qué es lo más delicioso y comer hasta
+  hartarse.
+  
+  Pero, ¿qué hacer si hay demasiados platos y no se conocen todos? de
+  alguna manera hay que saber cuáles hay que probar, si el objetivo es
+  comer lo mejor posible. Un amigo puede recomendar una u otra comida,
+  lo cual puede servir para orientarse. Entonces se pueden escoger
+  pequeñas muestras de acuerdo a las recomendaciones.
 
-Pero, ¿qué hacer si hay demasiados platos y no se conocen todos? de
-alguna manera hay que saber cuáles hay que probar, si el objetivo es
-comer lo mejor posible. Un amigo puede recomendar una u otra comida,
-lo cual puede servir para orientarse. Entonces se pueden escoger
-pequeñas muestras de acuerdo a las recomendaciones.
+  Complicando más el escenario, qué pasa si este restaurant tiene
+  además música en vivo, y por alguna razón, se tiene el privilegio de
+  escoger qué escuchar. En este caso, ya no es posible "probar" un
+  poco de cada tipo existente, no sólo por la cantidad, sino porque no
+  es posible juzgar un grupo musical por una canción o un extracto de
+  ella. Si se quiere tener la mejor velada, pudiendo disfrutar de cada
+  uno de los panoramas que ofrece, es necesario tener algo de
+  información para poder escoger.
+  
+  Pasando a un contexto diferente, supóngase que este gran buffet es la
+  Web y los distintos platos corresponden a contenido publicado en
+  ella. Por lo tanto, dada la gran cantidad de información disponible,
+  se hace necesario poder encontrar lo más atractivo de acuerdo a la
+  preferencia del usuario o de los usuarios. Nótese que se está
+  haciendo otra suposición importante con esta analogía, y es que se
+  está considerando que la información es íntegramente para ser
+  /consumida/, y no, por ejemplo, para generar más contenido,
+  conocimiento, o para ser utilizada por máquinas, etc. Dentro de
+  este contexto se plantea la pregunta de cómo seleccionar el contenido
+  más atractivo dentro de todo lo que hay disponible en un momento dado.
+  
+  Siguiendo el razonamiento de la analogía, una manera de poder
+  seleccionar sólo el contenido más "atractivo" (de acuerdo a las
+  preferencias del usuario), es probar un poco de cada uno. O bien,
+  generar un /resumen/ de cada documento y presentarlo al usuario.
 
-Pasando a un contexto diferente, supóngase que este gran buffet es la
-Web y los distintos platos corresponden a contenido publicado en
-ella. Por lo tanto, dada la gran cantidad de información disponible,
-se hace necesario poder encontrar lo más atractivo de acuerdo a la
-preferencia del usuario o usuarios. Se está haciendo otra suposición
-importante con esta analogía, y es que se está considerando que la
-información es íntegramente para ser /consumida/, y no, por ejemplo, para
-generar más contenido, conocimiento, o para ser utilizada por
-máquinas, etc. Dentro de
-este contexto se plantea la pregunta de cómo seleccionar el contenido
-más atractivo dentro de todo lo que hay disponible en un momento dado.
+  Sin embargo, tal como se dijo antes, no es posible hacer lo anterior
+  para contenido que no puede ser resumido directamente para ser
+  consumido (la música como tal, o bien, vídeos o imágenes). En esta
+  perspectiva, sólo las recomendaciones pueden ayudar a determinar lo
+  más conveniente de acuerdo al usuario.
 
-Siguiendo el razonamiento de la analogía, una manera de poder
-seleccionar sólo el contenido más "atractivo" (de acuerdo a las
-preferencias del usuario), es probar un poco de cada uno. Diversos
-esfuerzos han sido hechos para este propósito, entre ellos está el de
-generar resúmenes automáticos[fn::??] a partir de uno o múltiples
-documentos. Luego, utilizando las recomendaciones de otros usuarios es
-posible ordenar estos resultados de acuerdo a la relevancia que éstos
-les dan.
+  Este trabajo consistió en el desarrollo de una primera aproximación
+  que permite generar resúmenes automáticos de eventos bien definidos
+  a partir de los documentos Web que hablan de éstos. Los documentos son
+  considerados /multimedios/: texto, imágenes, vídeos, sonidos; es
+  decir, no necesariamente texto. El contenido es filtrado o
+  seleccionado de acuerdo a indicadores sociales: los objetos más
+  /tomados en cuenta/ en la Web son considerados más importantes.
+  
+  El sistema implementado consideró dos tipos de eventos: noticias y
+  conciertos musicales. Para obtenerlos, se utilizó el servicio de
+  Google News[fn::http://news.google.com] y
+  Last.fm[fn::http://last.fm]. Para medir la relevancia de los
+  documentos y obtener los mismos se utilizó la red social
+  Twitter[fn::http://twitter.com], que provee una 
+  /Aplication Programming Interface/ (o API) para realizar búsquedas y
+  obtener información sobre los /tweets/ o mensajes cortos que publican
+  los usuarios de la red.
 
-Este trabajo consistió en el desarrollo de un sistema que permite
-generar resúmenes automáticos de contenido general (/multimedios/:
-texto, imágenes, vídeos, sonidos) a partir de eventos bien
-definidos. El contenido es filtrado o seleccionado de acuerdo a
-indicadores sociales: los objetos más comentados en la Web son
-considerados más importantes.
+  La estructura de este informe es como sigue: en este capítulo se
+  comenta el contexto dentro del cual se desarrolló este sistema, las
+  contribuciones realizadas, los objetivos y una descripción general
+  de la solución; en el siguiente capítulo se discute el estado del
+  arte y el marco teórico del cual se desprende este trabajo; el
+  capítulo 3 describe más en detalle el problema a resolver, su
+  relevancia y sus dificultades, para luego, en el
+  capítulo 4, describir la solución implementada, más un par de casos
+  de estudio sobre los resultados obtenidos, para finalizar con las
+  conclusiones de este trabajo en el capítulo 5.
 
-El sistema implementado consideró dos tipos de eventos: noticias y
-conciertos musicales. Para obtenerlos, se utilizó el servicio de
-Google News[fn::http://news.google.com] y
-Last.fm[fn::http://last.fm]. Para medir la relevancia de los
-documentos y obtener los mismos se utilizó la red social
-Twitter[fn::http://twitter.com], que provee una 
-/Aplication Programming Interface/ (o API) para realizar búsquedas y
-obtener información sobre los /tweets/ o mensajes cortos que publican
-los usuarios del servicio.
-
-
-
-** Contexto
+** Contexto y Motivación
    
-   La tasa de crecimiento de la cantidad de datos en la red, y en
-   particular, de las /redes sociales online/ (OSN, /Online Social Networks/),
+   La tasa de crecimiento de la cantidad de datos en la Web, y en
+   particular, en las /redes sociales online/ (OSN, /Online Social Networks/),
    es de tal magnitud que se vuelve necesario encontrar formas de
    filtrar y buscar sólo la información relevante dentro de todas las
    fuentes que hablan del mismo tópico o tema.
@@ -113,108 +134,222 @@ los usuarios del servicio.
    millones de /actualizaciones de estado/ (mensajes breves sobre el
    estado actual del usuario) con respecto a distintos tópicos, ya
    sean conversacionales, personales o sobre algún evento en
-   particular[fn::Pear Analytics. Twitter Study TODO!!!!]. Además, el
-   auge de los teléfonos inteligentes o /smartphones/ con mayor
+   particular[fn::Pear Analytics. Twitter Study http://es.scribd.com/doc/18548460/Pear-Analytics-Twitter-Study-August-2009].
+   Además, el auge de los teléfonos inteligentes o /smartphones/ con mayor
    capacidad de procesamiento e integrados con todo tipo de sensores
    (cámaras fotográficas, de vídeo, acelerómetro, barómetro,
    osciloscopio, etc.), hace posible el generar aun más información y
-   en tiempo real con respecto a eventos que suceden en el mundo, o
-   bien con respecto al estado particular de los usuarios de estas
-   redes y dispositivos.
+   e incluso en tiempo real sobre lo que acontece en el mundo, en
+   internet, o bien sobre el estado particular de cada usuario.
 
-   Este aumento de la generación de datos no sólo influye en la
+   Este aumento y evolución de la generación de datos no sólo influye en la
    riqueza en la variedad de éstos, sino también en el
    comportamiento de los usuarios a lo largo del tiempo. Actualmente,
-   una gran parte de los usuarios valora más el contenido multimedia
-   en las redes sociales online.
+   una gran parte de los usuarios valora más el contenido de tipo
+   multimedia (imágenes y videos) en las redes sociales online[fn::The Rise of Visual Social Media http://www.fastcompany.com/3000794/rise-visual-social-media. En el   artículo se menciona un estudio sobre comportamiendo y preferencias de los usuarios en las redes sociales hecho por ROI Research: http://www.slideshare.net/performics_us/performics-life-on-demand-2012-summary-deck]. 
+   Se hace entonces necesario encontrar formas para satisfacer estas
+   necesidades de los usuarios, las cuales ya han sido
+   abordadas en parte, como la generación de
+   resúmenes automáticos orientado a motores de búsqueda, o la
+   determinación de la relevancia tanto de documentos en la Web como de
+   actualizaciones de estado en las redes sociales.
 
-** Motivación
+   Surge como motivación el poder identificar y extraer contenido
+   relevante de la Web, a partir de eventos, y además avanzar un
+   paso más arriba en el nivel de abstracción: considerar los
+   documentos no por su contenido textual, lo que permite abarcar
+   imágenes, vídeos, sonidos y multimedios. Algunas
+   aplicaciones directas de esto son, entre otras:
 
-   
+   - Ayudar al trabajo periodístico mediante una colección de
+     contenido multimedia relacionado a un evento noticioso. Por
+     ejemplo, la versión online de Radio
+     Biobío[fn::http://www.biobiochile.cl/] frecuentemente publica
+     breves artículos sobre sucesos que tienen impacto en las redes
+     sociales, mostrando un pequeño conjunto de mensajes con
+     comentarios de la gente[fn::Como muestra: http://www.biobiochile.cl/2012/12/01/aporte-de-lustrabotas-de-santiago-a-la-teleton-provoca-admiracion-en-redes-sociales.shtml, y http://www.biobiochile.cl/2012/12/01/rechazo-provocan-condicionamientos-de-compra-de-ripley-y-unimarc-para-donar-a-la-teleton.shtml]. 
+     Una aplicación directa involucraría
+     considerar además contenido multimedia, y organizar este
+     contenido de acuerdo a la relevancia que tiene dentro de las
+     redes. 
+   - Enriquecer la búsqueda en la Web a través de contenido
+     multimedia. Una persona buscando información sobre un concierto
+     podría obtener imágenes y vídeos de éste fácilmente una vez
+     identificado el concierto.
+   - Siguiendo lo anterior, un grupo musical podría obtener toda la
+     información multimedia asociada a su concierto, tanto para sus
+     fans como para ellos mismos, potenciando su popularidad.
+   - Poder distinguir entre eventos similares rápidamente. Por
+     ejemplo, un usuario que desee obtener información sobre "Gaza",
+     puede referirse tanto a la banda de música como al conflicto en
+     Israel. El poder distinguir rápidamente mediante una imagen o un
+     vídeo acelera mucho el proceso. /Una imagen vale más que mil palabras/.
+    
+   El sistema implementado es una primera aproximación que puede
+   satisfacer los ejemplos mencionados.
 
-** Contribuciones
-** Alternativas analizadas
 ** Objetivos
 *** Objetivo general
+    
+    El objetivo principal de este trabajo fue el de poder evaluar e
+    implementar en la práctica un sistema de extracción de contenido
+    multimedia basado en la información social asociada a este
+    contenido.
+
 *** Objetivos específicos
+
+    - Abstraerse del problema de identificación de eventos a partir de
+      documentos Web, llevando a cabo una metodología de obtención de
+      datos simple.
+    - Implementar un modelo de /clustering/ para separar los
+      documentos en /subtópicos/ de cada evento, sin considerar el
+      tipo de contenido de estos documentos.
+    - Analizar la efectividad del sistema implementado, evaluando
+      casos de estudio.
+
+#** Descripción general de la solución
+#** Resultados obtenidos
+
 ** Descripción general de la solución
-** Resultados obtenidos
+   
+   Este trabajo puede considerarse como un punto de partida para el
+   desarrollo de un modelo de recuperación de contenido multimedia,
+   similar a lo que corresponde a la generación de resúmenes
+   automáticos para múltiples documentos. En particular, se implementó
+   un sistema que permite considerar distintas estrategias para
+   continuar desarrollando en el futuro. Además:
+
+   - Se llevó a cabo una metodología para la obtención de documentos y
+     enriquecerlos con datos obtenidos de fuentes sociales;
+   - Se implementó un procedimiento que separar estos documentos en
+     /clusters/, /sin considerar su contenido/. Sólo se utilizó la
+     información social asociada; y
+   - Se implementó además una forma de /rankear/ u ordenar los
+     resultados de acuerdo a /relevancia/, siendo ésta medida de
+     acuerdo a la información social asociada a los documentos
+     generados.   
+
+   El sistema implementado puede dividirse en tres componentes
+   principales:
+   1. La que obtiene descripciones de eventos a partir de fuentes de
+      éstos en la Web, enriqueciéndolos con información social;
+   2. Otra componente que procesa y separa los documentos a partir de
+      la información social; genera /objetos Web/ y los separa en
+      subtópicos de cada evento, respectivamente; y
+   3. La componente que entrega los $k$ documentos más relevantes por
+      cada evento obtenido, basándose en los subtópicos identificados.
+
+
+   Se utilizaron las API de Google News como de Last.fm para la
+   obtención de eventos: noticias y conciertos, respectivamente. Para
+   el enriquecimiento de los eventos se utilizó la información social
+   que provee Twitter y su API de búsqueda de /tweets/. De la misma
+   forma, se consideraron los metadatos de los mismos mensajes para medir
+   la relevancia de los documentos generados. 
+
+   Un documento es identificado por la URL que lo ubica en la Web. El
+   contenido no es más que la concatenación de los tweets que
+   mencionan al documento. Se realizó una limpieza y preprocesamiento
+   de los datos, quitando las /stopwords/ y realizando /stemming/
+   sobre el contenido en texto. Luego, se aplicó /tf-idf/ sobre los
+   documentos, representándolos como vectores en el /space vector
+   model/. Para identificar los subtópicos de un evento se utilizó el 
+   algoritmo de clustering $k$-means sobre los vectores. 
+
+   Para el ranking de los documentos se decidió usar una ponderación
+   simple sobre una serie de indicadores que dependen de los tweets y
+   de las URLs de cada evento.
+
+   Entre las herramientas utilizadas, se usó lenguaje de
+   programación Python, varias librerías para el manejo de datos
+   (tales como =nltk=, =scipy=, =scikit-learn=, por nombrar las más
+   importantes), el sistema de almacenamiento Redis, entre otras
+   herramientas que son mencionadas en la descripción detallada de la
+   solución.
 
 * Antecedentes
-** Marco teórico
-** Soluciones existentes
+** Twitter
+   Twitter es una red social online que permite conectar a
+   personas mediante la comunicación de mensajes cortos, rápidos y   frecuentes[fn::https://support.twitter.com/groups/31-twitter-basics/topics/104-welcome-to-twitter-support/articles/13920-get-to-know-twitter-new-user-faq]. Estos
+   mensajes son publicados en el perfil del usuario que los emite,
+   pueden ser vistos directamente por los seguidores de este usuario o
+   ser vistos directamente en el perfil o buscándolos mediante una
+   funcionalidad que provee el servicio. Además, un usuario puede
+   /seguir/ a otros para poder ver en su /timeline/ o perfil privado 
+   los mensajes de todos a quienes sigue.
+   
+   FIGURA TWITTER
+   
+   Estos mensajes, o /tweets/, sólo son cadenas de caracteres con
+   metadatos que el mismo servicio asigna una vez enviado a la red
+   social. Desde sus inicios (año 2007) se han añadido algunas capacidades
+   adicionales a estos mensajes, como la de poner URLs, imágenes,
+   vídeos, etc. Además, existen varias convenciones que han surgido a
+   lo largo del tiempo. A continuación se describe una lista de tipos
+   de mensajes que existen en Twitter, originados por estas convenciones:
 
-* Especificación del Problema
+   1. Respuestas o /replies/: son mensajes del tipo =@usuario [texto]=,
+      que ocurren usualmente en una conversación entre dos usuarios.
+   2. Menciones o /mentions/: un poco más general a una respuesta, el
+      nombre del usuario mencionado puede estar en cualquier parte del
+      mensaje. La diferencia semántica es que no se le habla
+      "directamente" al usuario mencionado, como en una respuesta, sino
+      que sólo es mencionado por si el mensaje es de su interés o no.
+   3. /Retweets/: son mensajes del tipo =RT @usuario: [texto]=. Ocurren
+      cuando se quiere compartir el mensaje de otro usuario, o citarlo
+      para mencionarlo en el mismo mensaje.
+   4. /Hashtags/: son palabras precedidas por el caracter \#, que indican
+      un identificador a cierto evento o suceso dentro o fuera de la
+      red. Suelen usarse para categorizar de cierta forma un tópico, pero
+      son libres de usarse como los usuarios quieran.
+   5. Mensaje simple: un mensaje sin menciones ni hashtags.
+
+  Ejemplos:
+
+  - Mensaje simple: =Jason Funk disipa patitos=;
+  - Respuesta: =@jason estoy de acuerdo con lo que dices=;
+  - Mención: =creo que @jason es una cumbre de sabiduría=;
+  - Retweet: =RT @jason: Jason Funk disipa patitos=; y
+  - Hashtag: =Estoy escribiendo mi memoria #dcc #summarization=
+
+  Estos mensajes están limitados a 140 caracteres de extensión. Sumando
+  esto a la integración de la red con otros servicios y dispositivos, y
+  a la cantidad de mensajes publicados cada minuto, permite utilizar
+  esta red como una gran fuente de datos.
+
+  Twitter además provee varios servicios adicionales, como por ejemplo,
+  un servicio de acortamiento de URLs, para permitir incluir una URL
+  larga sin perjudicar la cantidad de caracteres restantes para el
+  mensaje; un servicio de alojamiento de fotos y vídeos, para hacer más
+  sencilla la publicación de mensajes multimedia desde dispositivos
+  móviles; un servicio de búsqueda que permite buscar una cantidad
+  determinada de tweets sobre un término de búsqueda o un hashtag,
+  entre otros servicios.
+
+
+** Identificación automática de eventos                             :incompl:
+** Clustering de documentos                                         :incompl:
+*** Evaluación de clusterings
+** Resúmenes automáticos                                            :incompl:
+*** Evaluación de resúmenes
+** Ranking de documentos                                            :incompl:
+
+
+* Especificación del Problema                                       :incompl:
 ** Descripción detallada
 ** Relevancia de una solución
 ** Características de calidad
 ** Criterios de aceptación
 
 * Descripción de la Solución
-** Desafíos técnicos
-** Metología de desarrollo
-** Casos de estudio
-** Validación
-* Conclusiones
-** Resumen del trabajo realizado
-** Objetivos alcanzados
-** Relevancia del trabajo realizado
-** Trabajo futuro
-
-   
-* Unclassified D:
-  
-
-** Twitter
-Twitter es una red social online que permite conectar a
-personas mediante la comunicación de mensajes cortos, rápidos y frecuentes. Estos
-mensajes son publicados en el perfil del usuario que los emite, pueden
-ser vistos directamente por los seguidores de este usuario o ser
-vistos directamente en el perfil o buscándolos mediante una
-funcionalidad que provee el servicio. Además, un usuario puede
-/seguir/ a otros para poder ver en su /timeline/ los mensajes de todos
-a quienes sigue.
-
-Estos mensajes, o /tweets/, pueden además /mencionar/ a otros
-usuarios, mediante la convención "@usuario" que indica que se está
-mencionando a la persona con el nombre "usuario". Adicionalmente,
-existen varias convenciones o costumbres que han surgido a lo largo
-del tiempo en esta red:
-
-
-- Respuestas o /replies/: son mensajes del tipo =@usuario [texto]...=,
-  que ocurren usualmente en una conversación entre dos usuarios.
-- Menciones o /mentions/: un poco más general a una respuesta, el
-  nombre del usuario mencionado puede estar en cualquier parte del
-  mensaje. La diferencia semántica es que no se le habla
-  "directamente" al usuario mencionado, como en una respuesta, sino
-  que sólo es mencionado por si el mensajes es de su interés o no.
-- /Retweets/: son mensajes del tipo =RT @usuario: [texto]=. Ocurren
-  cuando se quiere compartir el mensaje de otro usuario, o citarlo
-  para mencionarlo en el mismo mensaje.
-- /Hashtags/: son palabras precedidas por el caracter \#, que indican
-  un identificador a cierto evento o suceso dentro o fuera de la
-  red. Suelen usarse para categorizar de cierta forma un tópico, pero
-  son libres de usarse como los usuarios quieran.
-- Mensaje simple: un mensaje sin menciones ni hashtags.
-
-Ejemplos:
-
-- Mensaje simple: =Jason Funk disipa patitos=;
-- Respuesta: =@jason estoy de acuerdo con lo que dices=;
-- Mención: =creo que @jason es una cumbre de sabiduría=;
-- Retweet: =RT @jason: Jason Funk disipa patitos=; y
-- Hashtag: =Estoy escribiendo mi memoria #dcc #summarization=
-
-
-# https://support.twitter.com/groups/31-twitter-basics/topics/104-welcome-to-twitter-support/articles/13920-get-to-know-twitter-new-user-faq
-
-** Metodología de obtencion del dataset :INCOMPL:
+** Modelo formal                                                    :incompl:
+** Metodología de desarrollo                                        :incompl:
+** Metodología de obtencion del dataset                             :INCOMPL:
 
 Se describe a continuación el proceso diseñado para la obtención de
 datos para alimentar al sistema implementado.
 
-Las etapas de generación del Dataset son las siguientes:
+Las etapas de generación del dataset son las siguientes:
 
 - Recolección de eventos (noticias y conciertos);
 - Enriquecimiento de los eventos existentes mediante tweets; e
@@ -222,7 +357,7 @@ Las etapas de generación del Dataset son las siguientes:
 
 Se recolectaron datos (eventos y tweets) desde el 19 de noviembre de
 2012 hasta XXXXXXXXXXXX todos los días desde la medianoche hasta que
-el procedimiento terminaba exitosamente.
+el proceso termina exitosamente.
 
 *** Recolección de eventos
 
@@ -343,10 +478,7 @@ eventos noticiosos y musicales, respectivamente.
     antemano), lo que consume recursos de ancho de banda y
     tiempo. 
 
-** Performance
-
-Tiempo? espacio? por evento?
-
+** Desafíos técnicos
 ** Restricciones de la API de Twitter
 
    La API de búsqueda de Twitter permite obtener tweets de acuerdo a un
@@ -392,10 +524,16 @@ Tiempo? espacio? por evento?
   - Fecha de creación de la cuenta;
   - etc.
 
-####################################################################################4
 
-#+BEGIN_LATEX
-\nocite{*}
-\bibliographystyle{plain}
-\bibliography{bibliografia}
-#+END_LATEX
+** Casos de estudio                                                 :incompl:
+
+* Conclusiones                                                      :incompl:
+** Resumen del trabajo realizado
+** Objetivos alcanzados
+** Relevancia del trabajo realizado
+** Trabajo futuro
+
+   
+
+
+

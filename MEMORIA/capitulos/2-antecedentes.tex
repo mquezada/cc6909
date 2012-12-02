@@ -1,8 +1,81 @@
 \chapter{Antecedentes}
 \label{sec-2}
 
-\section{Conceptos involucrados}
+\section{Twitter}
 \label{sec-2.1}
 
-\section{Soluciones existentes}
+Twitter es una red social online que permite conectar a
+personas mediante la comunicación de mensajes cortos, rápidos y frecuentes. Estos
+mensajes son publicados en el perfil del usuario que los emite, pueden
+ser vistos directamente por los seguidores de este usuario o ser
+vistos directamente en el perfil o buscándolos mediante una
+funcionalidad que provee el servicio. Además, un usuario puede
+\emph{seguir} a otros para poder ver en su \emph{timeline} los mensajes de todos
+a quienes sigue.
+
+FIGURA TWITTER
+
+Estos mensajes, o \emph{tweets}, pueden además \emph{mencionar} a otros
+usuarios, mediante la convención ``=@usuario [texto]='' indica que
+se está mencionando a la persona con el nombre ``usuario''. Adicionalmente,
+existen varias convenciones o costumbres que han surgido a lo largo
+del tiempo en esta red desde sus inicios el año 2007:
+
+
+\begin{itemize}
+\item Respuestas o \emph{replies}: son mensajes del tipo \texttt{@usuario [texto]},
+  que ocurren usualmente en una conversación entre dos usuarios.
+\item Menciones o \emph{mentions}: un poco más general a una respuesta, el
+  nombre del usuario mencionado puede estar en cualquier parte del
+  mensaje. La diferencia semántica es que no se le habla
+  ``directamente'' al usuario mencionado, como en una respuesta, sino
+  que sólo es mencionado por si el mensaje es de su interés o no.
+\item \emph{Retweets}: son mensajes del tipo \texttt{RT @usuario: [texto]}. Ocurren
+  cuando se quiere compartir el mensaje de otro usuario, o citarlo
+  para mencionarlo en el mismo mensaje.
+\item \emph{Hashtags}: son palabras precedidas por el caracter \#, que indican
+  un identificador a cierto evento o suceso dentro o fuera de la
+  red. Suelen usarse para categorizar de cierta forma un tópico, pero
+  son libres de usarse como los usuarios quieran.
+\item Mensaje simple: un mensaje sin menciones ni hashtags.
+\end{itemize}
+Ejemplos:
+
+\begin{itemize}
+\item Mensaje simple: \texttt{Jason Funk disipa patitos};
+\item Respuesta: \texttt{@jason estoy de acuerdo con lo que dices};
+\item Mención: \texttt{creo que @jason es una cumbre de sabiduría};
+\item Retweet: \texttt{RT @jason: Jason Funk disipa patitos}; y
+\item Hashtag: \texttt{Estoy escribiendo mi memoria \#dcc \#summarization}
+\end{itemize}
+Estos mensajes están limitados a 140 caracteres de extensión. Sumando
+esto a la integración de la red con otros servicios y dispositivos, y
+a la cantidad de mensajes publicados cada minuto, permite utilizar
+esta red como una gran fuente de datos.
+
+Twitter además provee varios servicios adicionales, como por ejemplo,
+un servicio de acortamiento de URLs, para permitir incluir una URL
+larga sin perjudicar la cantidad de caracteres restantes para el
+mensaje; un servicio de alojamiento de fotos y vídeos, para hacer más
+sencilla la publicación de mensajes multimedia desde dispositivos
+móviles; un servicio de búsqueda que permite buscar una cantidad
+determinada de tweets sobre un término de búsqueda o un hashtag.
+
+
+\section{Identificación automática de eventos}
 \label{sec-2.2}
+
+\section{Clustering de documentos}
+\label{sec-2.3}
+
+\subsection{Evaluación de clusterings}
+\label{sec-2.3.1}
+
+\section{Resúmenes automáticos}
+\label{sec-2.4}
+
+\subsection{Evaluación de resúmenes}
+\label{sec-2.4.1}
+
+\section{Ranking de documentos}
+\label{sec-2.5}
