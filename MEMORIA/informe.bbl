@@ -1,0 +1,22 @@
+\begin{thebibliography}{1}
+
+\bibitem{Arthur:2007:KAC:1283383.1283494}
+David Arthur and Sergei Vassilvitskii.
+\newblock k-means++: the advantages of careful seeding.
+\newblock In {\em Proceedings of the eighteenth annual ACM-SIAM symposium on
+  Discrete algorithms}, SODA '07, pages 1027--1035, Philadelphia, PA, USA,
+  2007. Society for Industrial and Applied Mathematics.
+
+\bibitem{Yang:1999:LAD:630307.630471}
+Yiming Yang, Jaime~G. Carbonell, Ralf~D. Brown, Thomas Pierce, Brian~T.
+  Archibald, and Xin Liu.
+\newblock Learning approaches for detecting and tracking news events.
+\newblock {\em IEEE Intelligent Systems}, 14(4):32--43, July 1999.
+
+\bibitem{Zhao02criterionfunctions}
+Ying Zhao and George Karypis.
+\newblock Criterion functions for document clustering: Experiments and
+  analysis.
+\newblock Technical report, 2002.
+
+\end{thebibliography}

@@ -1,4 +1,3 @@
-
 \chapter{Antecedentes}
 \label{sec-2}
 
@@ -96,7 +95,7 @@
 
 
 
-\section{Clustering de documentos}
+\section{Clustering de documentos \textbf{:incompl:}}
 \label{sec-2.2}
 
 
@@ -128,8 +127,8 @@
      contenido en un sólo subconjunto o cluster.
 \end{itemize}
    Para describir el proceso aplicado a documentos, primero se
-   describirán los modelos de representación más importantes para
-   éstos, de forma de definir la noción de documento y luego los
+   describirán los modelos de representación más importantes para,
+   de forma de definir la noción de documento y luego los
    algoritmos de clustering aplicados a éstos.
 
 \subsection{Modelos de representación de documentos}
@@ -141,7 +140,7 @@
     El modelo booleano es un modelo de representación de
     documentos. En él, los documentos son vectores de \emph{términos}:
 
-    $$d = (t_1,t_2,\ldots,t_m)$$
+    $$d = (w_1,w_2,\ldots,w_m)$$
 
     Donde un término es un $n$-grama del texto del documento.
 
@@ -164,10 +163,10 @@
 
     \subsubsection{Bag of words Model}
 
-    En el modelo Bag of Words, un documento $d$ es representado como un
-    conjunto de pares $(t_i, f_i)$, $i\in[1..m']$, donde $t_i$ es un
-    término del documento y $f_i$ es la frecuencia de $t_i$ en el
-    documento, y $m'$ es la cantidad de términos distintos en el
+    En el modelo Bag of Words un documento $d$ es representado como un
+    conjunto de pares $(w_i, f_i)$, $i\in[1..m']$, donde $w_i$ es un
+    término del documento, $f_i$ es la frecuencia de $w_i$ en el
+    mismo, y $m'$ es la cantidad de términos distintos en el
     documento.
 
     La ventaja principal por sobre el modelo anterior es que permite
@@ -182,7 +181,7 @@
     anterior. Un documento $d$ es representado como un vector de pesos
     asociados a los términos:
 
-    $$d = (w_1, w_2, \ldots, w_m)$$
+    $$d = (f(w_1), f(w_2), \ldots, f(w_m))$$
 
     Cada dimensión de este vector corresponde al peso asociado a un
     término del documento.
@@ -195,14 +194,13 @@
     O bien, normalizar esta frecuencia para evitar que documentos más
     largos sean más relevantes sólo por su extensión:
 
-
     $$\tf_0(w,d) = \left\{
     \begin{array}{l l}
     1 & \quad \textrm{si $w \in d$}\\
     0 & \quad \textrm{si no}\\
     \end{array} \right.$$
 
-    $tf_0$ o \emph{Term Frequency} es una primera aproximación a medir la
+    $\tf_0$ o \emph{Term Frequency} es una primera aproximación a medir la
     frecuencia de un término en un documento. Sin embargo, esta nueva
     aproximación sufre de la desventaja de que ahora un documento con
     una ocurrencia del término será igual de relevante que algún
@@ -218,7 +216,7 @@
     término con más ocurrencias, para esto, se normaliza por el tamaño
     del documento:
 
-    $$\tf(w,d) = \frac{\freq(w,d)}{\max\{\freq(t,d), t \in d\}}$$
+    $$\tf(w,d) = \frac{\freq(w,d)}{max\{\freq(t,d) : t \in d\}}$$
 
     Otro problema que tiene utilizar esta medida como los pesos de los
     términos, es que un término muy repetido entre todos los
@@ -231,21 +229,173 @@
     término que sólo es mencionado una vez en un documento. Esta
     medida es llamada \emph{Inverse Document Frequency} o $\idf$:
 
-    $$\idf(t, D) = \log \frac{ |D| } { |\{d \in D : t \ in d\}| }$$
+    $$\idf(t, D) = \log \frac{ |D| } {1 + |\{d \in D : t \in d\}| }$$
 
     Finalmente, el peso de un término es la ponderación de su
     frecuencia dentro del documento con el inverso de la frecuencia
-    entre los documentos, o \emph{tfidf}:
+    entre los documentos, o $\tfidf$:
 
     $$\tfidf(t,d,D) = \tf(t,d) \times \idf(t,D)$$
 
+    Para el resto de este trabajo se considerará la representación de
+    documentos en este modelo.
 
-\subsection{Evaluación de clusterings}
+\subsection{Medidas de similitud}
 \label{sec-2.2.2}
 
 
+    A lo largo de los años, dos formas han sido las usuales para
+    determinar similitud entre
+    documentos\cite{Zhao02criterionfunctions}: calculando el coseno de
+    los dos vectores, y la distancia euclidiana.
 
-\section{Identificación automática de eventos}
+    El coseno de dos documentos $d_i$ y $d_j$ se define como
+
+    $$\cos(d_i, d_j) = \frac{d_i^td_j}{\|d_i\|\|d_j\|}$$
+
+    Si ambos $d_i$ y $d_j$ son iguales, entonces la fórmula anterior
+    se evalúa a 1, y 0 si no tienen nada en común, es decir, ambos
+    vectores son ortogonales.
+
+    La distancia euclidiana entre $d_i$ y $d_j$ se define como
+
+    $$d(d_i,d_j) = \sqrt{(d_i-d_j)^t(d_i-d_j)} = \|d_i-d_j\|$$
+
+    En este caso, si la distancia es 0, entonces ambos documentos son
+    idénticos. Y si ambos son ortogonales, la distancia será
+    $\sqrt{2}$.
+
+    Si ambos documentos están normalizados (su norma es 1), entonces
+    ambas medidas serán muy parecidas, aun así siendo una de similitud
+    y la otra de distancia.
+
+\subsection{Algoritmo K-means}
+\label{sec-2.2.3}
+
+
+    Se considerará la siguiente definición para el problema de
+    clustering:
+
+    Dado un entero $k$ y un conjunto de $n$ puntos en $\mathbb{R}^v$,
+    el objetivo es determinar $k$ puntos tal que se minimice $\phi$,
+    la suma de las distancias al cuadrado de cada punto y su centro
+    más cercano.
+
+    Este problema es NP-hard, sin embargo, existe un algoritmo que
+    permite realizar una búsqueda local y determinar $k$ centros
+    en un tiempo razonable\footnote{Lloyd, S.; , ``Least squares quantization in PCM,'' Information Theory, IEEE Transactions on , vol.28, no.2, pp. 129- 137, Mar 1982 }.
+
+    K-means es un algoritmo de clustering particional, en el cual cada
+    cluster tiene un \emph{centroide} asociado, esto es, típicamente, un punto
+    el cual es el promedio de todos los puntos del cluster, y no
+    necesariamente corresponde a un dato real.
+
+    El algoritmo genera $k$ clusters, donde $k$ es un parámetro del
+    algoritmo, tal que cada punto pertence al cluster cuyo centroide es el
+    más cercano a éste.
+
+\begin{algorithm}[H]
+ \KwData{$k>0$, conjunto $D$ de puntos}
+ \KwResult{Asignación de cada punto a un cluster $i \in [1..k]$}
+ Seleccionar $k$ puntos como centroides iniciales\;
+ \While{Los centroides cambien a cada iteración}{
+  Formar $k$ clusters asignando todos los puntos al centroide más cercano\;
+  Recalcular los centroides de cada cluster\;
+ }
+ \caption{K-means}
+\end{algorithm}
+
+    Los clusters generados dependerán de la elección inicial de los
+    centroides, y usualmente basta con pocas iteraciones para la
+    convergencia. La complejidad de este algoritmo es $O(nkIv)$, donde $n$
+    es el número de puntos, $k$ el parámetro de la cantidad de clusters,
+    $I$ es la cantidad de iteraciones que hará el algoritmo y $v$ es la
+    cantidad de dimensiones de los vectores.
+
+    K-means también puede verse desde el enfoque de optimizar una
+    función criterio. La medida más común es la
+    \emph{suma del error cuadrado} o Sum of Squared Error (SSE). Para cada
+    punto, su \emph{error} es la distancia al cluster más cercano:
+
+    $$SSE = \sum_{i=1}^k\sum_{x\in C_i} dist^2(m_i,x)$$
+
+    Donde $x$ es un punto en el cluster $C_i$, y $m_i$ es su
+    centroide. Dados dos clusters, en cada paso se escoge el que tenga
+    menor error.
+
+
+
+    Un problema importante de K-means es escoger los centroides
+    iniciales. Dado que la probabilidad de acertar a los centroides
+    ``reales'' (precisión) es muy baja, es posible que un clustering
+    tenga un mal error cuadrático, de hecho, el radio competitivo con
+    la solución óptima es no acotado incluso para $k$ y $n$ fijos.
+    Existen varias formas de evitar
+    este problema, por ejemplo, ejecutando varias veces K-means,
+    usar clustering jerárquico para determinar los centroides
+    iniciales, determinar más de $k$ centroides y luego elegir los $k$
+    más separados, etc.
+
+    Un enfoque utilizado es el de usar el algoritmo
+    K-means++\cite{Arthur:2007:KAC:1283383.1283494}, el cual tiene
+    como objetivo determinar los centroides iniciales para
+    K-Means. Este algoritmo garantiza un radio competitivo de
+    $O(\log k)$ con respecto al error cuadrático esperado del óptimo.
+    El algoritmo K-means++ escoge los centroides con cierta
+    probabilidad que depende de la distancia al centroide más cercano,
+    lo cual garantiza una buena elección inicial, y luego continúa con
+    el algoritmo usual. Sea $D(x)$ la distancia de $x$ al centroide
+    más cercano. El algoritmo es como sigue:
+
+\begin{algorithm}[H]
+ \KwData{$k>0$, conjunto $D$ de puntos}
+ \KwResult{Asignación de cada punto a un cluster $i \in [1..k]$}
+Escoger un centroide $c_1$ al azar uniformemente de $D$\;
+Escoger un nuevo centroide $c_i$, escogiendo $x \in D$ con probabilidad $\frac{D(x)^2}{\sum_{x' \in D}D(x')^2}$\;
+Repetir paso 1 hasta haber escogido $k$ centros\;
+Proceder con K-means estándar\;
+ \caption{K-means++}
+\end{algorithm}
+
+
+\subsection{Evaluación de clusters}
+\label{sec-2.2.4}
+
+
+    Existen dos enfoques para evaluar clusterings: validación interna
+    y externa\footnote{\href{http://en.wikipedia.org/wiki/Cluster\_analysis\#Evaluation\_of\_clustering\_results}{http://en.wikipedia.org/wiki/Cluster\_analysis\#Evaluation\_of\_clustering\_results} } La validación interna considera evaluar el clustering
+    con respecto a los datos que han sido agrupados (es decir, sin
+    información adicional), mientras que la evaluación externa
+    considera datos adicionales, como datos pre-clasificados (conjunto
+    de prueba, de entrenamiento, etc), o los clusters ``reales''.
+
+    Por otra parte, dos de las métricas más usadas para evaluar
+    clusterings, segun \cite{Zhao02criterionfunctions} son:
+
+\begin{itemize}
+\item \textbf{Entropía}: mide cómo son distribuidas las clases de documentos
+      entre cada cluster. Se define formalmente como
+
+      $$E(C_r) = -\frac{1}{\log q}\sum_{i=1}^q\frac{n^i_r}{n_r}\log\frac{n^i_r}{n_r}$$
+
+      donde $q$ es el número de clases en el dataset, y $n^i_r$ es el
+      número de documentos de la $i$-ésima clase que fue asignado al
+      $r$-ésimo cluster $C_r$. La entropía del clustering se define
+      como la suma ponderada de la entropía de cada cluster:
+
+      $$E(\mathfrak{C}) = \sum_{r=1}^k \frac{n_r}{n} E(C_r)$$
+
+      Un clustering perfecto tendrá clusters tal que cada cluster
+      contenga documentos de una sola clase, en ese caso la entropía
+      será 0. En general, conviene tener bajos valores de entropía.
+\item \textbf{Pureza}: mide de qué forma cada cluster contiene documentos de
+      una clase. La pureza de un cluster $C_r$ se define como
+
+      $$P(C_r) = \frac{1}{n_r} max_i\{n^i_r\}$$
+
+      la cual es la fracción del tamaño del cluster\ldots{}.\ldots{}.\ldots{}.\ldots{}.\ldots{}.\ldots{}.\ldots{}.\ldots{}.
+\end{itemize}
+\section{Identificación automática de eventos \textbf{:incompl:}}
 \label{sec-2.3}
 
 
@@ -266,11 +416,11 @@
 
 
 
-\section{Resúmenes automáticos}
+\section{Resúmenes automáticos \textbf{:incompl:}}
 \label{sec-2.4}
 
 \subsection{Evaluación de resúmenes}
 \label{sec-2.4.1}
 
-\section{Ranking de documentos}
+\section{Ranking de documentos \textbf{:incompl:}}
 \label{sec-2.5}
