@@ -1,51 +1,4 @@
-#+TITLE:     IDENTIFICACIÓN DE CONTENIDO MULTIMEDIA RELEVANTE A PARTIR DE EVENTOS UTILIZANDO SU INFORMACIÓN SOCIAL
-#+AUTHOR:    MAURICIO DANIEL QUEZADA VEAS
-#+EMAIL:     mquezada@dcc.uchile.cl
-#+DATE:      DICIEMBRE 2012
-#+DESCRIPTION: 
-#+KEYWORDS: 
-#+LANGUAGE:  en
-#+OPTIONS:   H:3 num:t toc:nil \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
-#+OPTIONS:   TeX:t LaTeX:nil skip:nil d:nil todo:t pri:nil tags:nil
-#+INFOJS_OPT: view:nil toc:nil ltoc:t mouse:underline buttons:0 path:http://orgmode.org/org-info.js
-#+EXPORT_SELECT_TAGS: export
-#+EXPORT_EXCLUDE_TAGS: noexport
-#+LINK_UP:   
-#+LINK_HOME: 
-
 #+LATEX_CLASS: umemoria
-#+LATEX_HEADER: \depto{Ciencias de la Computación}
-#+LATEX_HEADER: \carrera{Ingeniero Civil en Computación}
-#+LATEX_HEADER: \comision{Sergio Ochoa Delorenzi}{Mauricio Marín Caihuan}{}
-#+LATEX_HEADER: \guia{Bárbara Poblete Labra}
-
-#+LATEX_HEADER: 
-
-#+BEGIN_LATEX
-
-\begin{abstract}
-asdf
-\end{abstract}
-
-\begin{dedicatoria}
-Jason Funk disipa patitos
-\end{dedicatoria}
-
-\begin{thanks}
-asdf
-\end{thanks}
-
-\cleardoublepage
-\tableofcontents
-%\cleardoublepage
-%\listoftables
-%\cleardoublepage
-%\listoffigures
-
-\mainmatter
-#+END_LATEX
-
-#####################################################################################3
 
 * Introducción
 
@@ -268,6 +221,31 @@ asdf
    solución.
 
 * Antecedentes
+  
+  Para poder describir correctamente tanto el problema como la
+  solución implementada, es necesario dar los punteros y conceptos
+  básicos que los involucran. En este capítulo se discutirán los
+  siguientes tópicos:
+
+  - La red social Twitter, la cual es utilizada como fuente de datos y
+    documentos para este trabajo.
+  - Clustering de documentos, y en general, estrategias de clustering,
+    las cuales tienen muchas aplicaciones prácticas. En este trabajo
+    fue utilizada una de estas estrategias para poder determinar los
+    subtópicos de cada evento.
+  - La identificación automática de eventos, la cual, si bien se
+    utilizó un enfoque más simple para este trabajo, sirve para
+    indicar en qué aspectos es posible extender este trabajo en el
+    futuro.
+  - Resúmenes automáticos: una sucinta definición, y algunos enfoques
+    que han existido en el tiempo para este procedimiento.
+  - Ranking de documentos, o cómo generar órdenes de acuerdo a
+    relevancia.
+
+  Casi todos estos tópicos, a excepción del primero, involucran
+  técnicas de Minería de Datos, Recuperación de la Información y
+  Aprendizaje de Máquinas, entre otras áreas.
+
 ** Twitter
    Twitter es una red social online que permite conectar a
    personas mediante la comunicación de mensajes cortos, rápidos y   frecuentes[fn::https://support.twitter.com/groups/31-twitter-basics/topics/104-welcome-to-twitter-support/articles/13920-get-to-know-twitter-new-user-faq]. Estos
@@ -326,16 +304,195 @@ asdf
   determinada de tweets sobre un término de búsqueda o un hashtag,
   entre otros servicios.
 
+   
+
+   
+   
+   
+
+** Clustering de documentos                                         :incompl:
+
+   El análisis de clusters o clustering es el proceso de encontrar
+   grupos de objetos, tal que los objetos en un grupo sean similares
+   entre sí (o relacionados) y que sean diferentes (o no relacionados)
+   a los objetos de otros grupos. Algunas aplicaciones del análisis de
+   clusters son, entre otras:
+   - Encontrar clusters naturales y describir sus propiedades (/data understanding/);
+   - Encontrar agrupamientos útiles (/data class identification/);
+   - Encontrar representantes de grupos homogéneos (/data reduction/);
+   - Encontrar perturbaciones aleatorias de los datos (/noise detection/);
+   - Encontrar objetos inusuales (/outliers detection/);
+   - etc.
+
+   Se denomina cluster a un grupo de objetos, mientras que
+   clustering puede referirse al conjunto de clusters o al proceso de
+   encontrarlos. Existen diversos tipos de procesos de clustering, una
+   de las distinciones más importantes es entre los clusters
+   jerárquicos y los particionales:
+   - Un clustering jerárquico es un conjunto de clusters anidados,
+     organizados más bien como un árbol. Cortando el árbol en
+     cualquier nivel da como resultado un clustering potencialmente
+     distinto.
+   - El clustering particional es un conjunto de clusters de forma de
+     partición del conjunto total, es decir, cada objeto está
+     contenido en un sólo subconjunto o cluster.
+
+#   Existen distintos tipos de clusters, dependiendo de las propiedades
+#   que tengan los objetos en su conjunto. Una clasificación general
+#   abarca las siguientes clases de clusters:
+#   - *Bien separados*: un cluster es un conjunto de puntos tal que
+#     cualquier punto en un cluster está más cerca (más similar) a
+#     cualquier otro punto en el cluster que a cualquier punto que no
+#     está en el cluster.
+#   - *Basados en un centro*
+
+   Para describir el proceso aplicado a documentos, primero se
+   describirán los modelos de representación más importantes para
+   éstos, de forma de definir la noción de documento y luego los
+   algoritmos de clustering aplicados a éstos.
+
+*** Modelos de representación de documentos
+
+    \subsubsection{Standard Boolean Model}
+
+    El modelo booleano es un modelo de representación de
+    documentos. En él, los documentos son vectores de /términos/:
+
+    $$d = (w_1,w_2,\ldots,w_m)$$
+
+    Donde un término es un $n$-grama del texto del documento.
+
+    \begin{defn} Un $n$-grama es una secuencia contigua de $n$ ítems a
+    partir de un texto. \end{defn}
+
+    La definición de ítem dependerá de la aplicación: en lenguaje
+    natural el texto a su vez dependerá del idioma, por ejemplo, si el
+    texto está en inglés o en japonés, la distinción entre palabras
+    es distinta para cada uno. 
+
+    No existe una medida de "similitud" como tal en este modelo, sino
+    que se considera el calce exacto entre los términos de una query
+    $q$ y un documento $d$. La query puede ser una consulta hecha por
+    un usuario al conjunto de documentos, o bien un documento del
+    mismo conjunto.
+
+    Una consulta es una fórmula de lógica proposicional que pide los
+    documentos que contengan o no ciertos términos.
+
+    \subsubsection{Bag of words Model}
+
+    En el modelo Bag of Words un documento $d$ es representado como un
+    conjunto de pares $(w_i, f_i)$, $i\in[1..m']$, donde $w_i$ es un
+    término del documento, $f_i$ es la frecuencia de $w_i$ en el
+    mismo, y $m'$ es la cantidad de términos distintos en el
+    documento. 
+
+    La ventaja principal por sobre el modelo anterior es que permite
+    hacer calces parciales entre consultas y documentos. Este modelo
+    es comúnmente utilizado para hacer clasificación de documentos,
+    por ejemplo, para determinar si un correo electrónico es o no
+    spam.
+
+    \subsubsection{Vector Space Model}
+
+    El /Vector Space Model/ es un modelo un poco más general que el
+    anterior. Un documento $d$ es representado como un vector de pesos
+    asociados a los términos:
+
+    $$d = (f(w_1), f(w_2), \ldots, f(w_m))$$
+
+    Cada dimensión de este vector corresponde al peso asociado a un
+    término del documento. 
+
+    El peso puede ser directamente la frecuencia del término dentro
+    del documento:
+
+    $$\freq(w,d) = |\{w : w \in d\}|$$
+
+    O bien, normalizar esta frecuencia para evitar que documentos más
+    largos sean más relevantes sólo por su extensión:
+
+    $$\tf_0(w,d) = \left\{ 
+    \begin{array}{l l}
+    1 & \quad \textrm{si $w \in d$}\\
+    0 & \quad \textrm{si no}\\
+    \end{array} \right.$$
+
+    $\tf_0$ o /Term Frequency/ es una primera aproximación a medir la
+    frecuencia de un término en un documento. Sin embargo, esta nueva
+    aproximación sufre de la desventaja de que ahora un documento con
+    una ocurrencia del término será igual de relevante que algún
+    documento que mencione varias veces el término (por ejemplo, un
+    diccionario que tiene el término una vez contra un artículo sobre
+    el tema). Otra alternativa, considera no castigar demasiado a los
+    documentos con pocas ocurrencias, pero tampoco beneficiar mucho a
+    los que tengan muchas:
+
+    $$\tf_1(w,d) = 1 + \log(\freq(w,d))$$
+
+    La solución más utilizada considera la proporción con respecto al
+    término con más ocurrencias, para esto, se normaliza por el tamaño
+    del documento:
+
+    $$\tf(w,d) = \frac{\freq(w,d)}{\max\{\freq(t,d) : t \in d\}}$$
+
+    Otro problema que tiene utilizar esta medida como los pesos de los
+    términos, es que un término muy repetido entre todos los
+    documentos que hablan de un mismo tema puede significar que no es
+    muy relevante (por ejemplo, las /stopwords/ o palabras vacías, son
+    por lo general las preposiciones, artículos, pronombres,
+    etc.). Para esto, se considera además ponderar por el inverso de
+    la frecuencia entre los documentos; es decir, un término frecuente
+    entre todos los documentos ve su peso castigado a diferencia de un
+    término que sólo es mencionado una vez en un documento. Esta
+    medida es llamada /Inverse Document Frequency/ o $\idf$:
+
+    $$\idf(t, D) = \log \frac{ |D| } {1 + |\{d \in D : t \ in d\}| }$$
+
+    Finalmente, el peso de un término es la ponderación de su
+    frecuencia dentro del documento con el inverso de la frecuencia
+    entre los documentos, o $\tfidf$:
+
+    $$\tfidf(t,d,D) = \tf(t,d) \times \idf(t,D)$$
+
+
+*** Evaluación de clusterings
+
 
 ** Identificación automática de eventos                             :incompl:
-** Clustering de documentos                                         :incompl:
-*** Evaluación de clusterings
+
+   La identificación automática de eventos consiste en, dado un
+   conjunto de documentos, donde cada documento está asociado a un
+   evento (desconocido), es poder particionar el conjunto de
+   documentos en clusters, de forma que cada cluster corresponda a
+   todos los documentos asociados a un evento.
+
+   Se considerará la definición de "evento" dada por \cite{Yang:1999:LAD:630307.630471}. 
+
+   \begin{defn} Un /evento/ es un suceso que ocurre en un período de tiempo
+   determinado y en un lugar específico. \end{defn}
+
+   El poder identificar eventos a partir de documentos publicados en
+   los medios sociales permite mejorar la navegación de estos eventos,
+   al mejorar la búsqueda tanto local como de motores de búsqueda.
+
+   
+
 ** Resúmenes automáticos                                            :incompl:
 *** Evaluación de resúmenes
 ** Ranking de documentos                                            :incompl:
-
-
+   
 * Especificación del Problema                                       :incompl:
+
+  Formalmente, el problema a resolver consiste en determinar, a partir
+  de un conjunto $D$ de documentos tal que todos ellos "hablan" del
+  mismo tema o tópico, y donde cada documento $d_i \in D$,
+  $i \in [1..|D|]$, tiene alguna representación apropiada (vector de
+  palabras, de frecuencias de palabras, etc.), un subconjunto 
+  $D' \subseteq D$ de documentos tal que
+
+  - 
+
 ** Descripción detallada
 ** Relevancia de una solución
 ** Características de calidad

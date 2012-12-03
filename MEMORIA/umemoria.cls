@@ -191,3 +191,9 @@
 \newcommand{\Z}{\mathbb{Z}}
 \newcommand{\1}{\mathbf{1}}
 \let\epsilon\varepsilon
+
+
+\DeclareMathOperator{\freq}{freq}
+\DeclareMathOperator{\tf}{tf}
+\DeclareMathOperator{\idf}{idf}
+\DeclareMathOperator{\tfidf}{tf-idf}
