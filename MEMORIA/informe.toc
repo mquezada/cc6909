@@ -20,22 +20,21 @@
 \contentsline {subsection}{\numberline {2.4.1}Evaluaci\'on de res\'umenes}{13}{subsection.2.4.1}
 \contentsline {section}{\numberline {2.5}Ranking de documentos \textbf {:incompl:}}{13}{section.2.5}
 \contentsline {chapter}{\numberline {3}Especificaci\'on del Problema}{14}{chapter.3}
-\contentsline {section}{\numberline {3.1}Descripci\'on detallada}{14}{section.3.1}
-\contentsline {section}{\numberline {3.2}Relevancia de una soluci\'on}{14}{section.3.2}
-\contentsline {section}{\numberline {3.3}Caracter\'isticas de calidad}{14}{section.3.3}
-\contentsline {section}{\numberline {3.4}Criterios de aceptaci\'on}{14}{section.3.4}
 \contentsline {chapter}{\numberline {4}Descripci\'on de la Soluci\'on}{15}{chapter.4}
-\contentsline {section}{\numberline {4.1}Modelo formal}{15}{section.4.1}
-\contentsline {section}{\numberline {4.2}Metodolog\IeC {\'\i }a de desarrollo}{15}{section.4.2}
-\contentsline {section}{\numberline {4.3}Metodolog\IeC {\'\i }a de obtencion del dataset}{15}{section.4.3}
-\contentsline {subsection}{\numberline {4.3.1}Recolecci\'on de eventos}{15}{subsection.4.3.1}
-\contentsline {subsection}{\numberline {4.3.2}Enriquecimiento de eventos}{16}{subsection.4.3.2}
-\contentsline {subsection}{\numberline {4.3.3}Identificaci\'on de documentos a partir de tweets}{17}{subsection.4.3.3}
-\contentsline {section}{\numberline {4.4}Desaf\IeC {\'\i }os t\'ecnicos}{18}{section.4.4}
-\contentsline {section}{\numberline {4.5}Restricciones de la API de Twitter}{18}{section.4.5}
-\contentsline {chapter}{\numberline {5}Conclusiones}{19}{chapter.5}
-\contentsline {section}{\numberline {5.1}Resumen del trabajo realizado}{19}{section.5.1}
-\contentsline {section}{\numberline {5.2}Objetivos alcanzados}{19}{section.5.2}
-\contentsline {section}{\numberline {5.3}Relevancia del trabajo realizado}{19}{section.5.3}
-\contentsline {section}{\numberline {5.4}Trabajo futuro}{19}{section.5.4}
-\contentsline {chapter}{\numberline {6}Anexos}{20}{chapter.6}
+\contentsline {section}{\numberline {4.1}Descripci\'on detallada}{15}{section.4.1}
+\contentsline {section}{\numberline {4.2}Metodolog\IeC {\'\i }a de desarrollo e implementaci\'on}{16}{section.4.2}
+\contentsline {subsection}{\numberline {4.2.1}Obtenci\'on de datos}{16}{subsection.4.2.1}
+\contentsline {subsubsection}{Recolecci\'on de eventos}{17}{section*.8}
+\contentsline {subsubsection}{Enriquecimiento de eventos}{17}{section*.9}
+\contentsline {subsubsection}{Identificaci\'on de documentos a partir de tweets}{18}{section*.10}
+\contentsline {subsection}{\numberline {4.2.2}Generaci\'on de res\'umenes}{19}{subsection.4.2.2}
+\contentsline {subsection}{\numberline {4.2.3}Ranking de documentos}{19}{subsection.4.2.3}
+\contentsline {section}{\numberline {4.3}Desaf\IeC {\'\i }os t\'ecnicos}{19}{section.4.3}
+\contentsline {subsection}{\numberline {4.3.1}Restricciones de la API de Twitter}{19}{subsection.4.3.1}
+\contentsline {section}{\numberline {4.4}Casos de estudio}{20}{section.4.4}
+\contentsline {chapter}{\numberline {5}Conclusiones}{21}{chapter.5}
+\contentsline {section}{\numberline {5.1}Resumen del trabajo realizado}{21}{section.5.1}
+\contentsline {section}{\numberline {5.2}Objetivos alcanzados}{21}{section.5.2}
+\contentsline {section}{\numberline {5.3}Relevancia del trabajo realizado}{21}{section.5.3}
+\contentsline {section}{\numberline {5.4}Trabajo futuro}{21}{section.5.4}
+\contentsline {chapter}{\numberline {6}Anexos}{22}{chapter.6}

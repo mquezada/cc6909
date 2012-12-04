@@ -1,33 +1,117 @@
 \chapter{Descripción de la Solución}
-\label{sec-4}
-
-\section{Modelo formal}
-\label{sec-4.1}
-
-\section{Metodología de desarrollo}
-\label{sec-4.2}
-
-\section{Metodología de obtencion del dataset}
-\label{sec-4.3}
+\label{sec-1}
 
 
-Se describe a continuación el proceso diseñado para la obtención de
-datos para alimentar al sistema implementado.
+  La solución implementada consiste en escoger una
+  representación de documentos que no considere el contenido de
+  éstos. Por otra parte, la relevancia es medida utilizando la
+  información social asociada a esta representación.
 
-Las etapas de generación del dataset son las siguientes:
+  Para esto, se asume que existe una fuente de eventos y documentos
+  asociados preexistente, de esta forma, el enfoque de la solución
+  radica principalmente en la generación de los resúmenes. Sin
+  embargo, para la implementación sí fue necesario enfrentar el
+  problema de identificar eventos, usando un enfoque práctico para
+  obtenerlos.
+
+  La figura FIGURA muestra de manera general el modelo propuesto.
+
+  FIGURA MODELO
+
+  DESCRIPCION DEL MODELO
+
+  En la sección SECCION se describe el modelo utilizado para la
+  implementación, con una especificación detallada de la solución. En la
+  sección SECCION se describe la metodología de desarrollo y la
+  implementación práctica realizada para representar el modelo
+  formal, la cual considera la obtención de datos dentro del
+  proceso. Luego se comentan los problemas técnicos que fueron
+  enfrentados para terminar en la sección SECCION, donde se discuten
+  un par de casos de estudio sobre los resultados obtenidos.
+
+\section{Descripción detallada}
+\label{sec-1.1}
+
+
+   Para enfrentar el problema descrito se decidió utilizar una
+   representación apropiada de los documentos que permita abstraerse
+   de su contenido, utilizando la información social asociada a
+   éstos. A partir de un evento determinado, se identifican los
+   subtópicos del evento utilizando los documentos, y luego, para cada
+   subtópicose determinan los documentos más relevantes utilizando
+   esta información social.
+
+   Para esto, fue necesario contar con dos \emph{fuentes de datos}: una
+   fuente de eventos y de \emph{contenido social}, en la forma de mensajes
+   y actualizaciones de estado.
+
+   Se asumió que estas fuentes satisfacen los siguientes
+   requerimientos:
+
+\begin{itemize}
+\item La fuente de eventos debe entregar una lista de eventos, los
+     cuales consisten en los siguientes datos:
+
+\begin{itemize}
+\item Un título del evento y \emph{términos asociados}. Los términos
+       asociados son breves frases o palabras que describan al
+       evento, como por ejemplo, tags o etiquetas.
+\item Como datos opcionales: breve descripción del evento, fecha de
+       inicio y término, ubicación y direcciones Web.
+\end{itemize}
+
+\item La o las fuentes de contenido social deben entregar una lista de
+     mensajes, con algunos metadatos tales como la fecha de creación,
+     si el mensaje fue compartido, etc. Además, algunos datos sobre el
+     autor del mensaje, como la cantidad de conexiones en la red, y
+     en general, datos que permitan comparar dos autores.
+\end{itemize}
+   Utilizando estas dos fuentes, el modelo consistió en enriquecer los
+   eventos obtenidos utilizando las fuentes sociales, generando
+   documentos del tipo $d = (s_1, s_2, \ldots, s_m)$, donde
+   $s_i, i \in [1..m]$ es un mensaje de alguna fuente social, con los
+   metadatos asociados. El documento es identificado por la URI de
+   algún documento en la Web, de forma que todos los mensajes que
+   contengan una URI en particular, corresponderán al mismo documento
+   $d$.
+
+   A continuación, utilizando alguna representación adecuada (vector
+   space model, bag of words, etc.), se generaron clusters de documentos
+   de un mismo evento, identificando los subtópicos. Con ellos fue
+   posible generar un resumen que abarcara todos los aspectos del
+   evento, en contraste con seleccionar directamente los documentos
+   más relevantes del evento en su conjunto, lo cual puede dejar
+   puntos de vista sin ser considerados por su extensión.
+
+   Finalmente se seleccionan los $k$ documentos más representativos de
+   cada cluster, utilizando como criterio los metadatos de los
+   mensajes de la fuente social. De esta forma, se ordenan los
+   documentos dejando como más ``relevantes'' los que más interés atrae
+   de los usuarios.
+
+\section{Metodología de desarrollo e implementación}
+\label{sec-1.2}
+
+
+
+\subsection{Obtención de datos}
+\label{sec-1.2.1}
+
+    Se describe a continuación el proceso diseñado para la obtención de
+    datos para alimentar al sistema implementado.
+
+    Las etapas de generación del dataset son las siguientes:
 
 \begin{itemize}
 \item Recolección de eventos (noticias y conciertos);
 \item Enriquecimiento de los eventos existentes mediante tweets; e
 \item Identificación de documentos a partir de los tweets por cada evento.
+
+      Se recolectaron datos (eventos y tweets) desde el 19 de noviembre de
+      2012 hasta el 30 de noviembre del mismo año, todos los días
+      desde la medianoche hasta que el proceso termina exitosamente.
 \end{itemize}
-Se recolectaron datos (eventos y tweets) desde el 19 de noviembre de
-2012 hasta XXXXXXXXXXXX todos los días desde la medianoche hasta que
-el proceso termina exitosamente.
-
-\subsection{Recolección de eventos}
-\label{sec-4.3.1}
-
+\subsubsection{Recolección de eventos}
 
 Se consideraron dos tipos de eventos para el sistema: noticias y
 conciertos musicales. Los conciertos incluyen festivales de varios
@@ -77,9 +161,7 @@ Cada vez que se obtienen los eventos se vuelven a obtener los
 conciertos, pero sólo agregando los nuevos. Las noticias siempre son
 nuevas, aun así por implementación no se consideraron los repetidos.
 
-\subsection{Enriquecimiento de eventos}
-\label{sec-4.3.2}
-
+\subsubsection{Enriquecimiento de eventos}
 
 Se obtuvieron tweets utilizando el servicio de búsqueda que provee
 Twitter en su
@@ -115,9 +197,7 @@ eventos noticiosos y musicales, respectivamente.
 \end{itemize}
 
 \end{itemize}
-\subsection{Identificación de documentos a partir de tweets}
-\label{sec-4.3.3}
-
+\subsubsection{Identificación de documentos a partir de tweets}
 
     Luego de obtener los tweets asociados a cada evento, el siguiente
     paso fue generar los documentos que fueron usados para la
@@ -144,7 +224,7 @@ eventos noticiosos y musicales, respectivamente.
     con una URL n su interior suelen utilizar \emph{acortadores} (\emph{url shorteners})
     para los enlaces, y así no utilizar mucho espacio dentro de un
     mensaje. Otra ventaja que ofrecen es que algunos servicios como
-    \hyperref[sec-4.3.3]{bit.ly} dan estadísticas sobre los visitantes a estos enlaces (y
+    \hyperref[sec-1.2.1]{bit.ly} dan estadísticas sobre los visitantes a estos enlaces (y
     así saber quiénes vienen de cierta red social u otra, por
     ejemplo). Twitter, a su vez, actualmente también ofrece
     acortamiento de URLs por defecto. Esto suele producir que un enlace
@@ -160,11 +240,20 @@ eventos noticiosos y musicales, respectivamente.
     antemano), lo que consume recursos de ancho de banda y
     tiempo.
 
-\section{Desafíos técnicos}
-\label{sec-4.4}
 
-\section{Restricciones de la API de Twitter}
-\label{sec-4.5}
+\subsection{Generación de resúmenes}
+\label{sec-1.2.2}
+
+
+\subsection{Ranking de documentos}
+\label{sec-1.2.3}
+
+
+\section{Desafíos técnicos}
+\label{sec-1.3}
+
+\subsection{Restricciones de la API de Twitter}
+\label{sec-1.3.1}
 
 
    La API de búsqueda de Twitter permite obtener tweets de acuerdo a un
@@ -200,7 +289,7 @@ eventos noticiosos y musicales, respectivamente.
 \item La ubicación de donde se envió el tweet;
 \item etc.
 \end{itemize}
-  Además incluye datos sobre el autor, como por ejemplo:
+  Además, incluye datos sobre el autor, como por ejemplo:
 
 \begin{itemize}
 \item Si la cuenta está \emph{verificada};
@@ -212,3 +301,5 @@ eventos noticiosos y musicales, respectivamente.
 \item Fecha de creación de la cuenta;
 \item etc.
 \end{itemize}
+\section{Casos de estudio}
+\label{sec-1.4}

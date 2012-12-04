@@ -1,6 +1,9 @@
+#+OPTIONS:   TeX:t LaTeX:nil skip:nil d:nil todo:t pri:nil tags:nil
+#+EXPORT_SELECT_TAGS: export
+#+EXPORT_EXCLUDE_TAGS: noexport
 #+LATEX_CLASS: umemoria
 
-* Introducción
+* Introducción                                                     :noexport:
 
   Al igual que en el buffet de un restaurante, por mucho que se quisieran
   comer todos los platos favoritos, es imposible comer todo lo que uno
@@ -220,7 +223,7 @@
    herramientas que son mencionadas en la descripción detallada de la
    solución.
 
-* Antecedentes
+* Antecedentes                                                     :noexport:
   
   Para poder describir correctamente tanto el problema como la
   solución implementada, es necesario dar los punteros y conceptos
@@ -634,41 +637,143 @@ Proceder con K-means estándar\;
 *** Evaluación de resúmenes
 ** Ranking de documentos                                            :incompl:
    
-* Especificación del Problema                                       :incompl:
+* Especificación del Problema                                      :noexport:
 
-  Formalmente, el problema a resolver consiste en determinar, a partir
-  de un conjunto $D$ de documentos tal que todos ellos "hablan" del
-  mismo tema o tópico, y donde cada documento $d_i \in D$,
-  $i \in [1..|D|]$, tiene alguna representación apropiada (vector de
-  palabras, de frecuencias de palabras, etc.), un subconjunto 
-  $D' \subseteq D$ de documentos tal que
+  El problema a resolver consiste en poder /identificar/ y /entregar/
+  /contenido multimedia relevante/ en la Web a /consumidores/ de
+  contenido.
 
-  - 
+  Esta descripción por ser muy general necesita ser especificada un
+  poco más:
+
+  1. El *identificar* se refiere a poder distinguir entre varios
+     documentos asociados a un mismo evento cuáles de estos comparten o
+     tienen cierta propiedad especial, que debe ser definida.
+
+  2. El poder *entregar* implica que no sólo debe poder identificarse este
+     contenido, sino también ser entregado a un usuario o a una consulta
+     realizada.
+
+  3. El *contenido multimedia* abarca documentos de todo tipo en la
+     Web: texto, imágenes, vídeos, sonidos, binarios, y multimedios
+     (una combinación de los anteriores). Es decir, se abstrae la
+     noción de documento en este sentido.
+
+  4. La *relevancia* comprende la propiedad que debe ser
+     identificada. Cómo medir la relevancia tiene muchas respuestas
+     posibles, sin embargo, el enfoque del problema consiste en medir la
+     relevancia hacia el /usuario/, o bien, /consumidores/ de
+     contenido..
+
+  El énfasis está en los puntos 3 y 4: una solución a este problema no debe
+  basarse en el contenido de los documentos. Por lo mismo, tampoco es
+  posible medir la relevancia de los documentos basándose en su contenido.
+
+#** Relevancia de una solución
+#** Características de calidad
+#** Criterios de aceptación
+
+* Descripción de la Solución                                         :export:
+
+  La solución implementada consiste en escoger una
+  representación de documentos que no considere el contenido de
+  éstos. Por otra parte, la relevancia es medida utilizando la
+  información social asociada a esta representación.
+
+  Para esto, se asume que existe una fuente de eventos y documentos
+  asociados preexistente, de esta forma, el enfoque de la solución
+  radica principalmente en la generación de los resúmenes. Sin
+  embargo, para la implementación sí fue necesario enfrentar el
+  problema de identificar eventos, usando un enfoque práctico para
+  obtenerlos.
+
+  La figura FIGURA muestra de manera general el modelo propuesto.
+
+  FIGURA MODELO
+
+  DESCRIPCION DEL MODELO
+
+  En la sección SECCION se describe el modelo utilizado para la
+  implementación, con una especificación detallada de la solución. En la
+  sección SECCION se describe la metodología de desarrollo y la
+  implementación práctica realizada para representar el modelo
+  formal, la cual considera la obtención de datos dentro del
+  proceso. Luego se comentan los problemas técnicos que fueron
+  enfrentados para terminar en la sección SECCION, donde se discuten
+  un par de casos de estudio sobre los resultados obtenidos.
 
 ** Descripción detallada
-** Relevancia de una solución
-** Características de calidad
-** Criterios de aceptación
 
-* Descripción de la Solución
-** Modelo formal                                                    :incompl:
-** Metodología de desarrollo                                        :incompl:
-** Metodología de obtencion del dataset                             :INCOMPL:
+   Para enfrentar el problema descrito se decidió utilizar una
+   representación apropiada de los documentos que permita abstraerse
+   de su contenido, utilizando la información social asociada a
+   éstos. A partir de un evento determinado, se identifican los
+   subtópicos del evento utilizando los documentos, y luego, para cada
+   subtópicose determinan los documentos más relevantes utilizando
+   esta información social.
 
-Se describe a continuación el proceso diseñado para la obtención de
-datos para alimentar al sistema implementado.
+   Para esto, fue necesario contar con dos /fuentes de datos/: una
+   fuente de eventos y de /contenido social/, en la forma de mensajes
+   y actualizaciones de estado.
 
-Las etapas de generación del dataset son las siguientes:
+   Se asumió que estas fuentes satisfacen los siguientes
+   requerimientos:
 
-- Recolección de eventos (noticias y conciertos);
-- Enriquecimiento de los eventos existentes mediante tweets; e
-- Identificación de documentos a partir de los tweets por cada evento.
+   - La fuente de eventos debe entregar una lista de eventos, los
+     cuales consisten en los siguientes datos:
+     - Un título del evento y /términos asociados/. Los términos
+       asociados son breves frases o palabras que describan al
+       evento, como por ejemplo, tags o etiquetas.
+     - Como datos opcionales: breve descripción del evento, fecha de
+       inicio y término, ubicación y direcciones Web.
 
-Se recolectaron datos (eventos y tweets) desde el 19 de noviembre de
-2012 hasta XXXXXXXXXXXX todos los días desde la medianoche hasta que
-el proceso termina exitosamente.
+   - La o las fuentes de contenido social deben entregar una lista de
+     mensajes, con algunos metadatos tales como la fecha de creación,
+     si el mensaje fue compartido, etc. Además, algunos datos sobre el
+     autor del mensaje, como la cantidad de conexiones en la red, y
+     en general, datos que permitan comparar dos autores.
 
-*** Recolección de eventos
+   Utilizando estas dos fuentes, el modelo consistió en enriquecer los
+   eventos obtenidos utilizando las fuentes sociales, generando
+   documentos del tipo $d = (s_1, s_2, \ldots, s_m)$, donde 
+   $s_i$, $i \in [1..m]$ es un mensaje de alguna fuente social, con los
+   metadatos asociados. El documento es identificado por la URI de
+   algún documento en la Web, de forma que todos los mensajes que
+   contengan una URI en particular, corresponderán al mismo documento
+   $d$.
+
+   A continuación, utilizando alguna representación adecuada 
+   (/vector space model/, /bag of words/, etc.), se generaron clusters
+   de documentos de un mismo evento, identificando los subtópicos. Con
+   ellos fue posible generar un resumen que abarcara todos los
+   aspectos del evento, en contraste con seleccionar directamente los
+   documentos más relevantes del evento en su conjunto, lo cual puede
+   dejar puntos de vista sin ser considerados por su extensión. 
+
+   Finalmente se seleccionaron los $k>0$ documentos más representativos de
+   cada cluster, utilizando como criterio los metadatos de los
+   mensajes de la fuente social. De esta forma, se ordenan los
+   documentos dejando como más "relevantes" los que más interés atrae
+   de los usuarios.
+
+** Metodología de desarrollo e implementación
+  
+
+*** Obtención de datos
+    Se describe a continuación el proceso diseñado para la obtención de
+    datos para alimentar al sistema implementado.
+
+    Las etapas de generación del dataset son las siguientes:
+
+    - Recolección de eventos (noticias y conciertos);
+    - Enriquecimiento de los eventos existentes mediante tweets; e
+    - Identificación de documentos a partir de los tweets por cada evento.
+
+      Se recolectaron datos (eventos y tweets) desde el 19 de noviembre de
+      2012 hasta el 30 de noviembre del mismo año, todos los días
+      desde la medianoche hasta que el proceso termina exitosamente.
+
+\subsubsection{Recolección de eventos}
 
 Se consideraron dos tipos de eventos para el sistema: noticias y
 conciertos musicales. Los conciertos incluyen festivales de varios
@@ -713,7 +818,7 @@ Cada vez que se obtienen los eventos se vuelven a obtener los
 conciertos, pero sólo agregando los nuevos. Las noticias siempre son
 nuevas, aun así por implementación no se consideraron los repetidos.
   
-*** Enriquecimiento de eventos
+\subsubsection{Enriquecimiento de eventos}
 
 Se obtuvieron tweets utilizando el servicio de búsqueda que provee
 Twitter en su
@@ -744,7 +849,7 @@ eventos noticiosos y musicales, respectivamente.
     o un festival de un día), se busca hasta tres días pasada la fecha
     de inicio.
 
-*** Identificación de documentos a partir de tweets
+\subsubsection{Identificación de documentos a partir de tweets}
 
     Luego de obtener los tweets asociados a cada evento, el siguiente
     paso fue generar los documentos que fueron usados para la
@@ -787,8 +892,13 @@ eventos noticiosos y musicales, respectivamente.
     antemano), lo que consume recursos de ancho de banda y
     tiempo. 
 
+
+*** Generación de resúmenes
+
+*** Ranking de documentos
+
 ** Desafíos técnicos
-** Restricciones de la API de Twitter
+*** Restricciones de la API de Twitter
 
    La API de búsqueda de Twitter permite obtener tweets de acuerdo a un
    término de búsqueda. Se utilizó este servicio para enriquecer los
@@ -822,7 +932,7 @@ eventos noticiosos y musicales, respectivamente.
   - La ubicación de donde se envió el tweet;
   - etc.
 
-  Además incluye datos sobre el autor, como por ejemplo:
+  Además, incluye datos sobre el autor, como por ejemplo:
 
   - Si la cuenta está /verificada/;
   - La cantidad de seguidores del usuario;
@@ -836,7 +946,7 @@ eventos noticiosos y musicales, respectivamente.
 
 ** Casos de estudio                                                 :incompl:
 
-* Conclusiones                                                      :incompl:
+* Conclusiones                                                     :noexport:
 ** Resumen del trabajo realizado
 ** Objetivos alcanzados
 ** Relevancia del trabajo realizado
