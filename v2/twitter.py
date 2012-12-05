@@ -154,9 +154,67 @@ def search_term(query):
     return tweets
 
 
+def get_num_retweets(tweet_id):
+    WINDOW_SLEEP_TIME = 60*15
+    url = 'https://api.twitter.com/1.1/statuses/show.json?'
+    consumer = oauth.Consumer(key=settings.CONSUMER_KEY, secret=settings.CONSUMER_SECRET)
+    token = oauth.Token(key=settings.OAUTH_TOKEN, secret=settings.OAUTH_TOKEN_SECRET)
+    client = oauth.Client(consumer, token)
+
+    params = {
+        'id': tweet_id,
+        'trim_user': True
+    }
+
+    url = url + urllib.urlencode(params)
+
+    resp, content = client.request(
+        url,
+        method="GET",
+        body=None,
+        headers=None,
+        force_auth_header=False
+    )
+
+    try:
+        if resp['status'] == '200':
+            d = json.loads(content)
+            if 'retweet_count' in d:
+                return d['retweet_count']
+            else:
+                return 0
+
+        elif resp['status'] == '429':
+            actual_time = time.time()
+            if 'x-rate-limit-reset' in resp:
+                reset_time = int(resp['x-rate-limit-reset'])
+            else:
+                reset_time = actual_time + WINDOW_SLEEP_TIME
+
+            sleep = reset_time - actual_time
+            if sleep > 0:
+                print "Rate limit exceeded, waiting", sleep, "seconds"
+                time.sleep(sleep)
+
+        else:
+            print resp
+
+        return get_num_retweets(tweet_id)
+    except Exception, e:
+        print F, 'Exception:', e
+        return 0
+
+
 def main():
+    """
     s = raw_input('search term: ').decode('utf-8')
     print search_term(s)
+    """
+
+    s = 275985675621376000
+
+    for i in range(180):
+        print get_num_retweets(s)
 
 if __name__ == '__main__':
     main()
