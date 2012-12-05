@@ -1,4 +1,4 @@
-% Created 2012-12-04 Tue 01:53
+% Created 2012-12-05 Wed 02:24
 \documentclass[upright, contnum]{umemoria}
 \usepackage[latin1]{inputenc}
 \inputencoding{latin1}
@@ -18,7 +18,7 @@
 
 \title{informe}
 \author{Mauricio}
-\date{04 December 2012}
+\date{05 December 2012}
 
 \begin{document}
 
@@ -28,313 +28,438 @@
 \tableofcontents
 \vspace*{1cm}
 
-\chapter{Descripción de la Solución}
+\chapter{Antecedentes}
 \label{sec-1}
 
+  
+  Para poder describir correctamente tanto el problema como la
+  solución implementada, es necesario dar los punteros y conceptos
+  básicos que los involucran. En este capítulo se discutirán los
+  siguientes tópicos:
 
-  La solución implementada consiste en escoger una
-  representación de documentos que no considere el contenido de
-  éstos. Por otra parte, la relevancia es medida utilizando la
-  información social asociada a esta representación.
+\begin{itemize}
+\item La red social Twitter, la cual es utilizada como fuente de datos y
+    documentos para este trabajo.
+\item Clustering de documentos, y en general, estrategias de clustering,
+    las cuales tienen muchas aplicaciones prácticas. En este trabajo
+    fue utilizada una de estas estrategias para poder determinar los
+    subtópicos de cada evento.
+\item La identificación automática de eventos, la cual, si bien se
+    utilizó un enfoque más simple para este trabajo, sirve para
+    indicar en qué aspectos es posible extender este trabajo en el
+    futuro.
+\item Resúmenes automáticos: una sucinta definición, y algunos enfoques
+    que han existido en el tiempo para este procedimiento.
+\item Ranking de documentos, o cómo generar órdenes de acuerdo a
+    relevancia.
+\end{itemize}
+  Casi todos estos tópicos, a excepción del primero, involucran
+  técnicas de Minería de Datos, Recuperación de la Información y
+  Aprendizaje de Máquinas, entre otras áreas.
 
-  Para esto, se asume que existe una fuente de eventos y documentos
-  asociados preexistente, de esta forma, el enfoque de la solución
-  radica principalmente en la generación de los resúmenes. Sin
-  embargo, para la implementación sí fue necesario enfrentar el
-  problema de identificar eventos, usando un enfoque práctico para
-  obtenerlos.
-
-  La figura FIGURA muestra de manera general el modelo propuesto.
-
-  FIGURA MODELO
-
-  DESCRIPCION DEL MODELO
-
-  En la sección SECCION se describe el modelo utilizado para la
-  implementación, con una especificación detallada de la solución. En la
-  sección SECCION se describe la metodología de desarrollo y la
-  implementación práctica realizada para representar el modelo
-  formal, la cual considera la obtención de datos dentro del
-  proceso. Luego se comentan los problemas técnicos que fueron
-  enfrentados para terminar en la sección SECCION, donde se discuten
-  un par de casos de estudio sobre los resultados obtenidos.
-
-\section{Descripción detallada}
+\section{Twitter}
 \label{sec-1.1}
 
+   Twitter es una red social online que permite conectar a
+   personas mediante la comunicación de mensajes cortos, rápidos y   frecuentes\footnote{\href{https://support.twitter.com/groups/31-twitter-basics/topics/104-welcome-to-twitter-support/articles/13920-get-to-know-twitter-new-user-faq}{https://support.twitter.com/groups/31-twitter-basics/topics/104-welcome-to-twitter-support/articles/13920-get-to-know-twitter-new-user-faq} }. Estos
+   mensajes son publicados en el perfil del usuario que los emite,
+   pueden ser vistos directamente por los seguidores de este usuario o
+   ser vistos directamente en el perfil o buscándolos mediante una
+   funcionalidad que provee el servicio. Además, un usuario puede
+   \emph{seguir} a otros para poder ver en su \emph{timeline} o perfil privado 
+   los mensajes de todos a quienes sigue.
+   
+\begin{figure}[h!b]
+  \centering
+  \includegraphics[width=12cm]{./img/twitter.png}
+  \caption[Timeline de Twitter.]
+   {Timeline de Twitter. En éste se ve una lista en orden cronológico
+  de los tweets generados por los usuarios que sigue el usuario
+  actual. Además, el sitio incluye tweets promocionados por cuentas
+  que pagan por dicho servicio, como es el caso del primer tweet en la
+  lista.}
+\end{figure}
+   
+   Estos mensajes, o \emph{tweets}, sólo son cadenas de caracteres con
+   metadatos que el mismo servicio asigna una vez enviado a la red
+   social. Desde sus inicios (año 2007) se han añadido algunas capacidades
+   adicionales a estos mensajes, como la de poner URLs, imágenes,
+   vídeos, etc. Además, existen varias convenciones que han surgido a
+   lo largo del tiempo. A continuación se describe una lista de tipos
+   de mensajes que existen en Twitter, originados por estas convenciones:
 
-   Para enfrentar el problema descrito se decidió utilizar una
-   representación apropiada de los documentos que permita abstraerse
-   de su contenido, utilizando la información social asociada a
-   éstos. A partir de un evento determinado, se identifican los
-   subtópicos del evento utilizando los documentos, y luego, para cada
-   subtópicose determinan los documentos más relevantes utilizando
-   esta información social.
-
-   Para esto, fue necesario contar con dos \emph{fuentes de datos}: una
-   fuente de eventos y de \emph{contenido social}, en la forma de mensajes
-   y actualizaciones de estado.
-
-   Se asumió que estas fuentes satisfacen los siguientes
-   requerimientos:
+\begin{enumerate}
+\item Respuestas o \emph{replies}: son mensajes del tipo \texttt{@usuario [texto]},
+      que ocurren usualmente en una conversación entre dos usuarios.
+\item Menciones o \emph{mentions}: un poco más general a una respuesta, el
+      nombre del usuario mencionado puede estar en cualquier parte del
+      mensaje. La diferencia semántica es que no se le habla
+      ``directamente'' al usuario mencionado, como en una respuesta, sino
+      que sólo es mencionado por si el mensaje es de su interés o no.
+\item \emph{Retweets}: son mensajes del tipo \texttt{RT @usuario: [texto]}. Ocurren
+      cuando se quiere compartir el mensaje de otro usuario, o citarlo
+      para mencionarlo en el mismo mensaje.
+\item \emph{Hashtags}: son palabras precedidas por el caracter \#, que indican
+      un identificador a cierto evento o suceso dentro o fuera de la
+      red. Suelen usarse para categorizar de cierta forma un tópico, pero
+      son libres de usarse como los usuarios quieran.
+\item Mensaje simple: un mensaje sin menciones ni hashtags.
+\end{enumerate}
+  Ejemplos:
 
 \begin{itemize}
-\item La fuente de eventos debe entregar una lista de eventos, los
-     cuales consisten en los siguientes datos:
-
-\begin{itemize}
-\item Un título del evento y \emph{términos asociados}. Los términos
-       asociados son breves frases o palabras que describan al
-       evento, como por ejemplo, tags o etiquetas.
-\item Como datos opcionales: breve descripción del evento, fecha de
-       inicio y término, ubicación y direcciones Web.
+\item Mensaje simple: \texttt{Jason Funk disipa patitos};
+\item Respuesta: \texttt{@jason estoy de acuerdo con lo que dices};
+\item Mención: \texttt{creo que @jason es una cumbre de sabiduría};
+\item Retweet: \texttt{RT @jason: Jason Funk disipa patitos}; y
+\item Hashtag: \texttt{Estoy escribiendo mi memoria \#dcc \#summarization}
 \end{itemize}
+  Estos mensajes están limitados a 140 caracteres de extensión. Sumando
+  esto a la integración de la red con otros servicios y dispositivos, y
+  a la cantidad de mensajes publicados cada minuto, permite utilizar
+  esta red como una gran fuente de datos.
 
-\item La o las fuentes de contenido social deben entregar una lista de
-     mensajes, con algunos metadatos tales como la fecha de creación,
-     si el mensaje fue compartido, etc. Además, algunos datos sobre el
-     autor del mensaje, como la cantidad de conexiones en la red, y
-     en general, datos que permitan comparar dos autores.
-\end{itemize}
-   Utilizando estas dos fuentes, el modelo consistió en enriquecer los
-   eventos obtenidos utilizando las fuentes sociales, generando
-   documentos del tipo $d = (s_1, s_2, \ldots, s_m)$, donde 
-   $s_i, i \in [1..m]$ es un mensaje de alguna fuente social, con los
-   metadatos asociados. El documento es identificado por la URI de
-   algún documento en la Web, de forma que todos los mensajes que
-   contengan una URI en particular, corresponderán al mismo documento
-   $d$.
+  Twitter además provee varios servicios adicionales, como por ejemplo,
+  un servicio de acortamiento de URLs, para permitir incluir una URL
+  larga sin perjudicar la cantidad de caracteres restantes para el
+  mensaje; un servicio de alojamiento de fotos y vídeos, para hacer más
+  sencilla la publicación de mensajes multimedia desde dispositivos
+  móviles; un servicio de búsqueda que permite buscar una cantidad
+  determinada de tweets sobre un término de búsqueda o un hashtag,
+  entre otros servicios.
 
-   A continuación, utilizando alguna representación adecuada (vector
-   space model, bag of words, etc.), se generaron clusters de documentos
-   de un mismo evento, identificando los subtópicos. Con ellos fue
-   posible generar un resumen que abarcara todos los aspectos del
-   evento, en contraste con seleccionar directamente los documentos
-   más relevantes del evento en su conjunto, lo cual puede dejar
-   puntos de vista sin ser considerados por su extensión.
+   
 
-   Finalmente se seleccionan los $k$ documentos más representativos de
-   cada cluster, utilizando como criterio los metadatos de los
-   mensajes de la fuente social. De esta forma, se ordenan los
-   documentos dejando como más ``relevantes'' los que más interés atrae
-   de los usuarios.
+   
+   
+   
 
-\section{Metodología de desarrollo e implementación}
+\section{Clustering de documentos}
 \label{sec-1.2}
 
-  
 
-\subsection{Obtención de datos}
+   El análisis de clusters o clustering es el proceso de encontrar
+   grupos de objetos, tal que los objetos en un grupo sean similares
+   entre sí (o relacionados) y que sean diferentes (o no relacionados)
+   a los objetos de otros grupos. Algunas aplicaciones del análisis de
+   clusters son, entre otras:
+\begin{itemize}
+\item Encontrar clusters naturales y describir sus propiedades (\emph{data understanding});
+\item Encontrar agrupamientos útiles (\emph{data class identification});
+\item Encontrar representantes de grupos homogéneos (\emph{data reduction});
+\item Encontrar perturbaciones aleatorias de los datos (\emph{noise detection});
+\item Encontrar objetos inusuales (\emph{outliers detection});
+\item etc.
+\end{itemize}
+   Se denomina cluster a un grupo de objetos, mientras que
+   clustering puede referirse al conjunto de clusters o al proceso de
+   encontrarlos. Existen diversos tipos de procesos de clustering, una
+   de las distinciones más importantes es entre los clusters
+   jerárquicos y los particionales:
+\begin{itemize}
+\item Un clustering jerárquico es un conjunto de clusters anidados,
+     organizados más bien como un árbol. Cortando el árbol en
+     cualquier nivel da como resultado un clustering potencialmente
+     distinto.
+\item El clustering particional es un conjunto de clusters de forma de
+     partición del conjunto total, es decir, cada objeto está
+     contenido en un sólo subconjunto o cluster.
+\end{itemize}
+   Para describir el proceso aplicado a documentos, primero se
+   describirán los modelos de representación más importantes para,
+   de forma de definir la noción de documento y luego los
+   algoritmos de clustering aplicados a éstos.
+
+\subsection{Modelos de representación de documentos}
 \label{sec-1.2.1}
 
-    Se describe a continuación el proceso diseñado para la obtención de
-    datos para alimentar al sistema implementado.
 
-    Las etapas de generación del dataset son las siguientes:
+    \subsubsection{Standard Boolean Model}
 
-\begin{itemize}
-\item Recolección de eventos (noticias y conciertos);
-\item Enriquecimiento de los eventos existentes mediante tweets; e
-\item Identificación de documentos a partir de los tweets por cada evento.
+    El modelo booleano es un modelo de representación de
+    documentos. En él, los documentos son vectores de \emph{términos}:
 
-      Se recolectaron datos (eventos y tweets) desde el 19 de noviembre de
-      2012 hasta el 30 de noviembre del mismo año, todos los días
-      desde la medianoche hasta que el proceso termina exitosamente.
-\end{itemize}
-\subsubsection{Recolección de eventos}
+    $$d = (w_1,w_2,\ldots,w_m)$$
 
-Se consideraron dos tipos de eventos para el sistema: noticias y
-conciertos musicales. Los conciertos incluyen festivales de varios
-artistas.
+    Donde un término es un $n$-grama del texto del documento.
 
-\begin{itemize}
-\item Noticias
-  Para obtener las noticias, se utilizó el servicio de Google
-  News\footnote{\href{http://news.google.com}{http://news.google.com} }. Existe una API (en proceso de
-  obsolescencia, pero funcional a la fecha de este trabajo) que permite
-  obtener no sólo los titulares y breve descripción de cada noticia,
-  sino también un conjunto de entre 4-10 noticias relacionadas de otras
-  fuentes. Esto sirvió para alimentar los términos de búsqueda para la
-  etapa siguiente. Se guardaron los siguientes datos de una noticia:
+    \begin{defn} Un $n$-grama es una secuencia contigua de $n$ ítems a
+    partir de un texto. \end{defn}
 
-\begin{itemize}
-\item Título,
-\item Descripción,
-\item URL de la fuente, y
-\item Titulares de las noticias relacionadas.
-\end{itemize}
+    La definición de ítem dependerá de la aplicación: en lenguaje
+    natural el texto a su vez dependerá del idioma, por ejemplo, si el
+    texto está en inglés o en japonés, la distinción entre palabras
+    es distinta para cada uno. 
 
-\item Conciertos
-  Utilizando el servicio de Last.fm para obtener los conciertos y
-  festivales de una ubicación en
-  particular\footnote{\href{http://www.lastfm.es/api/show/geo.getEvents}{http://www.lastfm.es/api/show/geo.getEvents} }, se
-  obtuvieron los conciertos y festivales de las siguientes
-  ubicaciones:
+    No existe una medida de ``similitud'' como tal en este modelo, sino
+    que se considera el calce exacto entre los términos de una query
+    $q$ y un documento $d$. La query puede ser una consulta hecha por
+    un usuario al conjunto de documentos, o bien un documento del
+    mismo conjunto.
 
-\begin{itemize}
-\item Santiago, Chile;
-\item Londres, Inglaterra;
-\item Glastonbury, Inglaterra;
-\item Las Vegas, Nevada, EE.UU.; y
-\item Estocolmo, Suecia.
-\end{itemize}
+    Una consulta es una fórmula de lógica proposicional que pide los
+    documentos que contengan o no ciertos términos.
 
-\item Título del evento (concierto o festival);
-\item Artistas que participan; y
-\item Fechas de inicio y término (esta última no siempre está como
-    dato).
+    \subsubsection{Bag of words Model}
 
-  Además de otros datos descriptivos, como la ubicación, descripción
-  breve, sitio web de la banda o festival, etc.
-\end{itemize}
-Cada vez que se obtienen los eventos se vuelven a obtener los
-conciertos, pero sólo agregando los nuevos. Las noticias siempre son
-nuevas, aun así por implementación no se consideraron los repetidos.
-  
-\subsubsection{Enriquecimiento de eventos}
+    En el modelo Bag of Words un documento $d$ es representado como un
+    conjunto de pares $(w_i, f_i)$, $i\in[1..m']$, donde $w_i$ es un
+    término del documento, $f_i$ es la frecuencia de $w_i$ en el
+    mismo, y $m'$ es la cantidad de términos distintos en el
+    documento. 
 
-Se obtuvieron tweets utilizando el servicio de búsqueda que provee
-Twitter en su
-API\footnote{\href{https://dev.twitter.com/docs/api/1.1/get/search/tweets}{https://dev.twitter.com/docs/api/1.1/get/search/tweets} }. El
-objetivo es enriquecer los eventos con la información social que hay
-en la Web sobre éstos. 
+    La ventaja principal por sobre el modelo anterior es que permite
+    hacer calces parciales entre consultas y documentos. Este modelo
+    es comúnmente utilizado para hacer clasificación de documentos,
+    por ejemplo, para determinar si un correo electrónico es o no
+    spam.
 
-Para cada uno de los eventos obtenidos en la fase anterior, se
-utilizaron los términos de búsqueda asociados a ellos: los titulares
-de las noticias relacionadas y los nombres de los artistas para los
-eventos noticiosos y musicales, respectivamente.
+    \subsubsection{Vector Space Model}
 
-\begin{itemize}
-\item Para las noticias, se hace una búsqueda en Twitter de los titulares
-  al mismo tiempo en que se obtienen de Google News, y nuevamente al
-  día siguiente, es decir, 2 búsquedas por cada titular de un evento.
-  Se quitan las tildes y caracteres no ASCII y las stopwords, para
-  evitar problemas con la implementación y no hacer calce de stopwords
-  en la búsqueda de Twitter, respectivamente.
-\item Para los conciertos y festivales, se utilizaron los nombres de los
-  artistas y del evento como términos de búsqueda. De acuerdo a la
-  información asociada al evento, se busca por una mayor cantidad de
-  días:
+    El \emph{Vector Space Model} es un modelo un poco más general que el
+    anterior. Un documento $d$ es representado como un vector de pesos
+    asociados a los términos:
 
-\begin{itemize}
-\item Se busca desde un día antes de inicio del evento;
-\item Si está presente la fecha de término del evento, se busca cada día
-    dentro del intervalo ``fecha de inicio'' a ``fecha de término'' hasta
-    tres días terminado el evento.
-\item Si no está presente la fecha de término (por ejemplo, un concierto
-    o un festival de un día), se busca hasta tres días pasada la fecha
-    de inicio.
-\end{itemize}
+    $$d = (f(w_1), f(w_2), \ldots, f(w_m))$$
 
-\end{itemize}
-\subsubsection{Identificación de documentos a partir de tweets}
+    Cada dimensión de este vector corresponde al peso asociado a un
+    término del documento. 
 
-    Luego de obtener los tweets asociados a cada evento, el siguiente
-    paso fue generar los documentos que fueron usados para la
-    generación de los resúmenes. Nuevamente, el modelo consistió en que cada
-    documento se modeló como un vector de palabras, donde el
-    identificador del documento es una URL, y sus componentes
-    corresponden al contenido de los tweets que tienen esa URL en el
-    texto del mensaje.
+    El peso puede ser directamente la frecuencia del término dentro
+    del documento:
 
-    El caso en el que un tweet no tenía ninguna URL en su contenido
-    fue abordado de la siguiente forma: la URL asociada es una tal que
-    representa al mismo tweet (utilizando el servicio de Twitter), y
-    el contenido de ese documento es el mismo tweet, de forma de no
-    dejar el tweet sin ser representado.
+    $$\freq(w,d) = |\{w : w \in d\}|$$
 
-    Este proceso fue abordado recorriendo todos los eventos del
-    dataset, observando todos los tweets asociados a cada evento,
-    extrayendo la URL si es que hay alguna y guardando el documento
-    con el nuevo tweet. Se marcan los tweets observados para no tener
-    que repetir el proceso, ya que es intensivo en conexión a la red.
+    O bien, normalizar esta frecuencia para evitar que documentos más
+    largos sean más relevantes sólo por su extensión:
 
-    Dada la condición breve de los mensajes publicados en la red
-    social, muchos de los usuarios y/o servicios que publican mensajes
-    con una URL n su interior suelen utilizar \emph{acortadores} (\emph{url shorteners})
-    para los enlaces, y así no utilizar mucho espacio dentro de un
-    mensaje. Otra ventaja que ofrecen es que algunos servicios como
-    \hyperref[sec-1.2.1]{bit.ly} dan estadísticas sobre los visitantes a estos enlaces (y
-    así saber quiénes vienen de cierta red social u otra, por
-    ejemplo). Twitter, a su vez, actualmente también ofrece
-    acortamiento de URLs por defecto. Esto suele producir que un enlace
-    acortado se resuelva a otro enlace también acortado, por lo que es
-    necesario resolver la URL completa para evitar duplicados o
-    \emph{pseudo-duplicados} (en el caso en que dos URLs sintácticamente
-    distintas apunten al mismo recurso). EN LA FIGURA\ldots{}...
+    $$\tf_0(w,d) = \left\{ 
+    \begin{array}{l l}
+    1 & \quad \textrm{si $w \in d$}\\
+    0 & \quad \textrm{si no}\\
+    \end{array} \right.$$
 
-    FIGURA DE LINKS CORTOS
+    $\tf_0$ o \emph{Term Frequency} es una primera aproximación a medir la
+    frecuencia de un término en un documento. Sin embargo, esta nueva
+    aproximación sufre de la desventaja de que ahora un documento con
+    una ocurrencia del término será igual de relevante que algún
+    documento que mencione varias veces el término (por ejemplo, un
+    diccionario que tiene el término una vez contra un artículo sobre
+    el tema). Otra alternativa, considera no castigar demasiado a los
+    documentos con pocas ocurrencias, pero tampoco beneficiar mucho a
+    los que tengan muchas:
 
-    Por lo anterior, una vez identificada la URL del texto de un
-    tweet, se resuelve su URL completa (que puede ya serlo de
-    antemano), lo que consume recursos de ancho de banda y
-    tiempo. 
+    $$\tf_1(w,d) = 1 + \log(\freq(w,d))$$
 
+    La solución más utilizada considera la proporción con respecto al
+    término con más ocurrencias, para esto, se normaliza por el tamaño
+    del documento:
 
-\subsection{Generación de resúmenes}
+    $$\tf(w,d) = \frac{\freq(w,d)}{max\{\freq(t,d) : t \in d\}}$$
+
+    Otro problema que tiene utilizar esta medida como los pesos de los
+    términos, es que un término muy repetido entre todos los
+    documentos que hablan de un mismo tema puede significar que no es
+    muy relevante (por ejemplo, las \emph{stopwords} o palabras vacías, son
+    por lo general las preposiciones, artículos, pronombres,
+    etc.). Para esto, se considera además ponderar por el inverso de
+    la frecuencia entre los documentos; es decir, un término frecuente
+    entre todos los documentos ve su peso castigado a diferencia de un
+    término que sólo es mencionado una vez en un documento. Esta
+    medida es llamada \emph{Inverse Document Frequency} o $\idf$:
+
+    $$\idf(t, D) = \log \frac{ |D| } {1 + |\{d \in D : t \in d\}| }$$
+
+    Finalmente, el peso de un término es la ponderación de su
+    frecuencia dentro del documento con el inverso de la frecuencia
+    entre los documentos, o $\tfidf$:
+
+    $$\tfidf(t,d,D) = \tf(t,d) \times \idf(t,D)$$
+
+    Para el resto de este trabajo se considerará la representación de
+    documentos en este modelo.
+
+\subsection{Medidas de similitud}
 \label{sec-1.2.2}
 
+      
+    A lo largo de los años, dos formas han sido las usuales para
+    determinar similitud entre
+    documentos\cite{Zhao02criterionfunctions}: calculando el coseno de
+    los dos vectores, y la distancia euclidiana.
 
-\subsection{Ranking de documentos}
+    El coseno de dos documentos $d_i$ y $d_j$ se define como
+
+    $$\cos(d_i, d_j) = \frac{d_i^td_j}{\|d_i\|\|d_j\|}$$
+
+    Si ambos $d_i$ y $d_j$ son iguales, entonces la fórmula anterior
+    se evalúa a 1, y 0 si no tienen nada en común, es decir, ambos
+    vectores son ortogonales.
+
+    La distancia euclidiana entre $d_i$ y $d_j$ se define como
+
+    $$d(d_i,d_j) = \sqrt{(d_i-d_j)^t(d_i-d_j)} = \|d_i-d_j\|$$
+
+    En este caso, si la distancia es 0, entonces ambos documentos son
+    idénticos. Y si ambos son ortogonales, la distancia será
+    $\sqrt{2}$. 
+
+    Si ambos documentos están normalizados (su norma es 1), entonces
+    ambas medidas serán muy parecidas, aun así siendo una de similitud
+    y la otra de distancia.
+
+\subsection{Algoritmos de clustering}
 \label{sec-1.2.3}
 
 
-\section{Desafíos técnicos}
+    Se considerará la siguiente definición para el problema de
+    clustering:
+    
+    Dado un entero $k$ y un conjunto de $n$ puntos en $\mathbb{R}^v$,
+    el objetivo es determinar $k$ puntos tal que se minimice $\phi$,
+    la suma de las distancias al cuadrado de cada punto y su centro
+    más cercano.
+
+    Este problema es NP-hard, sin embargo, existe un algoritmo que
+    permite realizar una búsqueda local y determinar $k$ centros 
+    en un tiempo razonable\footnote{Lloyd, S.; , ``Least squares quantization in PCM,'' Information Theory, IEEE Transactions on , vol.28, no.2, pp. 129- 137, Mar 1982 }.
+    
+    K-means es un algoritmo de clustering particional, en el cual cada
+    cluster tiene un \emph{centroide} asociado, esto es, típicamente, un punto
+    el cual es el promedio de todos los puntos del cluster, y no
+    necesariamente corresponde a un dato real.
+    
+    El algoritmo genera $k$ clusters, donde $k$ es un parámetro del
+    algoritmo, tal que cada punto pertence al cluster cuyo centroide es el
+    más cercano a éste.
+    
+\begin{algorithm}[H]
+ \KwData{$k>0$, conjunto $D$ de puntos}
+ \KwResult{Asignación de cada punto a un cluster $i \in [1..k]$}
+ Seleccionar $k$ puntos como centroides iniciales\;
+ \While{Los centroides cambien a cada iteración}{
+  Formar $k$ clusters asignando todos los puntos al centroide más cercano\;
+  Recalcular los centroides de cada cluster\;
+ }
+ \caption{K-means}
+\end{algorithm}
+
+    Los clusters generados dependerán de la elección inicial de los
+    centroides, y usualmente basta con pocas iteraciones para la
+    convergencia. La complejidad de este algoritmo es $O(nkIv)$, donde $n$
+    es el número de puntos, $k$ el parámetro de la cantidad de clusters,
+    $I$ es la cantidad de iteraciones que hará el algoritmo y $v$ es la
+    cantidad de dimensiones de los vectores.
+
+    K-means también puede verse desde el enfoque de optimizar una
+    función criterio. La medida más común es la 
+    \emph{suma del error cuadrado} o Sum of Squared Error (SSE). Para cada
+    punto, su \emph{error} es la distancia al cluster más cercano:
+    $$SSE = \sum_{i=1}^k\sum_{x\in C_i} \dist^2(m_i,x)$$
+    Donde $x$ es un punto en el cluster $C_i$, y $m_i$ es su
+    centroide. Dados dos clusters, en cada paso se escoge el que tenga
+    menor error.
+    Un problema importante de K-means es escoger los centroides
+    iniciales. Dado que la probabilidad de acertar a los centroides
+    ``reales'' (precisión) es muy baja, es posible que un clustering
+    tenga un mal error cuadrático, de hecho, el radio competitivo con
+    la solución óptima es no acotado incluso para $k$ y $n$ fijos. 
+    Existen varias formas de evitar
+    este problema, por ejemplo, ejecutando varias veces K-means, 
+    usar clustering jerárquico para determinar los centroides
+    iniciales, determinar más de $k$ centroides y luego elegir los $k$
+    más separados, etc.
+
+    Un enfoque utilizado es el de usar el algoritmo
+    K-means++\cite{Arthur:2007:KAC:1283383.1283494}, el cual tiene
+    como objetivo determinar los centroides iniciales para
+    K-Means. Este algoritmo garantiza un radio competitivo de 
+    $O(\log k)$ con respecto al error cuadrático esperado del óptimo.
+    El algoritmo K-means++ escoge los centroides con cierta
+    probabilidad que depende de la distancia al centroide más cercano,
+    lo cual garantiza una buena elección inicial, y luego continúa con
+    el algoritmo usual. Sea $D(x)$ la distancia de $x$ al centroide
+    más cercano. El algoritmo es como sigue:
+
+\begin{algorithm}[H]
+ \KwData{$k>0$, conjunto $D$ de puntos}
+ \KwResult{Asignación de cada punto a un cluster $i \in [1..k]$}
+Escoger un centroide $c_1$ al azar uniformemente de $D$\;
+Escoger un nuevo centroide $c_i$, escogiendo $x \in D$ con probabilidad $\frac{D(x)^2}{\sum_{x' \in D}D(x')^2}$\;
+Repetir paso 1 hasta haber escogido $k$ centros\;
+Proceder con K-means estándar\;
+ \caption{K-means++}
+\end{algorithm}
+    
+
+\subsection{Evaluación de clusters}
+\label{sec-1.2.4}
+
+
+    Existen dos enfoques para evaluar clusterings: validación interna
+    y externa\footnote{\href{http://en.wikipedia.org/wiki/Cluster\_analysis\#Evaluation\_of\_clustering\_results}{http://en.wikipedia.org/wiki/Cluster\_analysis\#Evaluation\_of\_clustering\_results} } La validación interna considera evaluar el clustering
+    con respecto a los datos que han sido agrupados (es decir, sin
+    información adicional), mientras que la evaluación externa
+    considera datos adicionales, como datos pre-clasificados (conjunto
+    de prueba, de entrenamiento, etc), o los clusters ``reales''.
+
+    Por otra parte, dos de las métricas más usadas para evaluar
+    clusterings, segun \cite{Zhao02criterionfunctions} son:
+
+\begin{itemize}
+\item \textbf{Entropía}: mide cómo son distribuidas las clases de documentos
+      entre cada cluster. Se define formalmente como
+      
+      $$E(C_r) = -\frac{1}{\log q}\sum_{i=1}^q\frac{n^i_r}{n_r}\log\frac{n^i_r}{n_r}$$
+
+      donde $q$ es el número de clases en el dataset, y $n^i_r$ es el
+      número de documentos de la $i$-ésima clase que fue asignado al
+      $r$-ésimo cluster $C_r$. La entropía del clustering se define
+      como la suma ponderada de la entropía de cada cluster:
+
+      $$E(\mathfrak{C}) = \sum_{r=1}^k \frac{n_r}{n} E(C_r)$$
+
+      Un clustering perfecto tendrá clusters tal que cada cluster
+      contenga documentos de una sola clase, en ese caso la entropía
+      será 0. En general, conviene tener bajos valores de entropía.
+\item \textbf{Pureza}: mide de qué forma cada cluster contiene documentos de
+      una clase. La pureza de un cluster $C_r$ se define como
+
+      $$P(C_r) = \frac{1}{n_r} max_i\{n^i_r\}$$
+
+      la cual es la fracción del tamaño del cluster\ldots{}.\ldots{}.\ldots{}.\ldots{}.\ldots{}.\ldots{}.\ldots{}.\ldots{}.
+\end{itemize}
+\section{Identificación automática de eventos}
 \label{sec-1.3}
 
-\subsection{Restricciones de la API de Twitter}
-\label{sec-1.3.1}
 
+   La identificación automática de eventos consiste en, dado un
+   conjunto de documentos, donde cada documento está asociado a un
+   evento (desconocido), es poder particionar el conjunto de
+   documentos en clusters, de forma que cada cluster corresponda a
+   todos los documentos asociados a un evento.
 
-   La API de búsqueda de Twitter permite obtener tweets de acuerdo a un
-   término de búsqueda. Se utilizó este servicio para enriquecer los
-   eventos con información social utilizando como términos de búsqueda
-   tanto los títulos de las noticias como los nombres de los artistas
-   para las noticias y los conciertos, respectivamente. 
-   
-   Funciona de la siguiente forma: cada vez que se hace un request a la
-   URL dada por el servicio, éste retorna a lo más 100 tweets por página, con un
-   máximo de 15 páginas (indicando en el request qué página queremos
-   consultar), dando como total hasta 1500 tweets por búsqueda. Existirán
-   términos de búsqueda que no presenten ningún resultado  (ya sea por
-   estar mal escritos o simplemente que no sean un tópico de discusión), o por
-   el contrario, que se generen más tweets que los retornados por la
-   búsqueda por cada ventana de tiempo que demore ésta (por ejemplo, un
-   \emph{trending topic} o tópico que sea muy mencionado en la red social).
-   
-   Existe una limitación de uso de este servicio: sólo es posible hacer
-   hasta 180 requests por cada 15 minutos, o 1 request cada 5
-   segundos. Además, sólo retorna tweets de hasta 7 días de antigüedad, y
-   sus resultados no son necesariamente en tiempo real y su estabilidad
-   varía de acuerdo a factores externos.
-   
-   Los tweets retornados vienen en formato \texttt{JSON} (\emph{Javascript Simple Object Notation}),
-   e incluyen varios metadatos sobre el tweet aparte de los principales,
-   como autor, fecha, contenido. Algunos de estos metadatos son:
-   
-\begin{itemize}
-\item Cantidad de \emph{retweets} hechos hasta la fecha;
-\item Si posee alguna URL o \emph{hashtag} en el texto;
-\item Si es una \emph{mención} a otro usuario;
-\item La ubicación de donde se envió el tweet;
-\item etc.
-\end{itemize}
-  Además, incluye datos sobre el autor, como por ejemplo:
+   Se considerará la definición de ``evento'' dada por \cite{Yang:1999:LAD:630307.630471}. 
 
-\begin{itemize}
-\item Si la cuenta está \emph{verificada};
-\item La cantidad de seguidores del usuario;
-\item Cantidad de amigos (seguidores que también lo siguen);
-\item Cantidad de tweets;
-\item Su descripción, y si incluye alguna URL, etc;
-\item Ubicación (dada por el mismo usuario);
-\item Fecha de creación de la cuenta;
-\item etc.
-\end{itemize}
-\section{Casos de estudio}
+   \begin{defn} Un \emph{evento} es un suceso que ocurre en un período de tiempo
+   determinado y en un lugar específico. \end{defn}
+
+   El poder identificar eventos a partir de documentos publicados en
+   los medios sociales permite mejorar la navegación de estos eventos,
+   al mejorar la búsqueda tanto local como de motores de búsqueda.
+
+   
+
+\section{Resúmenes automáticos}
 \label{sec-1.4}
 
+\subsection{Evaluación de resúmenes}
+\label{sec-1.4.1}
 
+\section{Ranking de documentos}
+\label{sec-1.5}
+
+   
 
 
 

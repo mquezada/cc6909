@@ -2,17 +2,18 @@
 \label{sec-1}
 
 
-  La solución implementada consiste en escoger una
-  representación de documentos que no considere el contenido de
-  éstos. Por otra parte, la relevancia es medida utilizando la
-  información social asociada a esta representación.
+  La solución implementada consistió en generar un resumen utilizando
+  documentos representados apropiadamente con la información de medios
+  sociales que los mencionan. La relevancia de estos documentos
+  también se obtuvo con la información social más otros indicadores de
+  la solución parcial.
 
-  Para esto, se asume que existe una fuente de eventos y documentos
-  asociados preexistente, de esta forma, el enfoque de la solución
-  radica principalmente en la generación de los resúmenes. Sin
-  embargo, para la implementación sí fue necesario enfrentar el
-  problema de identificar eventos, usando un enfoque práctico para
-  obtenerlos.
+  Para esto, se asume que existe una fuente de eventos, de esta forma,
+  el enfoque de la solución radica principalmente en la generación de
+  los resúmenes y no en la identificación de eventos en medios
+  sociales. Sin embargo, para la implementación sí fue necesario
+  enfrentar el problema de identificar eventos, usando un enfoque
+  práctico para obtenerlos.
 
   La figura FIGURA muestra de manera general el modelo propuesto.
 
@@ -38,19 +39,20 @@
    de su contenido, utilizando la información social asociada a
    éstos. A partir de un evento determinado, se identifican los
    subtópicos del evento utilizando los documentos, y luego, para cada
-   subtópicose determinan los documentos más relevantes utilizando
+   subtópico se determinan los documentos más relevantes utilizando
    esta información social.
 
    Para esto, fue necesario contar con dos \emph{fuentes de datos}: una
-   fuente de eventos y de \emph{contenido social}, en la forma de mensajes
-   y actualizaciones de estado.
+   fuente de eventos y otra de \emph{contenido social}, en la forma de
+   mensajes y actualizaciones de estado.
 
    Se asumió que estas fuentes satisfacen los siguientes
    requerimientos:
 
 \begin{itemize}
-\item La fuente de eventos debe entregar una lista de eventos, los
-     cuales consisten en los siguientes datos:
+\item La fuente de eventos debe entregar una lista de eventos
+     rápidamente, la cual debe contener los siguientes datos para
+     cada entrada:
 
 \begin{itemize}
 \item Un título del evento y \emph{términos asociados}. Los términos
@@ -66,24 +68,25 @@
      autor del mensaje, como la cantidad de conexiones en la red, y
      en general, datos que permitan comparar dos autores.
 \end{itemize}
-   Utilizando estas dos fuentes, el modelo consistió en enriquecer los
-   eventos obtenidos utilizando las fuentes sociales, generando
-   documentos del tipo $d = (s_1, s_2, \ldots, s_m)$, donde
-   $s_i, i \in [1..m]$ es un mensaje de alguna fuente social, con los
+   Utilizando estas dos fuentes, el siguiente paso luego de obtener
+   una lista de eventos fue enriquecerlos utilizando las fuentes
+   sociales, generando documentos del tipo
+   $d = (s_1, s_2, \ldots, s_m)$, donde  $s_i$, $i \in [1..m]$
+   es un mensaje de alguna fuente social, con los
    metadatos asociados. El documento es identificado por la URI de
    algún documento en la Web, de forma que todos los mensajes que
    contengan una URI en particular, corresponderán al mismo documento
    $d$.
 
-   A continuación, utilizando alguna representación adecuada (vector
-   space model, bag of words, etc.), se generaron clusters de documentos
-   de un mismo evento, identificando los subtópicos. Con ellos fue
-   posible generar un resumen que abarcara todos los aspectos del
-   evento, en contraste con seleccionar directamente los documentos
-   más relevantes del evento en su conjunto, lo cual puede dejar
-   puntos de vista sin ser considerados por su extensión.
+   A continuación, utilizando alguna representación adecuada
+   (\emph{vector space model}, \emph{bag of words}, etc.), se generaron clusters
+   de documentos de un mismo evento, identificando los subtópicos. Con
+   ellos fue posible generar un resumen que abarcara todos los
+   aspectos del evento, en contraste con seleccionar directamente los
+   documentos más relevantes del evento en su conjunto, lo cual puede
+   dejar puntos de vista sin ser considerados por su extensión.
 
-   Finalmente se seleccionan los $k$ documentos más representativos de
+   Finalmente se seleccionaron los $k>0$ documentos más representativos de
    cada cluster, utilizando como criterio los metadatos de los
    mensajes de la fuente social. De esta forma, se ordenan los
    documentos dejando como más ``relevantes'' los que más interés atrae
@@ -93,12 +96,42 @@
 \label{sec-1.2}
 
 
+   La implementación consistió en las siguientes etapas:
 
+\begin{itemize}
+\item Obtención del dataset de eventos y documentos.
+
+     Para esto, se utilizaron dos fuentes de eventos: Google News y
+     Last.fm para recolectar noticias y conciertos musicales
+     (incluidos festivales), respectivamente. Como fuente de datos
+     sociales se utilizó la red social Twitter, que dispone de una API
+     para realizar búsquedas por \emph{keywords}. Esta etapa comprendió
+     la recolección de eventos y de documentos con información social
+     asociada a éstos.
+\item Generación de clusters para la identificación de subtópicos para
+     cada evento.
+
+     Una vez identificados los eventos y los documentos asociados, se
+     generaron clusters usando el algoritmo K-means con K-means++ para
+     la inicialización. Se impuso un valor de $k=5$ clusters por
+     evento. En la sección de casos de estudio se discuten las
+     alternativas y la evaluación de algunos clusters del dataset.
+\item Extracción de documentos relevantes para cada evento.
+
+     Una vez identificados los subtópicos de cada cluster, se
+     extrajeron de éstos los documentos más relevantes, utilizando la
+     información social de cada uno de ellos, en conjunto con otros
+     indicadores globales del clustering (como que incluyan una URL
+     dentro de las más mencionadas dentro del cluster, entre
+     otras). Estos documentos corresponden al output o salida del
+     sistema.
+\end{itemize}
 \subsection{Obtención de datos}
 \label{sec-1.2.1}
 
     Se describe a continuación el proceso diseñado para la obtención de
-    datos para alimentar al sistema implementado.
+    datos, tanto de eventos como de documentos con sus indicadores
+    sociales respectivos.
 
     Las etapas de generación del dataset son las siguientes:
 
@@ -121,7 +154,8 @@ artistas.
 \item Noticias
   Para obtener las noticias, se utilizó el servicio de Google
   News\footnote{\href{http://news.google.com}{http://news.google.com} }. Existe una API (en proceso de
-  obsolescencia, pero funcional a la fecha de este trabajo) que permite
+  obsolescencia\footnote{\href{http://googlecode.blogspot.com/2011/05/spring-cleaning-for-some-of-our-apis.html}{http://googlecode.blogspot.com/2011/05/spring-cleaning-for-some-of-our-apis.html} },
+  pero funcional a la fecha de este trabajo) que permite
   obtener no sólo los titulares y breve descripción de cada noticia,
   sino también un conjunto de entre 4-10 noticias relacionadas de otras
   fuentes. Esto sirvió para alimentar los términos de búsqueda para la
@@ -178,9 +212,9 @@ eventos noticiosos y musicales, respectivamente.
 \item Para las noticias, se hace una búsqueda en Twitter de los titulares
   al mismo tiempo en que se obtienen de Google News, y nuevamente al
   día siguiente, es decir, 2 búsquedas por cada titular de un evento.
-  Se quitan las tildes y caracteres no ASCII y las stopwords, para
+  Se quitan las tildes y caracteres no \texttt{ASCII} y las stopwords, para
   evitar problemas con la implementación y no hacer calce de stopwords
-  en la búsqueda de Twitter, respectivamente.
+  en la búsqueda de Twitter.
 \item Para los conciertos y festivales, se utilizaron los nombres de los
   artistas y del evento como términos de búsqueda. De acuerdo a la
   información asociada al evento, se busca por una mayor cantidad de
@@ -221,12 +255,13 @@ eventos noticiosos y musicales, respectivamente.
 
     Dada la condición breve de los mensajes publicados en la red
     social, muchos de los usuarios y/o servicios que publican mensajes
-    con una URL n su interior suelen utilizar \emph{acortadores} (\emph{url shorteners})
-    para los enlaces, y así no utilizar mucho espacio dentro de un
+    con una URL en su interior suelen utilizar \emph{acortadores}
+    (o \emph{url shorteners}) para los enlaces, y así no utilizar mucho
+    espacio dentro de un
     mensaje. Otra ventaja que ofrecen es que algunos servicios como
-    \hyperref[sec-1.2.1]{bit.ly} dan estadísticas sobre los visitantes a estos enlaces (y
-    así saber quiénes vienen de cierta red social u otra, por
-    ejemplo). Twitter, a su vez, actualmente también ofrece
+    Bit.ly\footnote{\href{http://bit.ly}{http://bit.ly} } dan estadísticas sobre los visitantes a
+    estos enlaces (y así saber quiénes vienen de cierta red social u
+    otra, por ejemplo). Twitter, a su vez, actualmente también ofrece
     acortamiento de URLs por defecto. Esto suele producir que un enlace
     acortado se resuelva a otro enlace también acortado, por lo que es
     necesario resolver la URL completa para evitar duplicados o
@@ -240,13 +275,91 @@ eventos noticiosos y musicales, respectivamente.
     antemano), lo que consume recursos de ancho de banda y
     tiempo.
 
-
-\subsection{Generación de resúmenes}
+\subsection{Identificación de subtópicos}
 \label{sec-1.2.2}
 
 
+    Una vez recolectados tanto los eventos como generados los
+    documentos asociados, se procedió a identificar los subtópicos de
+    cada evento. Para esto, se utilizó el algoritmo K-means para
+    construir clusters a partir de todos los documentos de un solo
+    evento.
+
+    Como se mencionó anteriormente, los documentos consisten en
+    vectores del tipo $d_{\textrm{URL}}=(t_1,t_2,\ldots,t_m)$, donde
+    $t_i$ es el tweet $i$-ésimo que contiene a URL dentro del texto
+    del mensaje. Para poder aplicar un algoritmo de clustering, fue
+    necesario procesar nuevamente estos documentos para representarlos
+    como vectores usando el vector space model. El procedimiento
+    consta de dos partes, ``normalizar'' los documentos, limpiando los
+    términos que puedan afectar al clustering, y luego aplicar
+    $\tfidf$ sobre los documentos normalizados:
+
+\begin{algorithm}[H]
+ \KwData{Conjunto de documentos $D_e$}
+ \KwResult{Conjunto de strings $D'_e$, }
+ $D'_e \leftarrow \emptyset$\;
+ \For{documento $d \in D_e$}{
+   $d' \leftarrow \varepsilon$\;
+   \For{tweet $t \in d$}{
+   $t' \leftarrow \texttt{clean}(t)$\;
+   $d' \leftarrow \texttt{concat}(d',t')$\;
+   }
+   $D'_e \leftarrow D'_e \cup \{d'\}$\;
+ }
+ \caption{Preprocesamiento de documentos}
+\end{algorithm}
+
+    Donde $\varepsilon$ es el string vacío, \texttt{concat}$(a,b)$ retorna
+    la concatenación de $a$ y $b$, y \texttt{clean} realiza las siguientes
+    operaciones sobre el tweet:
+
+\begin{itemize}
+\item Remueve las URLs que contenga el texto;
+\item Remueve todas las menciones;
+\item Quita los caracteres ``\#'', dejando los \emph{hashtags} intactos;
+\item Quita las tildes, acentos, stopwords; y
+\item Realiza stemming en español o inglés dependiendo del idioma del
+      evento dado por los metadatos de éste. Se utilizó el Snowball
+      Stemmer\footnote{\href{http://snowball.tartarus.org/}{http://snowball.tartarus.org/} } para esto.
+\end{itemize}
+    Una vez normalizados los documentos, se convierten a la
+    representación como vectores con pesos por cada término:
+
+\begin{algorithm}[H]
+\KwData{Conjunto de strings $D'_e$, vocabulario $V$ de palabras de
+$D'_e$}
+\KwResult{Conjunto de vectores $D''_e$, representados en vector space
+model}
+$D''_e \leftarrow \emptyset$ \;
+\For{documento $d \in D'_e$} {
+   $d' \leftarrow \texttt{map}(\tfidf(\cdotp, d, D'_e), \texttt{words}(d))$\;
+}
+$D''_e \leftarrow D''_e \cup \{d'\}$\;
+\caption{Transformación de documentos a vector space model}
+\end{algorithm}
+
+    Donde \texttt{map}$(f,l)$ mapea la
+    función o procedimiento $f$ a cada elemento de la lista $l$,
+    retornando una nueva lista $l'$ en la cual a cada elemento se le
+    aplicó $f$ y \texttt{words} retorna una lista con las palabras de
+    $d'$. Este procedimiento retorna un conjunto de vectores en
+    $\tfidf$, lo que permite entonces aplicar un algoritmo de
+    clustering para identificar subtópicos.
+
+    Se utilizó el algoritmo Mini Batch K-means, el CUAL\ldots{} COMPLETAR
+    ACA Y MODIFICAR ANTES DONDE DIGA KMEANS!!!!!. Al aplicarlo sobre
+    el conjunto de vectores, éste retorna una \emph{lista de etiquetas}
+    $L$, de largo $n$, la cantidad de documentos utilizados. Cada
+    $L_i \in [0..k-1], i \in [1..n]$ indica a cuál cluster corresponde
+    el $i$-ésimo documento, lo que permite fácilmente filtrar y
+    recuperar los clusters por separado, para pasar a la siguiente
+    etapa.
+
 \subsection{Ranking de documentos}
 \label{sec-1.2.3}
+
+
 
 
 \section{Desafíos técnicos}
@@ -303,3 +416,8 @@ eventos noticiosos y musicales, respectivamente.
 \end{itemize}
 \section{Casos de estudio}
 \label{sec-1.4}
+
+
+
+
+

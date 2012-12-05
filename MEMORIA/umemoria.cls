@@ -197,3 +197,4 @@
 \DeclareMathOperator{\tf}{tf}
 \DeclareMathOperator{\idf}{idf}
 \DeclareMathOperator{\tfidf}{tf-idf}
+\DeclareMathOperator{\dist}{dist}
