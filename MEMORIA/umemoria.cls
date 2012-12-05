@@ -54,7 +54,7 @@
 \renewenvironment{itemize}{\olditem\setlength{\parskip}{\smallskipamount}}{\oldenditem}
 
 %% Entornos nuevos
-\newenvironment{abstract}{\cleardoublepage\chapter*{Resumen}}{\vfill\null}
+\newenvironment{abstract}{\chapter*{Resumen}}{\vfill\null}
 \newenvironment{dedicatoria}{\cleardoublepage\null\vspace{\stretch{1}}\begin{flushright}\itshape}{\end{flushright}\vspace{\stretch{2}}\null}
 \let\thanks\undefined
 \newenvironment{thanks}{\chapter*{Agradecimientos}}{\vfill\null}
@@ -191,3 +191,10 @@
 \newcommand{\Z}{\mathbb{Z}}
 \newcommand{\1}{\mathbf{1}}
 \let\epsilon\varepsilon
+
+
+\DeclareMathOperator{\freq}{freq}
+\DeclareMathOperator{\tf}{tf}
+\DeclareMathOperator{\idf}{idf}
+\DeclareMathOperator{\tfidf}{tf-idf}
+\DeclareMathOperator{\dist}{dist}

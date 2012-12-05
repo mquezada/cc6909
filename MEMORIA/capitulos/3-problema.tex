@@ -1,14 +1,31 @@
 \chapter{Especificaci\'on del Problema}
-\label{sec-3}
+\label{sec-1}
 
-\section{Descripci\'on detallada}
-\label{sec-3.1}
 
-\section{Relevancia de una soluci\'on}
-\label{sec-3.2}
+  El problema a resolver consiste en poder \emph{identificar} y \emph{entregar}
+  \emph{contenido multimedia relevante} en la Web a \emph{consumidores} de
+  contenido.
 
-\section{Caracter\'isticas de calidad}
-\label{sec-3.3}
+  Esta descripción por ser muy general necesita ser especificada un
+  poco más:
 
-\section{Criterios de aceptaci\'on}
-\label{sec-3.4}
+\begin{enumerate}
+\item El \textbf{identificar} se refiere a poder distinguir entre varios
+     documentos asociados a un mismo evento cuáles de estos comparten o
+     tienen cierta propiedad especial, que debe ser definida.
+\item El poder \textbf{entregar} implica que no sólo debe poder identificarse este
+     contenido, sino también ser entregado a un usuario o a una consulta
+     realizada.
+\item El \textbf{contenido multimedia} abarca documentos de todo tipo en la
+     Web: texto, imágenes, vídeos, sonidos, binarios, y multimedios
+     (una combinación de los anteriores). Es decir, se abstrae la
+     noción de documento en este sentido.
+\item La \textbf{relevancia} comprende la propiedad que debe ser
+     identificada. Cómo medir la relevancia tiene muchas respuestas
+     posibles, sin embargo, el enfoque del problema consiste en medir la
+     relevancia hacia el \emph{usuario}, o bien, \emph{consumidores} de
+     contenido..
+\end{enumerate}
+  El énfasis está en los puntos 3 y 4: una solución a este problema no debe
+  basarse en el contenido de los documentos. Por lo mismo, tampoco es
+  posible medir la relevancia de los documentos basándose en su contenido.

@@ -2,44 +2,46 @@ This is BibTeX, Version 0.99c (TeX Live 2009/Debian)
 The top-level auxiliary file: informe.aux
 The style file: plain.bst
 Database file #1: bibliografia.bib
+Warning--empty institution in Zhao02criterionfunctions
 You've used 3 entries,
             2118 wiz_defined-function locations,
-            519 strings with 4356 characters,
-and the built_in function-call counts, 782 in all, are:
-= -- 74
-> -- 33
+            522 strings with 4776 characters,
+and the built_in function-call counts, 1200 in all, are:
+= -- 123
+> -- 59
 < -- 1
-+ -- 13
-- -- 10
-* -- 45
-:= -- 142
++ -- 23
+- -- 20
+* -- 87
+:= -- 200
 add.period$ -- 10
 call.type$ -- 3
-change.case$ -- 13
+change.case$ -- 20
 chr.to.int$ -- 0
-cite$ -- 3
-duplicate$ -- 36
-empty$ -- 67
-format.name$ -- 10
-if$ -- 165
+cite$ -- 4
+duplicate$ -- 44
+empty$ -- 83
+format.name$ -- 20
+if$ -- 251
 int.to.chr$ -- 0
 int.to.str$ -- 3
-missing$ -- 6
+missing$ -- 2
 newline$ -- 18
 num.names$ -- 6
-pop$ -- 20
+pop$ -- 17
 preamble$ -- 1
-purify$ -- 11
+purify$ -- 16
 quote$ -- 0
-skip$ -- 19
+skip$ -- 36
 stack$ -- 0
-substring$ -- 15
-swap$ -- 4
+substring$ -- 74
+swap$ -- 13
 text.length$ -- 1
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 6
-warning$ -- 0
-while$ -- 6
+type$ -- 12
+warning$ -- 1
+while$ -- 11
 width$ -- 4
 write$ -- 37
+(There was 1 warning)

@@ -18,6 +18,10 @@
 \usepackage[T1]{fontenc}
 \usepackage{fontspec}
 \usepackage{graphicx}
+
+\usepackage[lined,boxed,commentsnumbered,ruled,vlined,portuguese,linesnumbered]{algorithm2e}
+\usepackage{setspace}
+
 \defaultfontfeatures{Mapping=tex-text}
 \setmainfont{Linux Libertine O}
 \setmonofont[Scale=0.8]{DejaVu Sans Mono}
@@ -43,10 +47,12 @@ Una dedicatoria corta.
 \end{thanks}
 
 \cleardoublepage
+\begin{spacing}{1.5}
 \tableofcontents
-\cleardoublepage
-\listoftables
-\cleardoublepage
+\end{spacing}
+%\cleardoublepage
+%\listoftables
+%\cleardoublepage
 \listoffigures
 
 \mainmatter
