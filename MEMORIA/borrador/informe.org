@@ -1,71 +1,71 @@
 #+OPTIONS:   TeX:t LaTeX:nil skip:nil d:nil todo:t pri:nil tags:nil
 #+EXPORT_SELECT_TAGS: export
-#+EXPORT_EXCLUDE_TAGS: noexport
+#+EXPORT_EXCLUDE_TAGS: 
 #+LATEX_CLASS: umemoria
 
-* Introducción                                                     :noexport:
+* Introducción                                                       :export:
 
   Al igual que en el buffet de un restaurante, por mucho que se quisieran
-  comer todos los platos favoritos, es imposible comer todo lo que uno
+  comer todos los platos, es imposible comer todo lo que uno
   quisiera por razones obvias. Una posibilidad es probar un poco de cada
   comida, para así saber qué es lo más delicioso y comer hasta
   hartarse.
   
   Pero, ¿qué hacer si hay demasiados platos y no se conocen todos? de
   alguna manera hay que saber cuáles hay que probar, si el objetivo es
-  comer lo mejor posible. Un amigo puede recomendar una u otra comida,
+  comer lo mejor posible. Un amigo, u otras personas que hayan comido
+  en el restaurant pueden recomendar una u otra comida,
   lo cual puede servir para orientarse. Entonces se pueden escoger
-  pequeñas muestras de acuerdo a las recomendaciones.
+  muestras de acuerdo a las recomendaciones.
 
-  Complicando más el escenario, qué pasa si este restaurant tiene
-  además música en vivo, y por alguna razón, se tiene el privilegio de
-  escoger qué escuchar. En este caso, ya no es posible "probar" un
-  poco de cada tipo existente, no sólo por la cantidad, sino porque no
-  es posible juzgar un grupo musical por una canción o un extracto de
-  ella. Si se quiere tener la mejor velada, pudiendo disfrutar de cada
-  uno de los panoramas que ofrece, es necesario tener algo de
-  información para poder escoger.
+#  Complicando más el escenario, qué pasa si este restaurant tiene
+#  además música en vivo, y por alguna razón, se tiene el privilegio de
+#  escoger qué escuchar. En este caso, ya no es posible "probar" un
+#  poco de cada tipo existente, no sólo por la cantidad, sino porque no
+#  es posible juzgar un grupo musical por una canción o un extracto de
+#  ella. Si se quiere tener la mejor velada, pudiendo disfrutar de cada
+#  uno de los panoramas que ofrece, es necesario tener algo de
+#  información para poder escoger.
   
   Pasando a un contexto diferente, supóngase que este gran buffet es la
   Web y los distintos platos corresponden a contenido publicado en
   ella. Por lo tanto, dada la gran cantidad de información disponible,
   se hace necesario poder encontrar lo más atractivo de acuerdo a la
-  preferencia del usuario o de los usuarios. Nótese que se está
+  preferencia de los usuarios. Nótese que se está
   haciendo otra suposición importante con esta analogía, y es que se
   está considerando que la información es íntegramente para ser
   /consumida/, y no, por ejemplo, para generar más contenido,
   conocimiento, o para ser utilizada por máquinas, etc. Dentro de
   este contexto se plantea la pregunta de cómo seleccionar el contenido
   más atractivo dentro de todo lo que hay disponible en un momento dado.
-  
-  Siguiendo el razonamiento de la analogía, una manera de poder
-  seleccionar sólo el contenido más "atractivo" (de acuerdo a las
-  preferencias del usuario), es probar un poco de cada uno. O bien,
-  generar un /resumen/ de cada documento y presentarlo al usuario.
 
-  Sin embargo, tal como se dijo antes, no es posible hacer lo anterior
-  para contenido que no puede ser resumido directamente para ser
-  consumido (la música como tal, o bien, vídeos o imágenes). En esta
-  perspectiva, sólo las recomendaciones pueden ayudar a determinar lo
-  más conveniente de acuerdo al usuario.
+  Para hacerse la idea de cuál es la mejor oferta gastronómica de un
+  restaurant, sin tener que probar todos los platos, se puede
+  preguntar a la gente que come habitualmente ahí qué platos fueron
+  los que más les han gustado, y así definir la calidad de éste y/o
+  escoger los mejores platos. O bien, filtrar los documentos que
+  hablan de un mismo evento de acuerdo a las preferencias de los
+  usuarios, y luego presentarlo en la forma de un /resumen/ de cada
+  uno.
 
-  Este trabajo consistió en el desarrollo de una primera aproximación
-  que permite generar resúmenes automáticos de eventos bien definidos
-  a partir de los documentos Web que hablan de éstos. Los documentos son
-  considerados /multimedios/: texto, imágenes, vídeos, sonidos; es
-  decir, no necesariamente texto. El contenido es filtrado o
-  seleccionado de acuerdo a indicadores sociales: los objetos más
-  /tomados en cuenta/ en la Web son considerados más importantes.
+  Este trabajo consistió en el desarrollo de una metodología
+  que permite generar resúmenes automáticos de eventos determinados
+  a partir de los documentos Web que hablan de éstos. No se hace
+  ninguna suposición sobre el /contenido/ de estos documentos (pueden
+  ser de texto, imágenes, videos, /multimedios/ en general). Los
+  documentos del resumen son seleccionados de acuerdo a 
+  /indicadores sociales/: los elementos con mayor impacto en las redes
+  sociales son considerados más importantes.
   
-  El sistema implementado consideró dos tipos de eventos: noticias y
-  conciertos musicales. Para obtenerlos, se utilizó el servicio de
-  Google News[fn::http://news.google.com] y
-  Last.fm[fn::http://last.fm]. Para medir la relevancia de los
-  documentos y obtener los mismos se utilizó la red social
-  Twitter[fn::http://twitter.com], que provee una 
-  /Aplication Programming Interface/ (o API) para realizar búsquedas y
-  obtener información sobre los /tweets/ o mensajes cortos que publican
-  los usuarios de la red.
+  La metodología diseñada se implementó sobre dos tipos de eventos:
+  noticias y conciertos musicales. Para obtenerlos, se utilizó
+  el servicio de Google News[fn::http://news.google.com/] y
+  Last.fm[fn::http://last.fm/]. Los documentos y sus indicadores
+  sociales se obtuvieron de la red social
+  Twitter[fn::http://twitter.com/]; y utilizando una representación
+  adecuada de los documentos como vectores, se utilizó una estrategia
+  de clustering para identificar los subtópicos de cada evento y así
+  generar un resumen, basándose en los indicadores obtenidos.
 
   La estructura de este informe es como sigue: en este capítulo se
   comenta el contexto dentro del cual se desarrolló este sistema, las
@@ -84,37 +84,52 @@
    particular, en las /redes sociales online/ (OSN, /Online Social Networks/),
    es de tal magnitud que se vuelve necesario encontrar formas de
    filtrar y buscar sólo la información relevante dentro de todas las
-   fuentes que hablan del mismo tópico o tema.
+   fuentes que hablan del mismo evento. 
 
-   En el contexto de las redes sociales online, cada día se publican
-   millones de /actualizaciones de estado/ (mensajes breves sobre el
-   estado actual del usuario) con respecto a distintos tópicos, ya
-   sean conversacionales, personales o sobre algún evento en
-   particular[fn::Pear Analytics. Twitter Study http://es.scribd.com/doc/18548460/Pear-Analytics-Twitter-Study-August-2009].
+   Por otra parte, para poder entender lo que está pasando en el
+   mundo a partir de los puntos de vista de toda las personas que
+   manifiestan su opinión o los hechos recabados en las redes
+   sociales, se hace necesario poder procesar toda esta
+   información. Nuevamente, dado el gran volumen de datos, es
+   necesario poder resumir esta información para ser rápidamente
+   consumida. 
+
+   En el contexto de las redes sociales online, cada día los usuarios
+   publican  millones de mensajes cortos con respecto a distintos
+   tópicos, ya sean conversacionales, sobre eventos noticiosos, 
+   etc.[fn::Pear Analytics. Twitter Study http://es.scribd.com/doc/18548460/Pear-Analytics-Twitter-Study-August-2009]
    Además, el auge de los teléfonos inteligentes o /smartphones/ con mayor
    capacidad de procesamiento e integrados con todo tipo de sensores
-   (cámaras fotográficas, de vídeo, acelerómetro, barómetro,
-   osciloscopio, etc.), hace posible el generar aun más información y
+   (cámaras fotográficas, de vídeo, acelerómetro, osciloscopio, etc.),
+   hace posible el generar aun más información y
    e incluso en tiempo real sobre lo que acontece en el mundo, en
-   internet, o bien sobre el estado particular de cada usuario.
+   Internet, o bien sobre el estado particular de cada usuario.
 
    Este aumento y evolución de la generación de datos no sólo influye en la
-   riqueza en la variedad de éstos, sino también en el
-   comportamiento de los usuarios a lo largo del tiempo. Actualmente,
-   una gran parte de los usuarios valora más el contenido de tipo
-   multimedia (imágenes y videos) en las redes sociales online[fn::The Rise of Visual Social Media http://www.fastcompany.com/3000794/rise-visual-social-media. En el   artículo se menciona un estudio sobre comportamiendo y preferencias de los usuarios en las redes sociales hecho por ROI Research: http://www.slideshare.net/performics_us/performics-life-on-demand-2012-summary-deck]. 
+   riqueza de éstos, sino también en el comportamiento de los usuarios
+   a lo largo del tiempo. Actualmente,  una gran parte de éstos valora
+   más el contenido de tipo multimedia (imágenes y videos)
+   en las redes sociales online[fn::The Rise of Visual Social Media http://www.fastcompany.com/3000794/rise-visual-social-media. En el artículo se menciona un estudio sobre comportamiendo y preferencias de los usuarios en las redes sociales llevado a cabo por ROI Research: http://www.slideshare.net/performics_us/performics-life-on-demand-2012-summary-deck]. 
+   Este contenido no sólo corresponde a documentos Web en el sentido
+   tradicional, sino a objetos de más alto nivel como /tweets/
+   (mensajes cortos de la red social Twitter), imágenes (de servicios
+   como Instagram[fn::http://instagr.am/],
+   Tumblr[fn::http://tumblr.com/], etc.), vídeos
+   (Youtube[fn::http://youtube.com/], Vimeo[fn::http://vimeo.com/]) e
+   incluso sonidos (Soundcloud[fn::http://soundcloud.com/]).
    Se hace entonces necesario encontrar formas para satisfacer estas
    necesidades de los usuarios, las cuales ya han sido
    abordadas en parte, como la generación de
    resúmenes automáticos orientado a motores de búsqueda, o la
    determinación de la relevancia tanto de documentos en la Web como de
-   actualizaciones de estado en las redes sociales.
+   mensajes en las redes sociales.
 
    Surge como motivación el poder identificar y extraer contenido
-   relevante de la Web, a partir de eventos, y además avanzar un
+   relevante de lo que está pasando en las redes sociales,
+   clasificados dentro del concepto de eventos, y además avanzar un
    paso más arriba en el nivel de abstracción: considerar los
    documentos no por su contenido textual, lo que permite abarcar
-   imágenes, vídeos, sonidos y multimedios. Algunas
+   imágenes, vídeos, sonidos y multimedios en general. Algunas
    aplicaciones directas de esto son, entre otras:
 
    - Ayudar al trabajo periodístico mediante una colección de
@@ -146,47 +161,53 @@
 
 ** Objetivos
 *** Objetivo general
-    
-    El objetivo principal de este trabajo fue el de poder evaluar e
-    implementar en la práctica un sistema de extracción de contenido
-    multimedia basado en la información social asociada a este
-    contenido.
+
+    El objetivo principal de este trabajo fue el siguiente:
+
+    Diseñar e implementar un sistema que permita generar resúmenes
+    automáticos de /eventos/: información temporal publicada en redes
+    sociales online sobre sucesos en particular. Esta información se
+    basa en contenido textual y multimedial generado por los usuarios
+    de estas redes, cuya relevancia se basa en el impacto generado en
+    éstas.
+
 
 *** Objetivos específicos
 
-    - Abstraerse del problema de identificación de eventos a partir de
-      documentos Web, llevando a cabo una metodología de obtención de
-      datos simple.
-    - Implementar un modelo de /clustering/ para separar los
-      documentos en /subtópicos/ de cada evento, sin considerar el
-      tipo de contenido de estos documentos.
-    - Analizar la efectividad del sistema implementado, evaluando
-      casos de estudio.
+    1. Extraer datos relacionados a eventos en la Web, principalmente
+       aquellos generados en redes sociales online. Estos datos pueden
+       componerse tanto de información textual como multimedial. 
 
-#** Descripción general de la solución
-#** Resultados obtenidos
+    2. Agrupar la información extraída de un evento en subtópicos.
+
+    3. Seleccionar los elementos más relevantes de cada subtópico para
+       producir un resumen del evento. 
+
+    4. Analizar la efectividad de la metodología propuesta sobre un
+       conjunto de eventos noticiosos y conciertos. 
 
 ** Descripción general de la solución
    
-   Este trabajo puede considerarse como un punto de partida para el
-   desarrollo de un modelo de recuperación de contenido multimedia,
-   similar a lo que corresponde a la generación de resúmenes
-   automáticos para múltiples documentos. En particular, se implementó
-   un sistema que permite considerar distintas estrategias para
-   continuar desarrollando en el futuro. Además:
+   Para enfrentar el problema se diseñó una solución que consiste en
+   tres componentes para resolverlo, resultando cada una en diferente
+   grado de complejidad, siendo posible además ser mejoradas en el
+   futuro. Para probar la viabilidad de la metodología, ésta fue
+   aplicada sobre un conjunto de casos de prueba.
+
+   En particular:
 
    - Se llevó a cabo una metodología para la obtención de documentos y
      enriquecerlos con datos obtenidos de fuentes sociales;
-   - Se implementó un procedimiento que separar estos documentos en
+   - Se diseñó un procedimiento que separar estos documentos en
      /clusters/, /sin considerar su contenido/. Sólo se utilizó la
      información social asociada; y
-   - Se implementó además una forma de /rankear/ u ordenar los
+   - Se diseñó además un procedimiento para /rankear/ u ordenar los
      resultados de acuerdo a /relevancia/, siendo ésta medida de
      acuerdo a la información social asociada a los documentos
      generados.   
 
-   El sistema implementado puede dividirse en tres componentes
-   principales:
+   Las componentes diseñadas fueron las siguientes:
+
    1. La que obtiene descripciones de eventos a partir de fuentes de
       éstos en la Web, enriqueciéndolos con información social;
    2. Otra componente que procesa y separa los documentos a partir de
@@ -622,7 +643,7 @@ Proceder con K-means estándar\;
 
    La identificación automática de eventos consiste en, dado un
    conjunto de documentos, donde cada documento está asociado a un
-   evento (desconocido), es poder particionar el conjunto de
+   evento (desconocido), poder particionar el conjunto de
    documentos en clusters, de forma que cada cluster corresponda a
    todos los documentos asociados a un evento.
 
@@ -641,45 +662,60 @@ Proceder con K-means estándar\;
 *** Evaluación de resúmenes
 ** Ranking de documentos                                            :incompl:
    
-* Especificación del Problema                                      :noexport:
+* Especificación del Problema                                        :export:
 
-  El problema a resolver consiste en poder /identificar/ y /entregar/
-  /contenido multimedia relevante/ en la Web a /consumidores/ de
-  contenido.
+  El problema a resolver consiste en poder /resumir/ eventos en base
+  al contenido textual y multimedial de la información publicada en
+  medios sociales, tales como las redes sociales online.
 
-  Esta descripción por ser muy general necesita ser especificada un
-  poco más:
+  Se considerará un evento como una ocurrencia en el mundo real
+  con un período de tiempo asociado y un conjunto de mensajes, de
+  volumen considerable, que discutan la ocurrencia y además publicados
+  dentro del período de tiempo. 
 
-  1. El *identificar* se refiere a poder distinguir entre varios
-     documentos asociados a un mismo evento cuáles de estos comparten o
-     tienen cierta propiedad especial, que debe ser definida.
+  El resumir un evento consiste en entregar un subconjunto de
+  mensajes o de documentos mencionados en ellos que tengan
+  relación directa con el evento en cuestión. Por ejemplo, el evento
+  =Anef anuncia movilización nacional= contiene muchos mensajes, tales
+  como:
+  - =RT @econtingencia: Reajuste: Trabajadores del sector público=
+    =convocan a movilizaciones: La negociación entra a su recta final:=
+    =El l... h ...=
+  - =CUT de La Araucanía se adherirá a marcha nacional en rechazo a=
+    =reajuste salarial: La Central Unitaria de=
+    =Trabaja... http://t.co/IcgohlTR=
+  - =Reajuste: Trabajadores del sector público convocan a=
+    =movilizaciones http://t.co/pWC7q6NI=
+  - =RT @biobio: CUT de La Araucanía se adherirá a marcha nacional en=
+    =rechazo a reajuste salarial ofrecido por el Gobierno=
+    =http://t.co/IOieDido=
 
-  2. El poder *entregar* implica que no sólo debe poder identificarse este
-     contenido, sino también ser entregado a un usuario o a una consulta
-     realizada.
+  El resumen consistirá en una colección de objetos, los cuales pueden
+  ser o bien mensajes o bien algunos de los documentos mencionados en
+  ellos (en este caso representados por las URLs contenidas en los
+  mensajes), de forma que esta colección sea de tamaño mucho menor que
+  el total de mensajes, y además que los elementos de esta colección
+  representen de alguna forma todos los puntos de vista o aspectos
+  importantes del evento.
 
-  3. El *contenido multimedia* abarca documentos de todo tipo en la
-     Web: texto, imágenes, vídeos, sonidos, binarios, y multimedios
-     (una combinación de los anteriores). Es decir, se abstrae la
-     noción de documento en este sentido.
-
-  4. La *relevancia* comprende la propiedad que debe ser
-     identificada. Cómo medir la relevancia tiene muchas respuestas
-     posibles, sin embargo, el enfoque del problema consiste en medir la
-     relevancia hacia el /usuario/, o bien, /consumidores/ de
-     contenido..
-
-  El énfasis está en los puntos 3 y 4: una solución a este problema no debe
-  basarse en el contenido de los documentos. Por lo mismo, tampoco es
-  posible medir la relevancia de los documentos basándose en su contenido.
+  Se deben tomar en consideración las características de estos
+  mensajes: muchos de ellos tendrán errores de ortografía, redacción,
+  gramática, o semántica (que hablen de otro tema). Esto se traduce
+  como el ruido de los datos. Una solución a este problema debe tomar
+  en consideración el ruido intrínseco de los datos. Además, estos
+  mensajes son breves y no expresan en profunidad un punto de vista
+  del evento, sino que usualmente pueden tener una o dos
+  características cruciales que permitan distinguirlos de entre todos
+  los que existen, por ejemplo, una mención a una imagen o a un
+  vídeo que explique una parte del evento.
 
 #** Relevancia de una solución
 #** Características de calidad
 #** Criterios de aceptación
 
-* Descripción de la Solución                                       :noexport:
+* Descripción de la Solución                                         :export:
 
-  La solución implementada consistió en generar un resumen utilizando
+  La solución propuesta consistió en generar un resumen utilizando
   documentos representados apropiadamente con la información de medios
   sociales que los mencionan. La relevancia de estos documentos
   también se obtuvo con la información social más otros indicadores de
@@ -698,28 +734,35 @@ Proceder con K-means estándar\;
 
   DESCRIPCION DEL MODELO
 
-  En la sección SECCION se describe el modelo utilizado para la
+  En la Sección \ref{descdet} se describe el modelo utilizado para la
   implementación, con una especificación detallada de la solución. En la
-  sección SECCION se describe la metodología de desarrollo y la
+  sección \ref{impl} se describe la metodología de desarrollo y la
   implementación práctica realizada para representar el modelo
   formal, la cual considera la obtención de datos dentro del
   proceso. Luego se comentan los problemas técnicos que fueron
-  enfrentados para terminar en la sección SECCION, donde se discuten
+  enfrentados para terminar en la sección \ref{casosest}, donde se discuten
   un par de casos de estudio sobre los resultados obtenidos.
 
 ** Descripción detallada
+\label{descdet}
+
+# En esta parte puedes mencionar que la identificación de eventos está
+#  fuera del alcance de este trabajo. Así que recibes como input los eventos.
 
    Para enfrentar el problema descrito se decidió utilizar una
    representación apropiada de los documentos que permita abstraerse
    de su contenido, utilizando la información social asociada a
-   éstos. A partir de un evento determinado, se identifican los
-   subtópicos del evento utilizando los documentos, y luego, para cada
+   éstos. Se decidió que el problema de identificación de eventos está
+   fuera del alcance de este trabajo, por lo cual, se asume que los
+   eventos son dados como input a la solución diseñada. A partir de un
+   evento determinado, se identifican los  subtópicos del evento
+   utilizando los documentos, y luego, para cada 
    subtópico se determinan los documentos más relevantes utilizando
    esta información social.
 
    Para esto, fue necesario contar con dos /fuentes de datos/: una
    fuente de eventos y otra de /contenido social/, en la forma de
-   mensajes y actualizaciones de estado.
+   mensajes y actualizaciones de estado.  
 
    Se asumió que estas fuentes satisfacen los siguientes
    requerimientos:
@@ -764,6 +807,7 @@ Proceder con K-means estándar\;
    de los usuarios.
 
 ** Metodología de desarrollo e implementación
+\label{impl}
 
    La implementación consistió en las siguientes etapas:
 
@@ -1062,8 +1106,9 @@ $D''_e \leftarrow D''_e \cup \{d'\}$\;
 
 
 ** Casos de estudio                                                 :incompl:
+\label{casosest}
 
-* Conclusiones                                                     :noexport:
+* Conclusiones                                                       :export:
 ** Resumen del trabajo realizado
 ** Objetivos alcanzados
 ** Relevancia del trabajo realizado

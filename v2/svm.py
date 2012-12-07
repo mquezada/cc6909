@@ -24,6 +24,8 @@ def id(k):
 
 def generate_documents_for(event_id):
     lang = r.get('event:' + event_id + ':lang')
+    if lang is None:
+        lang = 'spanish'
     docs = r.keys('document:*:' + event_id)
     documents[event_id] = []
     documents_ids[event_id] = []
@@ -98,7 +100,8 @@ def cluster_event(event_id):
 
 ## test
 t = time()
-ev = '82cefb914318e7a9e6664550080f259a'
+#ev = '82cefb914318e7a9e6664550080f259a'
+ev = '47961910adba1a7cc98dc83b7bb2e773'
 generate_documents_for(ev)
 
 C = cluster_event(ev)

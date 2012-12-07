@@ -3,14 +3,14 @@ from twitter import get_num_retweets
 from tldextract import extract
 from collections import Counter
 import pprint
-from datetime.datetime import strptime
+import datetime
 import time
 
 r = Redis()
 
 
 def get(id, attr):
-	return r.get('tweet:' + id + ':' + attr)	
+	return r.get('tweet:' + id + ':' + attr)
 
 
 def getd(id, attr):
@@ -46,6 +46,7 @@ def get_features(event_id, documents_tweet_ids, documents_tweet_text):
 	j = 0
 	# para cada documento
 	for id_list in ids:
+		print "document", i, "of", len(ids)
 		key = documents_items[i][0]
 
 		documents[key].update({
@@ -69,16 +70,17 @@ def get_features(event_id, documents_tweet_ids, documents_tweet_text):
 			user_statuses = get(id, 'user_statuses_count')
 			user_friends = get(id, 'user_friends_count')
 
-			if get(id, 'retweets') is None:
+			if get(id, 'num_retweets') is None:
 				retweets = get_num_retweets(get(id, 'id_str'))
 				# bug, no se guardaron los retweets, se hace ahora
 				r.set('tweet:' + id + ':num_retweets', retweets)
+				time.sleep(5) # twitter rate limit
 			else:
-				retweets = get(id, 'retweets')
+				retweets = get(id, 'num_retweets')
 
 			tweets_lengths = len(documents_tweet_text[event_id][j].split())
 
-			timetmp = strptime(get(id, 'user_created_at'), '%a %b %d %H:%M:%S +0000 %Y')
+			timetmp = datetime.datetime.strptime(get(id, 'user_created_at'), '%a %b %d %H:%M:%S +0000 %Y')
 			user_created_at = time.mktime(timetmp.timetuple())
 
 			user_geo_enabled = int(get(id, 'user_geo_enabled') == 'True')

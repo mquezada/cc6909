@@ -1,8 +1,8 @@
 \select@language {spanish}
 \contentsline {chapter}{\numberline {1}Introducci\'on}{1}{chapter.1}
 \contentsline {section}{\numberline {1.1}Contexto y Motivaci\'on}{2}{section.1.1}
-\contentsline {section}{\numberline {1.2}Objetivos}{3}{section.1.2}
-\contentsline {subsection}{\numberline {1.2.1}Objetivo general}{3}{subsection.1.2.1}
+\contentsline {section}{\numberline {1.2}Objetivos}{4}{section.1.2}
+\contentsline {subsection}{\numberline {1.2.1}Objetivo general}{4}{subsection.1.2.1}
 \contentsline {subsection}{\numberline {1.2.2}Objetivos espec\IeC {\'\i }ficos}{4}{subsection.1.2.2}
 \contentsline {section}{\numberline {1.3}Descripci\'on general de la soluci\'on}{4}{section.1.3}
 \contentsline {chapter}{\numberline {2}Antecedentes}{6}{chapter.2}
@@ -26,7 +26,7 @@
 \contentsline {subsection}{\numberline {4.2.1}Obtenci\'on de datos}{18}{subsection.4.2.1}
 \contentsline {subsubsection}{Recolecci\'on de eventos}{18}{section*.8}
 \contentsline {subsubsection}{Enriquecimiento de eventos}{19}{section*.9}
-\contentsline {subsubsection}{Identificaci\'on de documentos a partir de tweets}{19}{section*.10}
+\contentsline {subsubsection}{Identificaci\'on de documentos a partir de tweets}{20}{section*.10}
 \contentsline {subsection}{\numberline {4.2.2}Identificaci\'on de subt\'opicos}{20}{subsection.4.2.2}
 \contentsline {subsection}{\numberline {4.2.3}Ranking de documentos}{22}{subsection.4.2.3}
 \contentsline {section}{\numberline {4.3}Desaf\IeC {\'\i }os t\'ecnicos}{22}{section.4.3}

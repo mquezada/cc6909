@@ -1,4 +1,4 @@
-% Created 2012-12-05 Wed 02:24
+% Created 2012-12-06 Thu 23:33
 \documentclass[upright, contnum]{umemoria}
 \usepackage[latin1]{inputenc}
 \inputencoding{latin1}
@@ -18,7 +18,7 @@
 
 \title{informe}
 \author{Mauricio}
-\date{05 December 2012}
+\date{06 December 2012}
 
 \begin{document}
 
@@ -28,8 +28,252 @@
 \tableofcontents
 \vspace*{1cm}
 
-\chapter{Antecedentes}
+\chapter{Introducción}
 \label{sec-1}
+
+
+  Al igual que en el buffet de un restaurante, por mucho que se quisieran
+  comer todos los platos, es imposible comer todo lo que uno
+  quisiera por razones obvias. Una posibilidad es probar un poco de cada
+  comida, para así saber qué es lo más delicioso y comer hasta
+  hartarse.
+  
+  Pero, ¿qué hacer si hay demasiados platos y no se conocen todos? de
+  alguna manera hay que saber cuáles hay que probar, si el objetivo es
+  comer lo mejor posible. Un amigo, u otras personas que hayan comido
+  en el restaurant pueden recomendar una u otra comida,
+  lo cual puede servir para orientarse. Entonces se pueden escoger
+  muestras de acuerdo a las recomendaciones.
+
+  
+  Pasando a un contexto diferente, supóngase que este gran buffet es la
+  Web y los distintos platos corresponden a contenido publicado en
+  ella. Por lo tanto, dada la gran cantidad de información disponible,
+  se hace necesario poder encontrar lo más atractivo de acuerdo a la
+  preferencia de los usuarios. Nótese que se está
+  haciendo otra suposición importante con esta analogía, y es que se
+  está considerando que la información es íntegramente para ser
+  \emph{consumida}, y no, por ejemplo, para generar más contenido,
+  conocimiento, o para ser utilizada por máquinas, etc. Dentro de
+  este contexto se plantea la pregunta de cómo seleccionar el contenido
+  más atractivo dentro de todo lo que hay disponible en un momento dado.
+
+  Para hacerse la idea de cuál es la mejor oferta gastronómica de un
+  restaurant, sin tener que probar todos los platos, se puede
+  preguntar a la gente que come habitualmente ahí qué platos fueron
+  los que más les han gustado, y así definir la calidad de éste y/o
+  escoger los mejores platos. O bien, filtrar los documentos que
+  hablan de un mismo evento de acuerdo a las preferencias de los
+  usuarios, y luego presentarlo en la forma de un \emph{resumen} de cada
+  uno.
+
+  Este trabajo consistió en el desarrollo de una metodología
+  que permite generar resúmenes automáticos de eventos determinados
+  a partir de los documentos Web que hablan de éstos. No se hace
+  ninguna suposición sobre el \emph{contenido} de estos documentos (pueden
+  ser de texto, imágenes, videos, \emph{multimedios} en general). Los
+  documentos del resumen son seleccionados de acuerdo a 
+  \emph{indicadores sociales}: los elementos con mayor impacto en las redes
+  sociales son considerados más importantes.
+  
+  La metodología diseñada se implementó sobre dos tipos de eventos:
+  noticias y conciertos musicales. Para obtenerlos, se utilizó
+  el servicio de Google News\footnote{\href{http://news.google.com/}{http://news.google.com/} } y
+  Last.fm\footnote{\href{http://last.fm/}{http://last.fm/} }. Los documentos y sus indicadores
+  sociales se obtuvieron de la red social
+  Twitter\footnote{\href{http://twitter.com/}{http://twitter.com/} }; y utilizando una representación
+  adecuada de los documentos como vectores, se utilizó una estrategia
+  de clustering para identificar los subtópicos de cada evento y así
+  generar un resumen, basándose en los indicadores obtenidos.
+
+  La estructura de este informe es como sigue: en este capítulo se
+  comenta el contexto dentro del cual se desarrolló este sistema, las
+  contribuciones realizadas, los objetivos y una descripción general
+  de la solución; en el siguiente capítulo se discute el estado del
+  arte y el marco teórico del cual se desprende este trabajo; el
+  capítulo 3 describe más en detalle el problema a resolver, su
+  relevancia y sus dificultades, para luego, en el
+  capítulo 4, describir la solución implementada, más un par de casos
+  de estudio sobre los resultados obtenidos, para finalizar con las
+  conclusiones de este trabajo en el capítulo 5.
+
+\section{Contexto y Motivación}
+\label{sec-1.1}
+
+   
+   La tasa de crecimiento de la cantidad de datos en la Web, y en
+   particular, en las \emph{redes sociales online} (OSN, \emph{Online Social Networks}),
+   es de tal magnitud que se vuelve necesario encontrar formas de
+   filtrar y buscar sólo la información relevante dentro de todas las
+   fuentes que hablan del mismo evento. 
+
+   Por otra parte, para poder entender lo que está pasando en el
+   mundo a partir de los puntos de vista de toda las personas que
+   manifiestan su opinión o los hechos recabados en las redes
+   sociales, se hace necesario poder procesar toda esta
+   información. Nuevamente, dado el gran volumen de datos, es
+   necesario poder resumir esta información para ser rápidamente
+   consumida. 
+
+   En el contexto de las redes sociales online, cada día los usuarios
+   publican  millones de mensajes cortos con respecto a distintos
+   tópicos, ya sean conversacionales, sobre eventos noticiosos, 
+   etc.\footnote{Pear Analytics. Twitter Study \href{http://es.scribd.com/doc/18548460/Pear-Analytics-Twitter-Study-August-2009}{http://es.scribd.com/doc/18548460/Pear-Analytics-Twitter-Study-August-2009} }
+   Además, el auge de los teléfonos inteligentes o \emph{smartphones} con mayor
+   capacidad de procesamiento e integrados con todo tipo de sensores
+   (cámaras fotográficas, de vídeo, acelerómetro, osciloscopio, etc.),
+   hace posible el generar aun más información y
+   e incluso en tiempo real sobre lo que acontece en el mundo, en
+   Internet, o bien sobre el estado particular de cada usuario.
+
+   Este aumento y evolución de la generación de datos no sólo influye en la
+   riqueza de éstos, sino también en el comportamiento de los usuarios
+   a lo largo del tiempo. Actualmente,  una gran parte de éstos valora
+   más el contenido de tipo multimedia (imágenes y videos)
+   en las redes sociales online\footnote{The Rise of Visual Social Media \href{http://www.fastcompany.com/3000794/rise-visual-social-media}{http://www.fastcompany.com/3000794/rise-visual-social-media}. En el artículo se menciona un estudio sobre comportamiendo y preferencias de los usuarios en las redes sociales llevado a cabo por ROI Research: \href{http://www.slideshare.net/performics_us/performics-life-on-demand-2012-summary-deck}{http://www.slideshare.net/performics\_us/performics-life-on-demand-2012-summary-deck} }. 
+   Este contenido no sólo corresponde a documentos Web en el sentido
+   tradicional, sino a objetos de más alto nivel como \emph{tweets}
+   (mensajes cortos de la red social Twitter), imágenes (de servicios
+   como Instagram\footnote{\href{http://instagr.am/}{http://instagr.am/} },
+   Tumblr\footnote{\href{http://tumblr.com/}{http://tumblr.com/} }, etc.), vídeos
+   (Youtube\footnote{\href{http://youtube.com/}{http://youtube.com/} }, Vimeo\footnote{\href{http://vimeo.com/}{http://vimeo.com/} }) e
+   incluso sonidos (Soundcloud\footnote{\href{http://soundcloud.com/}{http://soundcloud.com/} }).
+   Se hace entonces necesario encontrar formas para satisfacer estas
+   necesidades de los usuarios, las cuales ya han sido
+   abordadas en parte, como la generación de
+   resúmenes automáticos orientado a motores de búsqueda, o la
+   determinación de la relevancia tanto de documentos en la Web como de
+   mensajes en las redes sociales.
+
+   Surge como motivación el poder identificar y extraer contenido
+   relevante de lo que está pasando en las redes sociales,
+   clasificados dentro del concepto de eventos, y además avanzar un
+   paso más arriba en el nivel de abstracción: considerar los
+   documentos no por su contenido textual, lo que permite abarcar
+   imágenes, vídeos, sonidos y multimedios en general. Algunas
+   aplicaciones directas de esto son, entre otras:
+
+\begin{itemize}
+\item Ayudar al trabajo periodístico mediante una colección de
+     contenido multimedia relacionado a un evento noticioso. Por
+     ejemplo, la versión online de Radio
+     Biobío\footnote{\href{http://www.biobiochile.cl/}{http://www.biobiochile.cl/} } frecuentemente publica
+     breves artículos sobre sucesos que tienen impacto en las redes
+     sociales, mostrando un pequeño conjunto de mensajes con
+     comentarios de la gente\footnote{Como muestra: \href{http://www.biobiochile.cl/2012/12/01/aporte-de-lustrabotas-de-santiago-a-la-teleton-provoca-admiracion-en-redes-sociales.shtml}{http://www.biobiochile.cl/2012/12/01/aporte-de-lustrabotas-de-santiago-a-la-teleton-provoca-admiracion-en-redes-sociales.shtml}, y \href{http://www.biobiochile.cl/2012/12/01/rechazo-provocan-condicionamientos-de-compra-de-ripley-y-unimarc-para-donar-a-la-teleton.shtml}{http://www.biobiochile.cl/2012/12/01/rechazo-provocan-condicionamientos-de-compra-de-ripley-y-unimarc-para-donar-a-la-teleton.shtml} }. 
+     Una aplicación directa involucraría
+     considerar además contenido multimedia, y organizar este
+     contenido de acuerdo a la relevancia que tiene dentro de las
+     redes.
+\item Enriquecer la búsqueda en la Web a través de contenido
+     multimedia. Una persona buscando información sobre un concierto
+     podría obtener imágenes y vídeos de éste fácilmente una vez
+     identificado el concierto.
+\item Siguiendo lo anterior, un grupo musical podría obtener toda la
+     información multimedia asociada a su concierto, tanto para sus
+     fans como para ellos mismos, potenciando su popularidad.
+\item Poder distinguir entre eventos similares rápidamente. Por
+     ejemplo, un usuario que desee obtener información sobre ``Gaza'',
+     puede referirse tanto a la banda de música como al conflicto en
+     Israel. El poder distinguir rápidamente mediante una imagen o un
+     vídeo acelera mucho el proceso. \emph{Una imagen vale más que mil palabras}.
+\end{itemize}
+   El sistema implementado es una primera aproximación que puede
+   satisfacer los ejemplos mencionados.
+
+\section{Objetivos}
+\label{sec-1.2}
+
+\subsection{Objetivo general}
+\label{sec-1.2.1}
+
+
+    El objetivo principal de este trabajo fue el siguiente:
+
+    Diseñar e implementar un sistema que permita generar resúmenes
+    automáticos de \emph{eventos}: información temporal publicada en redes
+    sociales online sobre sucesos en particular. Esta información se
+    basa en contenido textual y multimedial generado por los usuarios
+    de estas redes, cuya relevancia se basa en el impacto generado en
+    éstas.
+
+
+\subsection{Objetivos específicos}
+\label{sec-1.2.2}
+
+
+\begin{enumerate}
+\item Extraer datos relacionados a eventos en la Web, principalmente
+       aquellos generados en redes sociales online. Estos datos pueden
+       componerse tanto de información textual como multimedial.
+\item Agrupar la información extraída de un evento en subtópicos.
+\item Seleccionar los elementos más relevantes de cada subtópico para
+       producir un resumen del evento.
+\item Analizar la efectividad de la metodología propuesta sobre un
+       conjunto de eventos noticiosos y conciertos.
+\end{enumerate}
+\section{Descripción general de la solución}
+\label{sec-1.3}
+
+   
+   Para enfrentar el problema se diseñó una solución que consiste en
+   tres componentes para resolverlo, resultando cada una en diferente
+   grado de complejidad, siendo posible además ser mejoradas en el
+   futuro. Para probar la viabilidad de la metodología, ésta fue
+   aplicada sobre un conjunto de casos de prueba.
+
+   En particular:
+
+\begin{itemize}
+\item Se llevó a cabo una metodología para la obtención de documentos y
+     enriquecerlos con datos obtenidos de fuentes sociales;
+\item Se diseñó un procedimiento que separar estos documentos en
+     \emph{clusters}, \emph{sin considerar su contenido}. Sólo se utilizó la
+     información social asociada; y
+\item Se diseñó además un procedimiento para \emph{rankear} u ordenar los
+     resultados de acuerdo a \emph{relevancia}, siendo ésta medida de
+     acuerdo a la información social asociada a los documentos
+     generados.
+\end{itemize}
+   Las componentes diseñadas fueron las siguientes:
+
+\begin{enumerate}
+\item La que obtiene descripciones de eventos a partir de fuentes de
+      éstos en la Web, enriqueciéndolos con información social;
+\item Otra componente que procesa y separa los documentos a partir de
+      la información social; genera \emph{objetos Web} y los separa en
+      subtópicos de cada evento, respectivamente; y
+\item La componente que entrega los $k$ documentos más relevantes por
+      cada evento obtenido, basándose en los subtópicos identificados.
+\end{enumerate}
+   Se utilizaron las API de Google News como de Last.fm para la
+   obtención de eventos: noticias y conciertos, respectivamente. Para
+   el enriquecimiento de los eventos se utilizó la información social
+   que provee Twitter y su API de búsqueda de \emph{tweets}. De la misma
+   forma, se consideraron los metadatos de los mismos mensajes para medir
+   la relevancia de los documentos generados. 
+
+   Un documento es identificado por la URL que lo ubica en la Web. El
+   contenido no es más que la concatenación de los tweets que
+   mencionan al documento. Se realizó una limpieza y preprocesamiento
+   de los datos, quitando las \emph{stopwords} y realizando \emph{stemming}
+   sobre el contenido en texto. Luego, se aplicó \emph{tf-idf} sobre los
+   documentos, representándolos como vectores en el \emph{space vector    model}. Para identificar los subtópicos de un evento se utilizó el 
+   algoritmo de clustering $k$-means sobre los vectores. 
+
+   Para el ranking de los documentos se decidió usar una ponderación
+   simple sobre una serie de indicadores que dependen de los tweets y
+   de las URLs de cada evento.
+
+   Entre las herramientas utilizadas, se usó lenguaje de
+   programación Python, varias librerías para el manejo de datos
+   (tales como \texttt{nltk}, \texttt{scipy}, \texttt{scikit-learn}, por nombrar las más
+   importantes), el sistema de almacenamiento Redis, entre otras
+   herramientas que son mencionadas en la descripción detallada de la
+   solución.
+
+\chapter{Antecedentes}
+\label{sec-2}
 
   
   Para poder describir correctamente tanto el problema como la
@@ -58,7 +302,7 @@
   Aprendizaje de Máquinas, entre otras áreas.
 
 \section{Twitter}
-\label{sec-1.1}
+\label{sec-2.1}
 
    Twitter es una red social online que permite conectar a
    personas mediante la comunicación de mensajes cortos, rápidos y   frecuentes\footnote{\href{https://support.twitter.com/groups/31-twitter-basics/topics/104-welcome-to-twitter-support/articles/13920-get-to-know-twitter-new-user-faq}{https://support.twitter.com/groups/31-twitter-basics/topics/104-welcome-to-twitter-support/articles/13920-get-to-know-twitter-new-user-faq} }. Estos
@@ -135,7 +379,7 @@
    
 
 \section{Clustering de documentos}
-\label{sec-1.2}
+\label{sec-2.2}
 
 
    El análisis de clusters o clustering es el proceso de encontrar
@@ -171,7 +415,7 @@
    algoritmos de clustering aplicados a éstos.
 
 \subsection{Modelos de representación de documentos}
-\label{sec-1.2.1}
+\label{sec-2.2.1}
 
 
     \subsubsection{Standard Boolean Model}
@@ -280,7 +524,7 @@
     documentos en este modelo.
 
 \subsection{Medidas de similitud}
-\label{sec-1.2.2}
+\label{sec-2.2.2}
 
       
     A lo largo de los años, dos formas han sido las usuales para
@@ -309,7 +553,7 @@
     y la otra de distancia.
 
 \subsection{Algoritmos de clustering}
-\label{sec-1.2.3}
+\label{sec-2.2.3}
 
 
     Se considerará la siguiente definición para el problema de
@@ -393,7 +637,7 @@ Proceder con K-means estándar\;
     
 
 \subsection{Evaluación de clusters}
-\label{sec-1.2.4}
+\label{sec-2.2.4}
 
 
     Existen dos enfoques para evaluar clusterings: validación interna
@@ -430,12 +674,12 @@ Proceder con K-means estándar\;
       la cual es la fracción del tamaño del cluster\ldots{}.\ldots{}.\ldots{}.\ldots{}.\ldots{}.\ldots{}.\ldots{}.\ldots{}.
 \end{itemize}
 \section{Identificación automática de eventos}
-\label{sec-1.3}
+\label{sec-2.3}
 
 
    La identificación automática de eventos consiste en, dado un
    conjunto de documentos, donde cada documento está asociado a un
-   evento (desconocido), es poder particionar el conjunto de
+   evento (desconocido), poder particionar el conjunto de
    documentos en clusters, de forma que cada cluster corresponda a
    todos los documentos asociados a un evento.
 
@@ -451,15 +695,531 @@ Proceder con K-means estándar\;
    
 
 \section{Resúmenes automáticos}
-\label{sec-1.4}
+\label{sec-2.4}
 
 \subsection{Evaluación de resúmenes}
-\label{sec-1.4.1}
+\label{sec-2.4.1}
 
 \section{Ranking de documentos}
-\label{sec-1.5}
+\label{sec-2.5}
 
    
+\chapter{Especificación del Problema}
+\label{sec-3}
+
+
+  El problema a resolver consiste en poder \emph{resumir} eventos en base
+  al contenido textual y multimedial de la información publicada en
+  medios sociales, tales como las redes sociales online.
+
+  Se considerará un evento como una ocurrencia en el mundo real
+  con un período de tiempo asociado y un conjunto de mensajes, de
+  volumen considerable, que discutan la ocurrencia y además publicados
+  dentro del período de tiempo. 
+
+  El resumir un evento consiste en entregar un subconjunto de
+  mensajes o de documentos mencionados en ellos que tengan
+  relación directa con el evento en cuestión. Por ejemplo, el evento
+  \texttt{Anef anuncia movilización nacional} contiene muchos mensajes, tales
+  como:
+\begin{itemize}
+\item \texttt{RT @econtingencia: Reajuste: Trabajadores del sector público}
+    \texttt{convocan a movilizaciones: La negociación entra a su recta final:}
+    \texttt{El l... h ...}
+\item \texttt{CUT de La Araucanía se adherirá a marcha nacional en rechazo a}
+    \texttt{reajuste salarial: La Central Unitaria de}
+    \texttt{Trabaja... http://t.co/IcgohlTR}
+\item \texttt{Reajuste: Trabajadores del sector público convocan a}
+    \texttt{movilizaciones http://t.co/pWC7q6NI}
+\item \texttt{RT @biobio: CUT de La Araucanía se adherirá a marcha nacional en}
+    \texttt{rechazo a reajuste salarial ofrecido por el Gobierno}
+    \texttt{http://t.co/IOieDido}
+\end{itemize}
+  El resumen consistirá en una colección de objetos, los cuales pueden
+  ser o bien mensajes o bien algunos de los documentos mencionados en
+  ellos (en este caso representados por las URLs contenidas en los
+  mensajes), de forma que esta colección sea de tamaño mucho menor que
+  el total de mensajes, y además que los elementos de esta colección
+  representen de alguna forma todos los puntos de vista o aspectos
+  importantes del evento.
+
+  Se deben tomar en consideración las características de estos
+  mensajes: muchos de ellos tendrán errores de ortografía, redacción,
+  gramática, o semántica (que hablen de otro tema). Esto se traduce
+  como el ruido de los datos. Una solución a este problema debe tomar
+  en consideración el ruido intrínseco de los datos. Además, estos
+  mensajes son breves y no expresan en profunidad un punto de vista
+  del evento, sino que usualmente pueden tener una o dos
+  características cruciales que permitan distinguirlos de entre todos
+  los que existen, por ejemplo, una mención a una imagen o a un
+  vídeo que explique una parte del evento.
+
+
+\chapter{Descripción de la Solución}
+\label{sec-4}
+
+
+  La solución propuesta consistió en generar un resumen utilizando
+  documentos representados apropiadamente con la información de medios
+  sociales que los mencionan. La relevancia de estos documentos
+  también se obtuvo con la información social más otros indicadores de
+  la solución parcial. 
+
+  Para esto, se asume que existe una fuente de eventos, de esta forma,
+  el enfoque de la solución radica principalmente en la generación de
+  los resúmenes y no en la identificación de eventos en medios
+  sociales. Sin embargo, para la implementación sí fue necesario
+  enfrentar el problema de identificar eventos, usando un enfoque
+  práctico para obtenerlos.
+
+  La figura FIGURA muestra de manera general el modelo propuesto.
+
+  FIGURA MODELO
+
+  DESCRIPCION DEL MODELO
+
+  En la Sección \ref{descdet} se describe el modelo utilizado para la
+  implementación, con una especificación detallada de la solución. En la
+  sección \ref{impl} se describe la metodología de desarrollo y la
+  implementación práctica realizada para representar el modelo
+  formal, la cual considera la obtención de datos dentro del
+  proceso. Luego se comentan los problemas técnicos que fueron
+  enfrentados para terminar en la sección \ref{casosest}, donde se discuten
+  un par de casos de estudio sobre los resultados obtenidos.
+
+\section{Descripción detallada}
+\label{sec-4.1}
+
+\label{descdet}
+
+
+   Para enfrentar el problema descrito se decidió utilizar una
+   representación apropiada de los documentos que permita abstraerse
+   de su contenido, utilizando la información social asociada a
+   éstos. Se decidió que el problema de identificación de eventos está
+   fuera del alcance de este trabajo, por lo cual, se asume que los
+   eventos son dados como input a la solución diseñada. A partir de un
+   evento determinado, se identifican los  subtópicos del evento
+   utilizando los documentos, y luego, para cada 
+   subtópico se determinan los documentos más relevantes utilizando
+   esta información social.
+
+   Para esto, fue necesario contar con dos \emph{fuentes de datos}: una
+   fuente de eventos y otra de \emph{contenido social}, en la forma de
+   mensajes y actualizaciones de estado.  
+
+   Se asumió que estas fuentes satisfacen los siguientes
+   requerimientos:
+
+\begin{itemize}
+\item La fuente de eventos debe entregar una lista de eventos
+     rápidamente, la cual debe contener los siguientes datos para
+     cada entrada:
+
+\begin{itemize}
+\item Un título del evento y \emph{términos asociados}. Los términos
+       asociados son breves frases o palabras que describan al
+       evento, como por ejemplo, tags o etiquetas.
+\item Como datos opcionales: breve descripción del evento, fecha de
+       inicio y término, ubicación y direcciones Web.
+\end{itemize}
+
+\item La o las fuentes de contenido social deben entregar una lista de
+     mensajes, con algunos metadatos tales como la fecha de creación,
+     si el mensaje fue compartido, etc. Además, algunos datos sobre el
+     autor del mensaje, como la cantidad de conexiones en la red, y
+     en general, datos que permitan comparar dos autores.
+\end{itemize}
+   Utilizando estas dos fuentes, el siguiente paso luego de obtener
+   una lista de eventos fue enriquecerlos utilizando las fuentes
+   sociales, generando documentos del tipo 
+   $d = (s_1, s_2, \ldots, s_m)$, donde  $s_i$, $i \in [1..m]$ 
+   es un mensaje de alguna fuente social, con los
+   metadatos asociados. El documento es identificado por la URI de
+   algún documento en la Web, de forma que todos los mensajes que
+   contengan una URI en particular, corresponderán al mismo documento
+   $d$.
+
+   A continuación, utilizando alguna representación adecuada 
+   (\emph{vector space model}, \emph{bag of words}, etc.), se generaron clusters
+   de documentos de un mismo evento, identificando los subtópicos. Con
+   ellos fue posible generar un resumen que abarcara todos los
+   aspectos del evento, en contraste con seleccionar directamente los
+   documentos más relevantes del evento en su conjunto, lo cual puede
+   dejar puntos de vista sin ser considerados por su extensión. 
+
+   Finalmente se seleccionaron los $k>0$ documentos más representativos de
+   cada cluster, utilizando como criterio los metadatos de los
+   mensajes de la fuente social. De esta forma, se ordenan los
+   documentos dejando como más ``relevantes'' los que más interés atrae
+   de los usuarios.
+
+\section{Metodología de desarrollo e implementación}
+\label{sec-4.2}
+
+\label{impl}
+
+   La implementación consistió en las siguientes etapas:
+
+\begin{itemize}
+\item Obtención del dataset de eventos y documentos.
+
+     Para esto, se utilizaron dos fuentes de eventos: Google News y
+     Last.fm para recolectar noticias y conciertos musicales
+     (incluidos festivales), respectivamente. Como fuente de datos
+     sociales se utilizó la red social Twitter, que dispone de una API
+     para realizar búsquedas por \emph{keywords}. Esta etapa comprendió
+     la recolección de eventos y de documentos con información social
+     asociada a éstos.
+\item Generación de clusters para la identificación de subtópicos para
+     cada evento.
+
+     Una vez identificados los eventos y los documentos asociados, se
+     generaron clusters usando el algoritmo K-means con K-means++ para
+     la inicialización. Se impuso un valor de $k=5$ clusters por
+     evento. En la sección de casos de estudio se discuten las
+     alternativas y la evaluación de algunos clusters del dataset.
+\item Extracción de documentos relevantes para cada evento.
+
+     Una vez identificados los subtópicos de cada cluster, se
+     extrajeron de éstos los documentos más relevantes, utilizando la
+     información social de cada uno de ellos, en conjunto con otros
+     indicadores globales del clustering (como que incluyan una URL
+     dentro de las más mencionadas dentro del cluster, entre
+     otras). Estos documentos corresponden al output o salida del
+     sistema.
+\end{itemize}
+\subsection{Obtención de datos}
+\label{sec-4.2.1}
+
+    Se describe a continuación el proceso diseñado para la obtención de
+    datos, tanto de eventos como de documentos con sus indicadores
+    sociales respectivos.
+
+    Las etapas de generación del dataset son las siguientes:
+
+\begin{itemize}
+\item Recolección de eventos (noticias y conciertos);
+\item Enriquecimiento de los eventos existentes mediante tweets; e
+\item Identificación de documentos a partir de los tweets por cada evento.
+
+      Se recolectaron datos (eventos y tweets) desde el 19 de noviembre de
+      2012 hasta el 30 de noviembre del mismo año, todos los días
+      desde la medianoche hasta que el proceso termina exitosamente.
+\end{itemize}
+\subsubsection{Recolección de eventos}
+
+Se consideraron dos tipos de eventos para el sistema: noticias y
+conciertos musicales. Los conciertos incluyen festivales de varios
+artistas.
+
+\begin{itemize}
+\item Noticias
+  Para obtener las noticias, se utilizó el servicio de Google
+  News\footnote{\href{http://news.google.com}{http://news.google.com} }. Existe una API (en proceso de
+  obsolescencia\footnote{\href{http://googlecode.blogspot.com/2011/05/spring-cleaning-for-some-of-our-apis.html}{http://googlecode.blogspot.com/2011/05/spring-cleaning-for-some-of-our-apis.html} }, 
+  pero funcional a la fecha de este trabajo) que permite
+  obtener no sólo los titulares y breve descripción de cada noticia,
+  sino también un conjunto de entre 4-10 noticias relacionadas de otras
+  fuentes. Esto sirvió para alimentar los términos de búsqueda para la
+  etapa siguiente. Se guardaron los siguientes datos de una noticia:
+
+\begin{itemize}
+\item Título,
+\item Descripción,
+\item URL de la fuente, y
+\item Titulares de las noticias relacionadas.
+\end{itemize}
+
+\item Conciertos
+  Utilizando el servicio de Last.fm para obtener los conciertos y
+  festivales de una ubicación en
+  particular\footnote{\href{http://www.lastfm.es/api/show/geo.getEvents}{http://www.lastfm.es/api/show/geo.getEvents} }, se
+  obtuvieron los conciertos y festivales de las siguientes
+  ubicaciones:
+
+\begin{itemize}
+\item Santiago, Chile;
+\item Londres, Inglaterra;
+\item Glastonbury, Inglaterra;
+\item Las Vegas, Nevada, EE.UU.; y
+\item Estocolmo, Suecia.
+\end{itemize}
+
+\item Título del evento (concierto o festival);
+\item Artistas que participan; y
+\item Fechas de inicio y término (esta última no siempre está como
+    dato).
+
+  Además de otros datos descriptivos, como la ubicación, descripción
+  breve, sitio web de la banda o festival, etc.
+\end{itemize}
+Cada vez que se obtienen los eventos se vuelven a obtener los
+conciertos, pero sólo agregando los nuevos. Las noticias siempre son
+nuevas, aun así por implementación no se consideraron los repetidos.
+  
+\subsubsection{Enriquecimiento de eventos}
+
+Se obtuvieron tweets utilizando el servicio de búsqueda que provee
+Twitter en su
+API\footnote{\href{https://dev.twitter.com/docs/api/1.1/get/search/tweets}{https://dev.twitter.com/docs/api/1.1/get/search/tweets} }. El
+objetivo es enriquecer los eventos con la información social que hay
+en la Web sobre éstos. 
+
+Para cada uno de los eventos obtenidos en la fase anterior, se
+utilizaron los términos de búsqueda asociados a ellos: los titulares
+de las noticias relacionadas y los nombres de los artistas para los
+eventos noticiosos y musicales, respectivamente.
+
+\begin{itemize}
+\item Para las noticias, se hace una búsqueda en Twitter de los titulares
+  al mismo tiempo en que se obtienen de Google News, y nuevamente al
+  día siguiente, es decir, 2 búsquedas por cada titular de un evento.
+  Se quitan las tildes y caracteres no \texttt{ASCII} y las stopwords, para
+  evitar problemas con la implementación y no hacer calce de stopwords
+  en la búsqueda de Twitter.
+\item Para los conciertos y festivales, se utilizaron los nombres de los
+  artistas y del evento como términos de búsqueda. De acuerdo a la
+  información asociada al evento, se busca por una mayor cantidad de
+  días:
+
+\begin{itemize}
+\item Se busca desde un día antes de inicio del evento;
+\item Si está presente la fecha de término del evento, se busca cada día
+    dentro del intervalo ``fecha de inicio'' a ``fecha de término'' hasta
+    tres días terminado el evento.
+\item Si no está presente la fecha de término (por ejemplo, un concierto
+    o un festival de un día), se busca hasta tres días pasada la fecha
+    de inicio.
+\end{itemize}
+
+\end{itemize}
+\subsubsection{Identificación de documentos a partir de tweets}
+
+    Luego de obtener los tweets asociados a cada evento, el siguiente
+    paso fue generar los documentos que fueron usados para la
+    generación de los resúmenes. Nuevamente, el modelo consistió en que cada
+    documento se modeló como un vector de palabras, donde el
+    identificador del documento es una URL, y sus componentes
+    corresponden al contenido de los tweets que tienen esa URL en el
+    texto del mensaje.
+
+    El caso en el que un tweet no tenía ninguna URL en su contenido
+    fue abordado de la siguiente forma: la URL asociada es una tal que
+    representa al mismo tweet (utilizando el servicio de Twitter), y
+    el contenido de ese documento es el mismo tweet, de forma de no
+    dejar el tweet sin ser representado.
+
+    Este proceso fue abordado recorriendo todos los eventos del
+    dataset, observando todos los tweets asociados a cada evento,
+    extrayendo la URL si es que hay alguna y guardando el documento
+    con el nuevo tweet. Se marcan los tweets observados para no tener
+    que repetir el proceso, ya que es intensivo en conexión a la red.
+
+    Dada la condición breve de los mensajes publicados en la red
+    social, muchos de los usuarios y/o servicios que publican mensajes
+    con una URL en su interior suelen utilizar \emph{acortadores} 
+    (o \emph{url shorteners}) para los enlaces, y así no utilizar mucho
+    espacio dentro de un
+    mensaje. Otra ventaja que ofrecen es que algunos servicios como
+    Bit.ly\footnote{\href{http://bit.ly}{http://bit.ly} } dan estadísticas sobre los visitantes a
+    estos enlaces (y así saber quiénes vienen de cierta red social u
+    otra, por ejemplo). Twitter, a su vez, actualmente también ofrece
+    acortamiento de URLs por defecto. Esto suele producir que un enlace
+    acortado se resuelva a otro enlace también acortado, por lo que es
+    necesario resolver la URL completa para evitar duplicados o
+    \emph{pseudo-duplicados} (en el caso en que dos URLs sintácticamente
+    distintas apunten al mismo recurso). EN LA FIGURA\ldots{}...
+
+    FIGURA DE LINKS CORTOS
+
+    Por lo anterior, una vez identificada la URL del texto de un
+    tweet, se resuelve su URL completa (que puede ya serlo de
+    antemano), lo que consume recursos de ancho de banda y
+    tiempo. 
+
+\subsection{Identificación de subtópicos}
+\label{sec-4.2.2}
+
+
+    Una vez recolectados tanto los eventos como generados los
+    documentos asociados, se procedió a identificar los subtópicos de
+    cada evento. Para esto, se utilizó el algoritmo K-means para
+    construir clusters a partir de todos los documentos de un solo
+    evento.
+
+    Como se mencionó anteriormente, los documentos consisten en
+    vectores del tipo $d_{\textrm{URL}}=(t_1,t_2,\ldots,t_m)$, donde
+    $t_i$ es el tweet $i$-ésimo que contiene a URL dentro del texto
+    del mensaje. Para poder aplicar un algoritmo de clustering, fue
+    necesario procesar nuevamente estos documentos para representarlos
+    como vectores usando el vector space model. El procedimiento
+    consta de dos partes, ``normalizar'' los documentos, limpiando los
+    términos que puedan afectar al clustering, y luego aplicar
+    $\tfidf$ sobre los documentos normalizados:
+
+\begin{algorithm}[H]
+ \KwData{Conjunto de documentos $D_e$}
+ \KwResult{Conjunto de strings $D'_e$, }
+ $D'_e \leftarrow \emptyset$\; 
+ \For{documento $d \in D_e$}{
+   $d' \leftarrow \varepsilon$\;
+   \For{tweet $t \in d$}{
+   $t' \leftarrow \texttt{clean}(t)$\;
+   $d' \leftarrow \texttt{concat}(d',t')$\;
+   }
+   $D'_e \leftarrow D'_e \cup \{d'\}$\;
+ }
+ \caption{Preprocesamiento de documentos}
+\end{algorithm}
+    
+    Donde $\varepsilon$ es el string vacío, \texttt{concat}$(a,b)$ retorna
+    la concatenación de $a$ y $b$, y \texttt{clean} realiza las siguientes
+    operaciones sobre el tweet:
+
+\begin{itemize}
+\item Remueve las URLs que contenga el texto;
+\item Remueve todas las menciones;
+\item Quita los caracteres ``\#'', dejando los \emph{hashtags} intactos;
+\item Quita las tildes, acentos, stopwords; y
+\item Realiza stemming en español o inglés dependiendo del idioma del
+      evento dado por los metadatos de éste. Se utilizó el Snowball
+      Stemmer\footnote{\href{http://snowball.tartarus.org/}{http://snowball.tartarus.org/} } para esto.
+\end{itemize}
+    Una vez normalizados los documentos, se convierten a la
+    representación como vectores con pesos por cada término:
+
+\begin{algorithm}[H]
+\KwData{Conjunto de strings $D'_e$, vocabulario $V$ de palabras de
+$D'_e$}
+\KwResult{Conjunto de vectores $D''_e$, representados en vector space
+model}
+$D''_e \leftarrow \emptyset$ \;
+\For{documento $d \in D'_e$} {
+   $d' \leftarrow \texttt{map}(\tfidf(\cdotp, d, D'_e), \texttt{words}(d))$\;
+}
+$D''_e \leftarrow D''_e \cup \{d'\}$\;
+\caption{Transformación de documentos a vector space model}
+\end{algorithm}
+
+    Donde \texttt{map}$(f,l)$ mapea la
+    función o procedimiento $f$ a cada elemento de la lista $l$,
+    retornando una nueva lista $l'$ en la cual a cada elemento se le
+    aplicó $f$ y \texttt{words} retorna una lista con las palabras de
+    $d'$. Este procedimiento retorna un conjunto de vectores en
+    $\tfidf$, lo que permite entonces aplicar un algoritmo de
+    clustering para identificar subtópicos.
+
+    Se utilizó el algoritmo Mini Batch K-means, el CUAL\ldots{} COMPLETAR
+    ACA Y MODIFICAR ANTES DONDE DIGA KMEANS!!!!!. Al aplicarlo sobre
+    el conjunto de vectores, éste retorna una \emph{lista de etiquetas}
+    $L$, de largo $n$, la cantidad de documentos utilizados. Cada
+    $L_i \in [0..k-1], i \in [1..n]$ indica a cuál cluster corresponde
+    el $i$-ésimo documento, lo que permite fácilmente filtrar y
+    recuperar los clusters por separado, para pasar a la siguiente
+    etapa.
+
+\subsection{Ranking de documentos}
+\label{sec-4.2.3}
+
+    
+
+
+\section{Desafíos técnicos}
+\label{sec-4.3}
+
+\subsection{Restricciones de la API de Twitter}
+\label{sec-4.3.1}
+
+
+   La API de búsqueda de Twitter permite obtener tweets de acuerdo a un
+   término de búsqueda. Se utilizó este servicio para enriquecer los
+   eventos con información social utilizando como términos de búsqueda
+   tanto los títulos de las noticias como los nombres de los artistas
+   para las noticias y los conciertos, respectivamente. 
+   
+   Funciona de la siguiente forma: cada vez que se hace un request a la
+   URL dada por el servicio, éste retorna a lo más 100 tweets por página, con un
+   máximo de 15 páginas (indicando en el request qué página queremos
+   consultar), dando como total hasta 1500 tweets por búsqueda. Existirán
+   términos de búsqueda que no presenten ningún resultado  (ya sea por
+   estar mal escritos o simplemente que no sean un tópico de discusión), o por
+   el contrario, que se generen más tweets que los retornados por la
+   búsqueda por cada ventana de tiempo que demore ésta (por ejemplo, un
+   \emph{trending topic} o tópico que sea muy mencionado en la red social).
+   
+   Existe una limitación de uso de este servicio: sólo es posible hacer
+   hasta 180 requests por cada 15 minutos, o 1 request cada 5
+   segundos. Además, sólo retorna tweets de hasta 7 días de antigüedad, y
+   sus resultados no son necesariamente en tiempo real y su estabilidad
+   varía de acuerdo a factores externos.
+   
+   Los tweets retornados vienen en formato \texttt{JSON} (\emph{Javascript Simple Object Notation}),
+   e incluyen varios metadatos sobre el tweet aparte de los principales,
+   como autor, fecha, contenido. Algunos de estos metadatos son:
+   
+\begin{itemize}
+\item Cantidad de \emph{retweets} hechos hasta la fecha;
+\item Si posee alguna URL o \emph{hashtag} en el texto;
+\item Si es una \emph{mención} a otro usuario;
+\item La ubicación de donde se envió el tweet;
+\item etc.
+\end{itemize}
+  Además, incluye datos sobre el autor, como por ejemplo:
+
+\begin{itemize}
+\item Si la cuenta está \emph{verificada};
+\item La cantidad de seguidores del usuario;
+\item Cantidad de amigos (seguidores que también lo siguen);
+\item Cantidad de tweets;
+\item Su descripción, y si incluye alguna URL, etc;
+\item Ubicación (dada por el mismo usuario);
+\item Fecha de creación de la cuenta;
+\item etc.
+\end{itemize}
+\section{Casos de estudio}
+\label{sec-4.4}
+
+\label{casosest}
+
+\chapter{Conclusiones}
+\label{sec-5}
+
+\section{Resumen del trabajo realizado}
+\label{sec-5.1}
+
+\section{Objetivos alcanzados}
+\label{sec-5.2}
+
+\section{Relevancia del trabajo realizado}
+\label{sec-5.3}
+
+\section{Trabajo futuro}
+\label{sec-5.4}
+
+
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

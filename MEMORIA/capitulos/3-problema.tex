@@ -1,31 +1,49 @@
-\chapter{Especificaci\'on del Problema}
-\label{sec-1}
+\chapter{Especificación del Problema}
+\label{sec-3}
 
 
-  El problema a resolver consiste en poder \emph{identificar} y \emph{entregar}
-  \emph{contenido multimedia relevante} en la Web a \emph{consumidores} de
-  contenido.
+  El problema a resolver consiste en poder \emph{resumir} eventos en base
+  al contenido textual y multimedial de la información publicada en
+  medios sociales, tales como las redes sociales online.
 
-  Esta descripción por ser muy general necesita ser especificada un
-  poco más:
+  Se considerará un evento como una ocurrencia en el mundo real
+  con un período de tiempo asociado y un conjunto de mensajes, de
+  volumen considerable, que discutan la ocurrencia y además publicados
+  dentro del período de tiempo.
 
-\begin{enumerate}
-\item El \textbf{identificar} se refiere a poder distinguir entre varios
-     documentos asociados a un mismo evento cuáles de estos comparten o
-     tienen cierta propiedad especial, que debe ser definida.
-\item El poder \textbf{entregar} implica que no sólo debe poder identificarse este
-     contenido, sino también ser entregado a un usuario o a una consulta
-     realizada.
-\item El \textbf{contenido multimedia} abarca documentos de todo tipo en la
-     Web: texto, imágenes, vídeos, sonidos, binarios, y multimedios
-     (una combinación de los anteriores). Es decir, se abstrae la
-     noción de documento en este sentido.
-\item La \textbf{relevancia} comprende la propiedad que debe ser
-     identificada. Cómo medir la relevancia tiene muchas respuestas
-     posibles, sin embargo, el enfoque del problema consiste en medir la
-     relevancia hacia el \emph{usuario}, o bien, \emph{consumidores} de
-     contenido..
-\end{enumerate}
-  El énfasis está en los puntos 3 y 4: una solución a este problema no debe
-  basarse en el contenido de los documentos. Por lo mismo, tampoco es
-  posible medir la relevancia de los documentos basándose en su contenido.
+  El resumir un evento consiste en entregar un subconjunto de
+  mensajes o de documentos mencionados en ellos que tengan
+  relación directa con el evento en cuestión. Por ejemplo, el evento
+  \texttt{Anef anuncia movilización nacional} contiene muchos mensajes, tales
+  como:
+\begin{itemize}
+\item \texttt{RT @econtingencia: Reajuste: Trabajadores del sector público}
+    \texttt{convocan a movilizaciones: La negociación entra a su recta final:}
+    \texttt{El l... h ...}
+\item \texttt{CUT de La Araucanía se adherirá a marcha nacional en rechazo a}
+    \texttt{reajuste salarial: La Central Unitaria de}
+    \texttt{Trabaja... http://t.co/IcgohlTR}
+\item \texttt{Reajuste: Trabajadores del sector público convocan a}
+    \texttt{movilizaciones http://t.co/pWC7q6NI}
+\item \texttt{RT @biobio: CUT de La Araucanía se adherirá a marcha nacional en}
+    \texttt{rechazo a reajuste salarial ofrecido por el Gobierno}
+    \texttt{http://t.co/IOieDido}
+\end{itemize}
+  El resumen consistirá en una colección de objetos, los cuales pueden
+  ser o bien mensajes o bien algunos de los documentos mencionados en
+  ellos (en este caso representados por las URLs contenidas en los
+  mensajes), de forma que esta colección sea de tamaño mucho menor que
+  el total de mensajes, y además que los elementos de esta colección
+  representen de alguna forma todos los puntos de vista o aspectos
+  importantes del evento.
+
+  Se deben tomar en consideración las características de estos
+  mensajes: muchos de ellos tendrán errores de ortografía, redacción,
+  gramática, o semántica (que hablen de otro tema). Esto se traduce
+  como el ruido de los datos. Una solución a este problema debe tomar
+  en consideración el ruido intrínseco de los datos. Además, estos
+  mensajes son breves y no expresan en profunidad un punto de vista
+  del evento, sino que usualmente pueden tener una o dos
+  características cruciales que permitan distinguirlos de entre todos
+  los que existen, por ejemplo, una mención a una imagen o a un
+  vídeo que explique una parte del evento.

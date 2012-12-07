@@ -5,6 +5,7 @@ import time
 import oauth2 as oauth
 import settings
 import urlparse
+import datetime
 
 F = "[twitter]"
 SLEEP_TIME = 5
@@ -155,7 +156,6 @@ def search_term(query):
 
 
 def get_num_retweets(tweet_id):
-    WINDOW_SLEEP_TIME = 60*15
     url = 'https://api.twitter.com/1.1/statuses/show.json?'
     consumer = oauth.Consumer(key=settings.CONSUMER_KEY, secret=settings.CONSUMER_SECRET)
     token = oauth.Token(key=settings.OAUTH_TOKEN, secret=settings.OAUTH_TOKEN_SECRET)
@@ -185,6 +185,13 @@ def get_num_retweets(tweet_id):
                 return 0
 
         elif resp['status'] == '429':
+            print resp
+            print content
+            print tweet_id
+            print datetime.datetime.fromtimestamp(int(resp['x-rate-limit-reset'])).strftime('%Y-%m-%d %H:%M:%S')
+            print
+            raw_input('[continue?] ')
+            """
             actual_time = time.time()
             if 'x-rate-limit-reset' in resp:
                 reset_time = int(resp['x-rate-limit-reset'])
@@ -195,9 +202,14 @@ def get_num_retweets(tweet_id):
             if sleep > 0:
                 print "Rate limit exceeded, waiting", sleep, "seconds"
                 time.sleep(sleep)
+            """
 
         else:
             print resp
+            print content
+            print tweet_id
+            print
+            return 0
 
         return get_num_retweets(tweet_id)
     except Exception, e:

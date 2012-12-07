@@ -3,31 +3,24 @@
 
 
   Al igual que en el buffet de un restaurante, por mucho que se quisieran
-  comer todos los platos favoritos, es imposible comer todo lo que uno
+  comer todos los platos, es imposible comer todo lo que uno
   quisiera por razones obvias. Una posibilidad es probar un poco de cada
   comida, para así saber qué es lo más delicioso y comer hasta
   hartarse.
 
   Pero, ¿qué hacer si hay demasiados platos y no se conocen todos? de
   alguna manera hay que saber cuáles hay que probar, si el objetivo es
-  comer lo mejor posible. Un amigo puede recomendar una u otra comida,
+  comer lo mejor posible. Un amigo, u otras personas que hayan comido
+  en el restaurant pueden recomendar una u otra comida,
   lo cual puede servir para orientarse. Entonces se pueden escoger
-  pequeñas muestras de acuerdo a las recomendaciones.
+  muestras de acuerdo a las recomendaciones.
 
-  Complicando más el escenario, qué pasa si este restaurant tiene
-  además música en vivo, y por alguna razón, se tiene el privilegio de
-  escoger qué escuchar. En este caso, ya no es posible ``probar'' un
-  poco de cada tipo existente, no sólo por la cantidad, sino porque no
-  es posible juzgar un grupo musical por una canción o un extracto de
-  ella. Si se quiere tener la mejor velada, pudiendo disfrutar de cada
-  uno de los panoramas que ofrece, es necesario tener algo de
-  información para poder escoger.
 
   Pasando a un contexto diferente, supóngase que este gran buffet es la
   Web y los distintos platos corresponden a contenido publicado en
   ella. Por lo tanto, dada la gran cantidad de información disponible,
   se hace necesario poder encontrar lo más atractivo de acuerdo a la
-  preferencia del usuario o de los usuarios. Nótese que se está
+  preferencia de los usuarios. Nótese que se está
   haciendo otra suposición importante con esta analogía, y es que se
   está considerando que la información es íntegramente para ser
   \emph{consumida}, y no, por ejemplo, para generar más contenido,
@@ -35,34 +28,33 @@
   este contexto se plantea la pregunta de cómo seleccionar el contenido
   más atractivo dentro de todo lo que hay disponible en un momento dado.
 
-  Siguiendo el razonamiento de la analogía, una manera de poder
-  seleccionar sólo el contenido más ``atractivo'' (de acuerdo a las
-  preferencias del usuario), es probar un poco de cada uno. O bien,
-  generar un \emph{resumen} de cada documento y presentarlo al usuario.
+  Para hacerse la idea de cuál es la mejor oferta gastronómica de un
+  restaurant, sin tener que probar todos los platos, se puede
+  preguntar a la gente que come habitualmente ahí qué platos fueron
+  los que más les han gustado, y así definir la calidad de éste y/o
+  escoger los mejores platos. O bien, filtrar los documentos que
+  hablan de un mismo evento de acuerdo a las preferencias de los
+  usuarios, y luego presentarlo en la forma de un \emph{resumen} de cada
+  uno.
 
-  Sin embargo, tal como se dijo antes, no es posible hacer lo anterior
-  para contenido que no puede ser resumido directamente para ser
-  consumido (la música como tal, o bien, vídeos o imágenes). En esta
-  perspectiva, sólo las recomendaciones pueden ayudar a determinar lo
-  más conveniente de acuerdo al usuario.
+  Este trabajo consistió en el desarrollo de una metodología
+  que permite generar resúmenes automáticos de eventos determinados
+  a partir de los documentos Web que hablan de éstos. No se hace
+  ninguna suposición sobre el \emph{contenido} de estos documentos (pueden
+  ser de texto, imágenes, videos, \emph{multimedios} en general). Los
+  documentos del resumen son seleccionados de acuerdo a
+  \emph{indicadores sociales}: los elementos con mayor impacto en las redes
+  sociales son considerados más importantes.
 
-  Este trabajo consistió en el desarrollo de una primera aproximación
-  que permite generar resúmenes automáticos de eventos bien definidos
-  a partir de los documentos Web que hablan de éstos. Los documentos son
-  considerados \emph{multimedios}: texto, imágenes, vídeos, sonidos; es
-  decir, no necesariamente texto. El contenido es filtrado o
-  seleccionado de acuerdo a indicadores sociales: los objetos más
-  \emph{tomados en cuenta} en la Web son considerados más importantes.
-
-  El sistema implementado consideró dos tipos de eventos: noticias y
-  conciertos musicales. Para obtenerlos, se utilizó el servicio de
-  Google News\footnote{\href{http://news.google.com}{http://news.google.com} } y
-  Last.fm\footnote{\href{http://last.fm}{http://last.fm} }. Para medir la relevancia de los
-  documentos y obtener los mismos se utilizó la red social
-  Twitter\footnote{\href{http://twitter.com}{http://twitter.com} }, que provee una
-  \emph{Aplication Programming Interface} (o API) para realizar búsquedas y
-  obtener información sobre los \emph{tweets} o mensajes cortos que publican
-  los usuarios de la red.
+  La metodología diseñada se implementó sobre dos tipos de eventos:
+  noticias y conciertos musicales. Para obtenerlos, se utilizó
+  el servicio de Google News\footnote{\href{http://news.google.com/}{http://news.google.com/} } y
+  Last.fm\footnote{\href{http://last.fm/}{http://last.fm/} }. Los documentos y sus indicadores
+  sociales se obtuvieron de la red social
+  Twitter\footnote{\href{http://twitter.com/}{http://twitter.com/} }; y utilizando una representación
+  adecuada de los documentos como vectores, se utilizó una estrategia
+  de clustering para identificar los subtópicos de cada evento y así
+  generar un resumen, basándose en los indicadores obtenidos.
 
   La estructura de este informe es como sigue: en este capítulo se
   comenta el contexto dentro del cual se desarrolló este sistema, las
@@ -83,37 +75,52 @@
    particular, en las \emph{redes sociales online} (OSN, \emph{Online Social Networks}),
    es de tal magnitud que se vuelve necesario encontrar formas de
    filtrar y buscar sólo la información relevante dentro de todas las
-   fuentes que hablan del mismo tópico o tema.
+   fuentes que hablan del mismo evento.
 
-   En el contexto de las redes sociales online, cada día se publican
-   millones de \emph{actualizaciones de estado} (mensajes breves sobre el
-   estado actual del usuario) con respecto a distintos tópicos, ya
-   sean conversacionales, personales o sobre algún evento en
-   particular\footnote{Pear Analytics. Twitter Study \href{http://es.scribd.com/doc/18548460/Pear-Analytics-Twitter-Study-August-2009}{http://es.scribd.com/doc/18548460/Pear-Analytics-Twitter-Study-August-2009} }.
+   Por otra parte, para poder entender lo que está pasando en el
+   mundo a partir de los puntos de vista de toda las personas que
+   manifiestan su opinión o los hechos recabados en las redes
+   sociales, se hace necesario poder procesar toda esta
+   información. Nuevamente, dado el gran volumen de datos, es
+   necesario poder resumir esta información para ser rápidamente
+   consumida.
+
+   En el contexto de las redes sociales online, cada día los usuarios
+   publican  millones de mensajes cortos con respecto a distintos
+   tópicos, ya sean conversacionales, sobre eventos noticiosos,
+   etc.\footnote{Pear Analytics. Twitter Study \href{http://es.scribd.com/doc/18548460/Pear-Analytics-Twitter-Study-August-2009}{http://es.scribd.com/doc/18548460/Pear-Analytics-Twitter-Study-August-2009} }
    Además, el auge de los teléfonos inteligentes o \emph{smartphones} con mayor
    capacidad de procesamiento e integrados con todo tipo de sensores
-   (cámaras fotográficas, de vídeo, acelerómetro, barómetro,
-   osciloscopio, etc.), hace posible el generar aun más información y
+   (cámaras fotográficas, de vídeo, acelerómetro, osciloscopio, etc.),
+   hace posible el generar aun más información y
    e incluso en tiempo real sobre lo que acontece en el mundo, en
-   internet, o bien sobre el estado particular de cada usuario.
+   Internet, o bien sobre el estado particular de cada usuario.
 
    Este aumento y evolución de la generación de datos no sólo influye en la
-   riqueza en la variedad de éstos, sino también en el
-   comportamiento de los usuarios a lo largo del tiempo. Actualmente,
-   una gran parte de los usuarios valora más el contenido de tipo
-   multimedia (imágenes y videos) en las redes sociales online\footnote{The Rise of Visual Social Media \href{http://www.fastcompany.com/3000794/rise-visual-social-media}{http://www.fastcompany.com/3000794/rise-visual-social-media}. En el   artículo se menciona un estudio sobre comportamiendo y preferencias de los usuarios en las redes sociales hecho por ROI Research: \href{http://www.slideshare.net/performics_us/performics-life-on-demand-2012-summary-deck}{http://www.slideshare.net/performics\_us/performics-life-on-demand-2012-summary-deck} }.
+   riqueza de éstos, sino también en el comportamiento de los usuarios
+   a lo largo del tiempo. Actualmente,  una gran parte de éstos valora
+   más el contenido de tipo multimedia (imágenes y videos)
+   en las redes sociales online\footnote{The Rise of Visual Social Media \href{http://www.fastcompany.com/3000794/rise-visual-social-media}{http://www.fastcompany.com/3000794/rise-visual-social-media}. En el artículo se menciona un estudio sobre comportamiendo y preferencias de los usuarios en las redes sociales llevado a cabo por ROI Research: \href{http://www.slideshare.net/performics_us/performics-life-on-demand-2012-summary-deck}{http://www.slideshare.net/performics\_us/performics-life-on-demand-2012-summary-deck} }.
+   Este contenido no sólo corresponde a documentos Web en el sentido
+   tradicional, sino a objetos de más alto nivel como \emph{tweets}
+   (mensajes cortos de la red social Twitter), imágenes (de servicios
+   como Instagram\footnote{\href{http://instagr.am/}{http://instagr.am/} },
+   Tumblr\footnote{\href{http://tumblr.com/}{http://tumblr.com/} }, etc.), vídeos
+   (Youtube\footnote{\href{http://youtube.com/}{http://youtube.com/} }, Vimeo\footnote{\href{http://vimeo.com/}{http://vimeo.com/} }) e
+   incluso sonidos (Soundcloud\footnote{\href{http://soundcloud.com/}{http://soundcloud.com/} }).
    Se hace entonces necesario encontrar formas para satisfacer estas
    necesidades de los usuarios, las cuales ya han sido
    abordadas en parte, como la generación de
    resúmenes automáticos orientado a motores de búsqueda, o la
    determinación de la relevancia tanto de documentos en la Web como de
-   actualizaciones de estado en las redes sociales.
+   mensajes en las redes sociales.
 
    Surge como motivación el poder identificar y extraer contenido
-   relevante de la Web, a partir de eventos, y además avanzar un
+   relevante de lo que está pasando en las redes sociales,
+   clasificados dentro del concepto de eventos, y además avanzar un
    paso más arriba en el nivel de abstracción: considerar los
    documentos no por su contenido textual, lo que permite abarcar
-   imágenes, vídeos, sonidos y multimedios. Algunas
+   imágenes, vídeos, sonidos y multimedios en general. Algunas
    aplicaciones directas de esto son, entre otras:
 
 \begin{itemize}
@@ -151,49 +158,55 @@
 \label{sec-1.2.1}
 
 
-    El objetivo principal de este trabajo fue el de poder evaluar e
-    implementar en la práctica un sistema de extracción de contenido
-    multimedia basado en la información social asociada a este
-    contenido.
+    El objetivo principal de este trabajo fue el siguiente:
+
+    Diseñar e implementar un sistema que permita generar resúmenes
+    automáticos de \emph{eventos}: información temporal publicada en redes
+    sociales online sobre sucesos en particular. Esta información se
+    basa en contenido textual y multimedial generado por los usuarios
+    de estas redes, cuya relevancia se basa en el impacto generado en
+    éstas.
+
 
 \subsection{Objetivos específicos}
 \label{sec-1.2.2}
 
 
-\begin{itemize}
-\item Abstraerse del problema de identificación de eventos a partir de
-      documentos Web, llevando a cabo una metodología de obtención de
-      datos simple.
-\item Implementar un modelo de \emph{clustering} para separar los
-      documentos en \emph{subtópicos} de cada evento, sin considerar el
-      tipo de contenido de estos documentos.
-\item Analizar la efectividad del sistema implementado, evaluando
-      casos de estudio.
-\end{itemize}
+\begin{enumerate}
+\item Extraer datos relacionados a eventos en la Web, principalmente
+       aquellos generados en redes sociales online. Estos datos pueden
+       componerse tanto de información textual como multimedial.
+\item Agrupar la información extraída de un evento en subtópicos.
+\item Seleccionar los elementos más relevantes de cada subtópico para
+       producir un resumen del evento.
+\item Analizar la efectividad de la metodología propuesta sobre un
+       conjunto de eventos noticiosos y conciertos.
+\end{enumerate}
 \section{Descripción general de la solución}
 \label{sec-1.3}
 
 
-   Este trabajo puede considerarse como un punto de partida para el
-   desarrollo de un modelo de recuperación de contenido multimedia,
-   similar a lo que corresponde a la generación de resúmenes
-   automáticos para múltiples documentos. En particular, se implementó
-   un sistema que permite considerar distintas estrategias para
-   continuar desarrollando en el futuro. Además:
+   Para enfrentar el problema se diseñó una solución que consiste en
+   tres componentes para resolverlo, resultando cada una en diferente
+   grado de complejidad, siendo posible además ser mejoradas en el
+   futuro. Para probar la viabilidad de la metodología, ésta fue
+   aplicada sobre un conjunto de casos de prueba.
+
+   En particular:
 
 \begin{itemize}
 \item Se llevó a cabo una metodología para la obtención de documentos y
      enriquecerlos con datos obtenidos de fuentes sociales;
-\item Se implementó un procedimiento que separar estos documentos en
+\item Se diseñó un procedimiento que separar estos documentos en
      \emph{clusters}, \emph{sin considerar su contenido}. Sólo se utilizó la
      información social asociada; y
-\item Se implementó además una forma de \emph{rankear} u ordenar los
+\item Se diseñó además un procedimiento para \emph{rankear} u ordenar los
      resultados de acuerdo a \emph{relevancia}, siendo ésta medida de
      acuerdo a la información social asociada a los documentos
      generados.
 \end{itemize}
-   El sistema implementado puede dividirse en tres componentes
-   principales:
+   Las componentes diseñadas fueron las siguientes:
+
 \begin{enumerate}
 \item La que obtiene descripciones de eventos a partir de fuentes de
       éstos en la Web, enriqueciéndolos con información social;
