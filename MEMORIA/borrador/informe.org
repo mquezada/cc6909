@@ -530,7 +530,7 @@
 
     Este problema es NP-hard, sin embargo, existe un algoritmo que
     permite realizar una búsqueda local y determinar $k$ centros 
-    en un tiempo razonable[fn::Lloyd, S.; , "Least squares quantization in PCM," Information Theory, IEEE Transactions on , vol.28, no.2, pp. 129- 137, Mar 1982].
+    en un tiempo razonable\cite{Lloyd:2006:LSQ:2263356.2269955}.
     
     K-means es un algoritmo de clustering particional, en el cual cada
     cluster tiene un /centroide/ asociado, esto es, típicamente, un punto
@@ -610,11 +610,22 @@ Proceder con K-means estándar\;
     y externa[fn::http://en.wikipedia.org/wiki/Cluster\_analysis\#Evaluation\_of\_clustering\_results] La validación interna considera evaluar el clustering
     con respecto a los datos que han sido agrupados (es decir, sin
     información adicional), mientras que la evaluación externa
-    considera datos adicionales, como datos pre-clasificados (conjunto
-    de prueba, de entrenamiento, etc), o los clusters "reales".
+    considera datos adicionales, como etiquetas a los datos
+    determinadas con anterioridad.
 
-    Por otra parte, dos de las métricas más usadas para evaluar
-    clusterings, segun \cite{Zhao02criterionfunctions} son:
+    La idea básica detrás de las medidas internas directamente de la
+    definición de clustering. Una buena solución debería agrupar
+    objetos en varios clusters, de forma que los objetos dentro de un
+    cluster sean más similares entre sí, y que los objetos de clusters
+    distintos lo sean lo menos posible. La calidad de la solución se
+    mide en términos del promedio de la similitud interna, y en
+    términos del promedio de la similitud externa, y el radio entre
+    estos dos promedios. Entre más alto es el radio, mejor es la
+    solución entregada.
+
+    Por otra parte, dos de las métricas para validación externa más
+    usadas para evaluar clusterings, segun
+    \cite{Zhao02criterionfunctions} son:
 
     - *Entropía*: mide cómo son distribuidas las clases de documentos
       entre cada cluster. Se define formalmente como
@@ -626,20 +637,21 @@ Proceder con K-means estándar\;
       $r$-ésimo cluster $C_r$. La entropía del clustering se define
       como la suma ponderada de la entropía de cada cluster:
 
-      $$E(\mathfrak{C}) = \sum_{r=1}^k \frac{n_r}{n} E(C_r)$$
+      $$\textrm{Entropia} = \sum_{r=1}^k \frac{n_r}{n} E(C_r)$$
 
       Un clustering perfecto tendrá clusters tal que cada cluster
       contenga documentos de una sola clase, en ese caso la entropía
       será 0. En general, conviene tener bajos valores de entropía.
 
-    - *Pureza*: mide de qué forma cada cluster contiene documentos de
-      una clase. La pureza de un cluster $C_r$ se define como
+    - *Pureza*: mide la cantidad de documentos de la clase más grande
+      en un cluster dividida por el tamaño del cluster. La pureza de
+      un cluster $C_r$ se define como
 
       $$P(C_r) = \frac{1}{n_r} max_i\{n^i_r\}$$
 
-      la cual es la fracción del tamaño del cluster................................
-
-** Identificación automática de eventos                             :incompl:
+      A mejor pureza, mejor es la solución.
+      
+** Identificación automática de eventos
 
    La identificación automática de eventos consiste en, dado un
    conjunto de documentos, donde cada documento está asociado a un
@@ -647,10 +659,20 @@ Proceder con K-means estándar\;
    documentos en clusters, de forma que cada cluster corresponda a
    todos los documentos asociados a un evento.
 
-   Se considerará la definición de "evento" dada por \cite{Yang:1999:LAD:630307.630471}. 
+   La definición de "evento" dada por
+   \cite{Yang:1999:LAD:630307.630471}, considera lo siguiente:
 
    \begin{defn} Un /evento/ es un suceso que ocurre en un período de tiempo
    determinado y en un lugar específico. \end{defn}
+
+   Otra definición de "evento" considera además la información
+   asociada a éste\cite{allan2002topic}:
+
+   \begin{defn} Un /evento/ es una ocurrencia en el mundo real $e$ con
+   (1) un período de tiempo asociado $T_e$, y (2) una secuencia
+   ordenada cronológicamente de mensajes $M_e$ de volumen sustancial,
+   que discuten la ocurrencia y que son publicados durante el período
+   $T_e$\end{defn}
 
    El poder identificar eventos a partir de documentos publicados en
    los medios sociales permite mejorar la navegación de estos eventos,

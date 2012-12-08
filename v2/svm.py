@@ -30,8 +30,13 @@ def generate_documents_for(event_id):
     documents[event_id] = []
     documents_ids[event_id] = []
 
-    for doc_key in docs:
-        doc_id = id(doc_key)
+    keys = []
+    for eid in docs:
+        keys.append(id(eid))
+
+    docs = set(keys)
+    for doc_id in docs:
+        #doc_id = id(doc_key)
         tweet_ids = r.lrange('document:' + doc_id + ':tweets', 0, -1)
         documents_ids[event_id].append(tweet_ids)
 
@@ -100,8 +105,8 @@ def cluster_event(event_id):
 
 ## test
 t = time()
-#ev = '82cefb914318e7a9e6664550080f259a'
-ev = '47961910adba1a7cc98dc83b7bb2e773'
+ev = '82cefb914318e7a9e6664550080f259a'
+#ev = '47961910adba1a7cc98dc83b7bb2e773'
 generate_documents_for(ev)
 
 C = cluster_event(ev)

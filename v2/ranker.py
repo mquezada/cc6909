@@ -5,6 +5,7 @@ from collections import Counter
 import pprint
 import datetime
 import time
+import utils
 
 r = Redis()
 
@@ -17,7 +18,7 @@ def getd(id, attr):
 	return r.get('document:' + id + ':' + attr)
 
 
-def get_features(event_id, documents_tweet_ids, documents_tweet_text):
+def get_features(event_id, documents_tweet_ids):
 	ids = documents_tweet_ids[event_id]
 	docs = r.keys('document:*:' + event_id)
 
@@ -77,8 +78,8 @@ def get_features(event_id, documents_tweet_ids, documents_tweet_text):
 				time.sleep(5) # twitter rate limit
 			else:
 				retweets = get(id, 'num_retweets')
-
-			tweets_lengths = len(documents_tweet_text[event_id][j].split())
+			#tweets_lengths = len(documents_tweet_text[event_id][j].split())
+			tweets_lengths = len(get(id, 'text').split())
 
 			timetmp = datetime.datetime.strptime(get(id, 'user_created_at'), '%a %b %d %H:%M:%S +0000 %Y')
 			user_created_at = time.mktime(timetmp.timetuple())
