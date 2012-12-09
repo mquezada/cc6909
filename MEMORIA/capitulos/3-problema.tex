@@ -1,6 +1,8 @@
+
 \chapter{Especificación del Problema}
 \label{sec-3}
 
+\label{cap:problema}
 
   El problema a resolver consiste en poder \emph{resumir} eventos en base
   al contenido textual y multimedial de la información publicada en
@@ -23,27 +25,61 @@
 \item \texttt{CUT de La Araucanía se adherirá a marcha nacional en rechazo a}
     \texttt{reajuste salarial: La Central Unitaria de}
     \texttt{Trabaja... http://t.co/IcgohlTR}
-\item \texttt{Reajuste: Trabajadores del sector público convocan a}
+\item \texttt{Reajuste: Trabajadores del sector público convocan a}\\
     \texttt{movilizaciones http://t.co/pWC7q6NI}
 \item \texttt{RT @biobio: CUT de La Araucanía se adherirá a marcha nacional en}
     \texttt{rechazo a reajuste salarial ofrecido por el Gobierno}
     \texttt{http://t.co/IOieDido}
+\item \texttt{http://t.co/ttFp0XgH Trabajadores del sector público anuncian}
+    \texttt{movilizaciones}
+\item \texttt{RT @DanielaLopezLv: http://t.co/ttFp0XgH Trabajadores del sector}
+    \texttt{público anuncian movilizaciones}
+\item \texttt{RT @Barbara\_figue: Reajuste: Trabajadores del sector público}
+    \texttt{convocan a movilizaciones http://t.co/DeXKACSR vía @nacioncl}
 \end{itemize}
-  El resumen consistirá en una colección de objetos, los cuales pueden
-  ser o bien mensajes o bien algunos de los documentos mencionados en
-  ellos (en este caso representados por las URLs contenidas en los
-  mensajes), de forma que esta colección sea de tamaño mucho menor que
-  el total de mensajes, y además que los elementos de esta colección
-  representen de alguna forma todos los puntos de vista o aspectos
-  importantes del evento.
+  El resumen consistirá en una colección de objetos, documentos o
+  mensajes, donde en este caso los documentos están representados por
+  las URLs contenidas en los mensajes, de forma que esta colección
+  represente lo mejor posible el evento, siendo de tamaño
+  considerablemente menor al total de mensajes/documentos del evento;
+  garantizando además baja redundancia entre ellos.
 
-  Se deben tomar en consideración las características de estos
-  mensajes: muchos de ellos tendrán errores de ortografía, redacción,
-  gramática, o semántica (que hablen de otro tema). Esto se traduce
-  como el ruido de los datos. Una solución a este problema debe tomar
-  en consideración el ruido intrínseco de los datos. Además, estos
-  mensajes son breves y no expresan en profunidad un punto de vista
-  del evento, sino que usualmente pueden tener una o dos
-  características cruciales que permitan distinguirlos de entre todos
-  los que existen, por ejemplo, una mención a una imagen o a un
-  vídeo que explique una parte del evento.
+  El problema de identificar contenido multimedial en medios sociales
+  a partir de eventos de por sí es un problema desafiante dada la
+  heterogeneidad y la naturaleza ruidosa de los datos: los mensajes
+  son breves, y pueden contener errores gramaticales o de ortografía;
+  además, pueden ser ambiguos respecto al evento que están haciendo
+  referencia (por ejemplo, un mensaje que mencione la palabra ``Gaza''
+  puede referirse al conflicto en medio oriente o bien a la banda
+  musical ``Gaza'').
+
+  Este problema no ha sido abordado en profundidad con anterioridad,
+  sino que los esfuerzos se han concentrado principalmente en la
+  generación de resúmenes textuales por una parte\cite{Conrad:2005:EDC:1165485.1165513,allan2002topic,DBLP:conf:spire:Bravo-MarquezM12,Diakopoulos:2012:FAS:2208276.2208409},
+  y en la recolección de contenido multimedia para eventos por
+  otra\cite{Becker:2012:ICP:2124295.2124360,Liu:2011:USM:2072609.2072613,Becker:2010:LSM:1718487.1718524}. Sin embargo, aún no
+  han habido muchos esfuerzos en cuanto a la generación de resúmenes
+  visuales o resúmenes multimedia en cuanto a eventos.
+
+  Las aplicaciones de una solución comprenden muchas en común con las
+  aplicaciones de clustering y resúmenes automáticos, además de la
+  obtención de conocimiento:
+
+\begin{itemize}
+\item Poder distinguir entre dos eventos rápidamente, por ejemplo, si
+    ``Gaza'' se refiere al evento musical o al conflicto en medio
+    oriente.
+\item Comprender la información contenida en grandes fuentes de datos
+    rápidamente mediante un resumen visual.
+\item Mejorar la calidad del servicio de distintos rubros, al conocer de
+    manera más eficaz el feedback de los usuarios (por ejemplo, un
+    \emph{review} en vídeo del tablet Nexus 7 de Google, o fotografías de
+    baterías de teléfonos móviles que explotan sin razón aparente).
+\item Tener información más completa sobre eventos musicales, por
+    ejemplo, una persona que quiera asistir a un festival de música
+    puede ver rápidamente fotografías y vídeos del evento realizado en
+    otras partes, para poder tomar una mejor decisión.
+\item Mejorar el trabajo periodístico, al tener mejor cobertura de
+    eventos masivos como manifestaciones o eventos políticos como
+    elecciones o discursos, entre otros.
+\end{itemize}

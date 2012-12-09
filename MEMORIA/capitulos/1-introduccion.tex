@@ -59,13 +59,14 @@
   La estructura de este informe es como sigue: en este capítulo se
   comenta el contexto dentro del cual se desarrolló este sistema, las
   contribuciones realizadas, los objetivos y una descripción general
-  de la solución; en el siguiente capítulo se discute el estado del
+  de la solución; en Capítulo \ref{cap:antecedentes} se discute el estado del
   arte y el marco teórico del cual se desprende este trabajo; el
-  capítulo 3 describe más en detalle el problema a resolver, su
+  Capítulo \ref{cap:problema} describe más en detalle el problema a resolver, su
   relevancia y sus dificultades, para luego, en el
-  capítulo 4, describir la solución implementada, más un par de casos
-  de estudio sobre los resultados obtenidos, para finalizar con las
-  conclusiones de este trabajo en el capítulo 5.
+  Capítulo \ref{cap:solucion}, describir la solución implementada, más
+  un par de casos de estudio sobre los resultados obtenidos, para
+  finalizar con las conclusiones de este trabajo en el Capítulo
+  \ref{cap:conclusiones}.
 
 \section{Contexto y Motivación}
 \label{sec-1.1}
@@ -148,7 +149,7 @@
      Israel. El poder distinguir rápidamente mediante una imagen o un
      vídeo acelera mucho el proceso. \emph{Una imagen vale más que mil palabras}.
 \end{itemize}
-   El sistema implementado es una primera aproximación que puede
+   La metodología implementada es una primera aproximación que puede
    satisfacer los ejemplos mencionados.
 
 \section{Objetivos}
@@ -216,28 +217,3 @@
 \item La componente que entrega los $k$ documentos más relevantes por
       cada evento obtenido, basándose en los subtópicos identificados.
 \end{enumerate}
-   Se utilizaron las API de Google News como de Last.fm para la
-   obtención de eventos: noticias y conciertos, respectivamente. Para
-   el enriquecimiento de los eventos se utilizó la información social
-   que provee Twitter y su API de búsqueda de \emph{tweets}. De la misma
-   forma, se consideraron los metadatos de los mismos mensajes para medir
-   la relevancia de los documentos generados.
-
-   Un documento es identificado por la URL que lo ubica en la Web. El
-   contenido no es más que la concatenación de los tweets que
-   mencionan al documento. Se realizó una limpieza y preprocesamiento
-   de los datos, quitando las \emph{stopwords} y realizando \emph{stemming}
-   sobre el contenido en texto. Luego, se aplicó \emph{tf-idf} sobre los
-   documentos, representándolos como vectores en el \emph{space vector    model}. Para identificar los subtópicos de un evento se utilizó el
-   algoritmo de clustering $k$-means sobre los vectores.
-
-   Para el ranking de los documentos se decidió usar una ponderación
-   simple sobre una serie de indicadores que dependen de los tweets y
-   de las URLs de cada evento.
-
-   Entre las herramientas utilizadas, se usó lenguaje de
-   programación Python, varias librerías para el manejo de datos
-   (tales como \texttt{nltk}, \texttt{scipy}, \texttt{scikit-learn}, por nombrar las más
-   importantes), el sistema de almacenamiento Redis, entre otras
-   herramientas que son mencionadas en la descripción detallada de la
-   solución.

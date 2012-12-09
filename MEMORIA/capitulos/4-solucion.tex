@@ -1,7 +1,9 @@
 
+
 \chapter{Descripción de la Solución}
 \label{sec-4}
 
+\label{cap:solucion}
 
   La solución propuesta consistió en generar un resumen utilizando
   documentos representados apropiadamente con la información de medios
@@ -12,24 +14,76 @@
   Para esto, se asume que existe una fuente de eventos, de esta forma,
   el enfoque de la solución radica principalmente en la generación de
   los resúmenes y no en la identificación de eventos en medios
-  sociales. Sin embargo, para la implementación sí fue necesario
-  enfrentar el problema de identificar eventos, usando un enfoque
-  práctico para obtenerlos.
+  sociales.
 
-  La figura FIGURA muestra de manera general el modelo propuesto.
+  La Figura \ref{fig:overview} muestra de manera general el modelo
+  propuesto. El modelo considera varias etapas: obtención de eventos,
+  enriquecimiento desde medios sociales para la generación de
+  documentos, identificación de subtópicos y la selección de los $k$
+  más relevantes.
 
-  FIGURA MODELO
+\begin{enumerate}
+\item La obtención de eventos consiste en la recolección de metadatos
+     sobre eventos del mundo real, para esto se asume una fuente
+     existente, siendo el problema de identificación de eventos fuera
+     del alcance de este trabajo.
+\item Con los metadatos recolectados, se realizan búsquedas en medios
+     sociales para la obtención de mensajes a partir de estos
+     metadatos. Con estos mensajes, se generan documentos utilizando la
+     información que contienen, mediante una representación adecuada.
+\item Se identifican los subtópicos de cada evento a partir de los
+     documentos, generando clusters de documentos.
+\item Finalmente, se utiliza la información social de los documentos
+     (obtenida a partir de los medios sociales) para generar una medida
+     de relevancia, y poder seleccionar los $k$ documentos más
+     relevantes.
+\end{enumerate}
+  \begin{figure}[h!b]
+  \centering
+  \includegraphics[width=11cm]{./dia/model2.ps}
+  \caption[Vista general de la solución.]
+   {Vista general de la solución\label{fig:overview}. En ésta se
+  pueden apreciar las etapas de la metodología: (1) obtención de los
+  eventos, (2) generación de los documentos a partir de mensajes
+  obtenidos de medios sociales, (3) identificación de subtópicos de
+  cada evento, y (4) selección de los $k$ más relevantes.}
+  \end{figure}
 
-  DESCRIPCION DEL MODELO
+  Se utilizaron las API de Google News y de Last.fm para la
+  obtención de eventos: noticias y conciertos, respectivamente. Para
+  el enriquecimiento de los eventos se utilizó la información social
+  que provee la red social Twitter y su API de búsqueda de
+  \emph{tweets}. De la misma forma, se consideraron los metadatos de los
+  mismos mensajes para medir la relevancia de los documentos generados.
+
+  Un documento es identificado por la URL que lo ubica en la Web. El
+  contenido no es más que la concatenación de los tweets que
+  mencionan al documento. Se realizó una limpieza y preprocesamiento
+  de los datos, quitando las \emph{stopwords} y realizando \emph{stemming}
+  sobre el contenido en texto. Luego, se aplicó \emph{tf-idf} sobre los
+  documentos, representándolos como vectores en el \emph{space vector   model}. Para identificar los subtópicos de un evento se utilizó el
+  algoritmo de clustering $k$-means sobre los vectores.
+
+  Para el ranking de los documentos se decidió usar una ponderación
+  simple sobre una serie de indicadores que dependen de los tweets y
+  de las URLs de cada evento.
+
+  Entre las herramientas utilizadas, se usó lenguaje de
+  programación Python, varias librerías para el manejo de datos
+  (tales como \texttt{nltk}, \texttt{scipy}, \texttt{scikit-learn}, por nombrar las más
+  importantes), el sistema de almacenamiento Redis, entre otras
+  herramientas que son mencionadas en la descripción detallada de la
+  solución.
 
   En la Sección \ref{descdet} se describe el modelo utilizado para la
   implementación, con una especificación detallada de la solución. En la
-  sección \ref{impl} se describe la metodología de desarrollo y la
+  Sección \ref{impl} se describe la metodología de desarrollo y la
   implementación práctica realizada para representar el modelo
   formal, la cual considera la obtención de datos dentro del
   proceso. Luego se comentan los problemas técnicos que fueron
-  enfrentados para terminar en la sección \ref{casosest}, donde se discuten
+  enfrentados para terminar en la Sección \ref{casosest}, donde se discuten
   un par de casos de estudio sobre los resultados obtenidos.
+
 
 \section{Descripción detallada}
 \label{sec-4.1}
@@ -273,9 +327,20 @@ eventos noticiosos y musicales, respectivamente.
     acortado se resuelva a otro enlace también acortado, por lo que es
     necesario resolver la URL completa para evitar duplicados o
     \emph{pseudo-duplicados} (en el caso en que dos URLs sintácticamente
-    distintas apunten al mismo recurso). EN LA FIGURA\ldots{}...
+    distintas apunten al mismo recurso). En la Figura \ref{fig:short}
+    se puede apreciar un ejemplo de cómo estos enlaces pueden apuntar
+    al mismo recurso, por lo cual hay que resolverlos completamente
+    para evitar pseudo-duplicados.
 
-    FIGURA DE LINKS CORTOS
+  \begin{figure}[h]
+  \centering
+  \includegraphics[width=16cm]{./dia/shortlinks.ps}
+  \caption[Ejemplo de enlaces acortados.]
+   {Ejemplo de enlaces acortados. Los dos primeros se resuelven
+  primero a otros enlaces cortos que finalmente se resuelven a un
+  nodo terminal (que se resuelve a su misma URL). El tercer link se
+  resuelve directamente al nodo terminal.\label{fig:short}}
+  \end{figure}
 
     Por lo anterior, una vez identificada la URL del texto de un
     tweet, se resuelve su URL completa (que puede ya serlo de

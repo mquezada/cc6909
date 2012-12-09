@@ -105,8 +105,10 @@ def cluster_event(event_id):
 
 ## test
 t = time()
-ev = '82cefb914318e7a9e6664550080f259a'
+#ev = '82cefb914318e7a9e6664550080f259a'
 #ev = '47961910adba1a7cc98dc83b7bb2e773'
+#ev = '62d63b809018510981a48d263a646ef5'
+ev = 'b60e4389f7910448e4972f622afb9260'
 generate_documents_for(ev)
 
 C = cluster_event(ev)

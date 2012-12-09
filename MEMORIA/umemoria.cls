@@ -198,3 +198,9 @@
 \DeclareMathOperator{\idf}{idf}
 \DeclareMathOperator{\tfidf}{tf-idf}
 \DeclareMathOperator{\dist}{dist}
+\DeclareMathOperator{\Mcount}{count}
+\DeclareMathOperator{\rouge}{ROUGE}
+\DeclareMathOperator{\ngram}{n-grama}
+\DeclareMathOperator{\MREF}{Ref}
+\DeclareMathOperator{\Mmin}{min}
+\DeclareMathOperator{\Mmax}{max}

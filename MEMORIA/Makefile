@@ -1,4 +1,5 @@
 init:
+	fig2ps ./dia/*.fig
 	xelatex informe.tex && bibtex informe && xelatex informe.tex && xelatex informe.tex
 
 clean:

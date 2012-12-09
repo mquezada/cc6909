@@ -156,6 +156,7 @@ def search_term(query):
 
 
 def get_num_retweets(tweet_id):
+    print 'get rts', tweet_id,
     url = 'https://api.twitter.com/1.1/statuses/show.json?'
     consumer = oauth.Consumer(key=settings.CONSUMER_KEY, secret=settings.CONSUMER_SECRET)
     token = oauth.Token(key=settings.OAUTH_TOKEN, secret=settings.OAUTH_TOKEN_SECRET)
@@ -180,11 +181,13 @@ def get_num_retweets(tweet_id):
         if resp['status'] == '200':
             d = json.loads(content)
             if 'retweet_count' in d:
+                print 'done'
                 return d['retweet_count']
             else:
                 return 0
 
         elif resp['status'] == '429':
+            print
             print resp
             print content
             print tweet_id
@@ -205,12 +208,14 @@ def get_num_retweets(tweet_id):
             """
 
         else:
+            print
             print resp
             print content
             print tweet_id
             print
             return 0
 
+        print 'retrying'
         return get_num_retweets(tweet_id)
     except Exception, e:
         print F, 'Exception:', e

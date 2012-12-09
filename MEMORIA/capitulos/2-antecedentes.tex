@@ -1,6 +1,7 @@
 \chapter{Antecedentes}
 \label{sec-2}
 
+\label{cap:antecedentes}
 
   Para poder describir correctamente tanto el problema como la
   solución implementada, es necesario dar los punteros y conceptos
@@ -292,10 +293,11 @@
 
     Este problema es NP-hard, sin embargo, existe un algoritmo que
     permite realizar una búsqueda local y determinar $k$ centros
-    en un tiempo razonable\footnote{Lloyd, S.; , ``Least squares quantization in PCM,'' Information Theory, IEEE Transactions on , vol.28, no.2, pp. 129- 137, Mar 1982 }.
+    en un tiempo razonable.
 
-    K-means es un algoritmo de clustering particional, en el cual cada
-    cluster tiene un \emph{centroide} asociado, esto es, típicamente, un punto
+    K-means\cite{Lloyd:2006:LSQ:2263356.2269955} es un algoritmo de
+    clustering particional, en el cual cada cluster tiene un
+    \emph{centroide} asociado, esto es, típicamente, un punto
     el cual es el promedio de todos los puntos del cluster, y no
     necesariamente corresponde a un dato real.
 
@@ -325,12 +327,18 @@
     función criterio. La medida más común es la
     \emph{suma del error cuadrado} o Sum of Squared Error (SSE). Para cada
     punto, su \emph{error} es la distancia al cluster más cercano:
+
     $$SSE = \sum_{i=1}^k\sum_{x\in C_i} \dist^2(m_i,x)$$
+
     Donde $x$ es un punto en el cluster $C_i$, y $m_i$ es su
-    centroide. Dados dos clusters, en cada paso se escoge el que tenga
-    menor error.
-    Un problema importante de K-means es escoger los centroides
-    iniciales. Dado que la probabilidad de acertar a los centroides
+    centroide. La distancia $\dist$ suele ser distancia euclidiana
+    entre los dos puntos. Dados dos clusters, en cada paso se escoge
+    el que tenga menor error.
+
+    K-means converge rápidamente a un óptimo, sin embargo, éste puede
+    ser un óptimo local, dado que es altamente dependiente de la
+    elección de los centroides iniciales. Dado que la probabilidad de
+    acertar a los centroides
     ``reales'' (precisión) es muy baja, es posible que un clustering
     tenga un mal error cuadrático, de hecho, el radio competitivo con
     la solución óptima es no acotado incluso para $k$ y $n$ fijos.
@@ -362,6 +370,26 @@ Proceder con K-means estándar\;
 \end{algorithm}
 
 
+    Existen muchas otras variantes para resolver el problema de
+    clustering, principalmente dependientes de la naturaleza de los
+    datos. En la Figura \ref{fig:clusters}\footnote{Imagen obtenida de \href{http://scikit-learn.org/dev/auto\_examples/cluster/plot\_cluster\_comparison.html}{http://scikit-learn.org/dev/auto\_examples/cluster/plot\_cluster\_comparison.html} } se puede apreciar una
+    comparación entre distintos algoritmos de clustering y los
+    resultados obtenidos. MiniBatch K-means es una variante de K-means
+    que mejora sustancialmente el tiempo de convergencia escogiendo
+    subconjuntos en vez de centroides al inicio, aunque la calidad de
+    los resultados puede ser levemente menor a la del algoritmo
+    clásico\cite{Sculley:2010:WKC:1772690.1772862}.
+
+\begin{figure}[h!b]
+  \centering
+  \includegraphics[width=16cm]{./img/cluster_comparison.png}
+  \caption[Comparación de algoritmos de clustering]
+   {Comparación de algoritmos de clustering\label{fig:clusters}. En la
+  figura se muestran las características de distintos algoritmos de
+  clustering sobre datos en 2 dimensiones. El último caso muestra
+  datos uniformes en el cual sólo habría 1 cluster.}
+  \end{figure}
+
 \subsection{Evaluación de clusters}
 \label{sec-2.2.4}
 
@@ -370,11 +398,22 @@ Proceder con K-means estándar\;
     y externa\footnote{\href{http://en.wikipedia.org/wiki/Cluster\_analysis\#Evaluation\_of\_clustering\_results}{http://en.wikipedia.org/wiki/Cluster\_analysis\#Evaluation\_of\_clustering\_results} } La validación interna considera evaluar el clustering
     con respecto a los datos que han sido agrupados (es decir, sin
     información adicional), mientras que la evaluación externa
-    considera datos adicionales, como datos pre-clasificados (conjunto
-    de prueba, de entrenamiento, etc), o los clusters ``reales''.
+    considera datos adicionales, como etiquetas a los datos
+    determinadas con anterioridad.
 
-    Por otra parte, dos de las métricas más usadas para evaluar
-    clusterings, segun \cite{Zhao02criterionfunctions} son:
+    La idea básica detrás de las medidas internas directamente de la
+    definición de clustering. Una buena solución debería agrupar
+    objetos en varios clusters, de forma que los objetos dentro de un
+    cluster sean más similares entre sí, y que los objetos de clusters
+    distintos lo sean lo menos posible. La calidad de la solución se
+    mide en términos del promedio de la similitud interna, y en
+    términos del promedio de la similitud externa, y el radio entre
+    estos dos promedios. Entre más alto es el radio, mejor es la
+    solución entregada.
+
+    Por otra parte, dos de las métricas para validación externa más
+    usadas para evaluar clusterings, segun
+    \cite{Zhao02criterionfunctions} son:
 
 \begin{itemize}
 \item \textbf{Entropía}: mide cómo son distribuidas las clases de documentos
@@ -387,17 +426,18 @@ Proceder con K-means estándar\;
       $r$-ésimo cluster $C_r$. La entropía del clustering se define
       como la suma ponderada de la entropía de cada cluster:
 
-      $$E(\mathfrak{C}) = \sum_{r=1}^k \frac{n_r}{n} E(C_r)$$
+      $$\textrm{Entropia} = \sum_{r=1}^k \frac{n_r}{n} E(C_r)$$
 
       Un clustering perfecto tendrá clusters tal que cada cluster
       contenga documentos de una sola clase, en ese caso la entropía
       será 0. En general, conviene tener bajos valores de entropía.
-\item \textbf{Pureza}: mide de qué forma cada cluster contiene documentos de
-      una clase. La pureza de un cluster $C_r$ se define como
+\item \textbf{Pureza}: mide la cantidad de documentos de la clase más grande
+      en un cluster dividida por el tamaño del cluster. La pureza de
+      un cluster $C_r$ se define como
 
-      $$P(C_r) = \frac{1}{n_r} max_i\{n^i_r\}$$
+      $$P(C_r) = \frac{1}{n_r} \Mmax_i\{n^i_r\}$$
 
-      la cual es la fracción del tamaño del cluster\ldots{}.\ldots{}.\ldots{}.\ldots{}.\ldots{}.\ldots{}.\ldots{}.\ldots{}.
+      A mejor pureza, mejor es la solución.
 \end{itemize}
 \section{Identificación automática de eventos}
 \label{sec-2.3}
@@ -409,22 +449,221 @@ Proceder con K-means estándar\;
    documentos en clusters, de forma que cada cluster corresponda a
    todos los documentos asociados a un evento.
 
-   Se considerará la definición de ``evento'' dada por \cite{Yang:1999:LAD:630307.630471}.
+   La definición de ``evento'' dada por
+   \cite{Yang:1999:LAD:630307.630471}, considera lo siguiente:
 
    \begin{defn} Un \emph{evento} es un suceso que ocurre en un período de tiempo
    determinado y en un lugar específico. \end{defn}
 
-   El poder identificar eventos a partir de documentos publicados en
-   los medios sociales permite mejorar la navegación de estos eventos,
-   al mejorar la búsqueda tanto local como de motores de búsqueda.
+   Otra definición de ``evento'' considera además la información
+   asociada a éste\cite{allan2002topic}:
 
+   \begin{defn} Un \emph{evento} es una ocurrencia en el mundo real $e$ con
+   (1) un período de tiempo asociado $T_e$, y (2) una secuencia
+   ordenada cronológicamente de mensajes $M_e$ de volumen sustancial,
+   que discuten la ocurrencia y que son publicados durante el período
+   $T_e$ \end{defn}
+
+   Si los eventos son conocidos con anticipación, el problema consiste
+   en recuperar documentos que los discutan. Las fuentes de datos son
+   por lo general muy especializadas, por ejemplo, en el caso de las
+   noticias\cite{Diakopoulos:2012:FAS:2208276.2208409} o documentos
+   estructurados, donde es posible utilizar técnicas de procesamiento
+   de lenguaje natural para detectar características de los documentos
+   y utilizar un clasificador para identificar el evento al cual
+   pertenecen. Algunos trabajos utilizan otras fuentes de datos, tal
+   como de fotografías o vídeos, donde estas tienen sus propias
+   características (descripción, tags, coordenadas geográficas,
+   marca de tiempo, etc.), las cuales son aprovechadas para
+   aplicaciones ad-hoc\cite{Liu:2011:USM:2072609.2072613}. Otros
+   esfuerzos consideran utilizar distintas fuentes de datos y aprender
+   sus características, combinándolas todas utilizando alguna
+   metodología entrenada con anticipación, tales como
+   \cite{Becker:2010:LSM:1718487.1718524}, o
+   \cite{Becker:2012:ICP:2124295.2124360}, en el cual se generan
+   distintas queries de manera automática para realizar búsquedas de
+   documentos en la Web, basadas en las características de los
+   eventos. Esto permite  enriquecer los  eventos con información
+   variada sobre ellos.
+
+   Cuando los eventos no son conocidos con anticipación, algunos de
+   los enfoques mencionados anteriormente también pueden ser
+   utilizados, por ejemplo, suponer que ocurre un evento si muchos
+   documentos (imágenes, vídeos, tweets, etc.) fueron generados en la
+   misma zona geográfica en un período acotado de tiempo, como en
+   \cite{Liu:2011:USM:2072609.2072613}, o si se publican muchos
+   mensajes de un tópico en particular en un período acotado (llamado
+   un \emph{burst} o ráfaga de mensajes); en ese caso también se pueden
+   identificar eventos cuando el tópico es conocido, por ejemplo, en
+   \cite{chakrabarti2011event} utilizan eventos deportivos para
+   identificar las partes más relevantes de cada partido, basándose en
+   los bursts de tweets ocurridos en Twitter.
 
 
 \section{Resúmenes automáticos}
 \label{sec-2.4}
 
+
+   Debido a la gran cantidad de información en Internet, los sistemas
+   de \emph{Information Retrieval} (IR) se volvieron necesarios para la
+   extracción de contenido relevante a partir de los documentos
+   encontrados. Sin embargo, dada aún la gran cantidad de documentos
+   retornados por estos sistemas, un siguiente nivel de abstracción ha
+   sido necesario para éstos, el cual es la necesidad de construir
+   resúmenes de estos documentos\cite{Ganapathiraju_relevanceof}. Un
+   survey más exhaustivo sobre el tema puede ser consultado en
+   \cite{Das07asurvey}.
+
+   Entre las múltiples aplicaciones de los resúmenes automáticos se
+   pueden mencionar:
+\begin{itemize}
+\item Extracción de información de múltiples fuentes;
+\item Rápida adquisición de conocimiento;
+\item Responder preguntas automáticamente de tópicos muy específicos;
+\item Generación de reseñas biográficas, etc.
+\end{itemize}
+   Los resúmenes pueden ser clasificados según los siguientes
+   criterios:
+
+\begin{itemize}
+\item \textbf{Detalle}: Indicativo / Informativo;
+\item \textbf{Granularidad}: Específico a un evento / Mirada general;
+\item \textbf{Técnica}: Extractivo / Abstractivo;
+\item \textbf{Contenido}: Generalizado / Basado en consulta; y
+\item \textbf{Aproximación}: Dominio / Específico de un género /
+     Independiente.
+\end{itemize}
+   Las categorías más importantes a la hora de clasificar un resumen
+   son la técnica y el contenido, mientras que otra forma de
+   clasificar resúmenes se basa en la entrada de la aplicación:
+   resumen de un solo documento o bien multi-documento.
+
+   Un resumen extractivo apunta a
+   extraer las oraciones más importantes de un documento, mientras
+   apunta a mantener una baja redundancia en el resumen. Un resumen
+   abstractivo es más complejo: la idea es poder generar un resumen
+   utilizando palabras no necesariamente sacadas de los documentos, o
+   dicho de otra forma, estos sistemas intentan \emph{comprender} el
+   contenido de los documentos de forma de generar un resumen
+   abstracto. La forma clásica de generar resúmenes es utilizando
+   métodos extractivos, dada la complejidad y baja calidad aún de los
+   enfoques abstractivos.
+
+   El criterio de contenido de un resumen se basa principalmente en
+   cuál es la base para generarlo: si es basado en consulta, entonces
+   la entrada del sistema es una frase y el resumen intenta encontrar
+   las frases u oraciones más similares a la consulta, como una
+   especie de respuesta a una pregunta. Un resumen de contenido
+   general simplemente genera un resumen de todo el o los documentos
+   de la entrada.
+
+   Existen diversos enfoques para generar un resumen en base a uno o
+   múltiples documentos: el más usual es utilizando clustering. Sin
+   embargo, a veces son consideradas algunas características propias
+   del documento: por ejemplo, si son noticias, usualmente las
+   primeras oraciones del texto contienen la información más
+   relevante\cite{DBLP:conf:spire:Bravo-MarquezM12}. Algunas
+   características generales usuales son:
+
+\begin{itemize}
+\item Ocurrencia de palabras clave: oraciones con palabras
+     clave usualmente son usadas en el resumen.
+\item Palabras claves de título: a su vez, oraciones que contengan
+     palabras del título también son consideradas importantes.
+\item Heurísticas de ubicación: como fue mencionado, según la
+     naturaleza del documento, la ubicación de las frases tienen
+     cierta relevancia, tales como en documentos noticiosos, o
+     artículos técnicos.
+\item Frases indicativas: ``en este informe'', o ``en conclusión''.
+\item Frases cortas: usualmente las frases muy cortas no son tomadas en
+     consideración.
+\item Características de palabras en mayúsculas: acrónimos o nombres
+     propios son considerados importantes.
+\end{itemize}
+   Entre las distinas estrategias para generar resúmenes, aparte de
+   clustering usando una representación adecuada de los documentos, se
+   cuentan:
+
+\begin{itemize}
+\item Similitud directa entre documentos, usando el coseno de los
+     vectores;
+\item Aproximaciones usando teoría de grafos, en el cual, por ejemplo,
+     cada nodo es una frase, y una arista existe entre dos nodos si su
+     similitud está sobre un umbral; luego se determina la centralidad
+     de los nodos mediante un camino aleatorio u otras estrategias;
+\item Usando aprendizaje de máquinas: mediante un clasificador aprender
+     las características de un conjunto de prueba;
+\item Utilizando modelos más elaborados, como Modelos Ocultos de
+     Markov\footnote{\href{http://en.wikipedia.org/wiki/Hidden\_Markov\_model}{http://en.wikipedia.org/wiki/Hidden\_Markov\_model} }
+     para determinar características ocultas entre los datos, como fue
+     usado en \cite{chakrabarti2011event}; etc.
+\end{itemize}
 \subsection{Evaluación de resúmenes}
 \label{sec-2.4.1}
 
-\section{Ranking de documentos}
+
+    ROUGE (\emph{Recall Oriented Understudy for Gisting Evaluation})\cite{Lin:2003:AES:1073445.1073465}
+    es una medida intrínseca para la evaluación semi-automática de
+    resúmenes. No es tan efectiva como una evaluación hecha por
+    humanos, dada la naturaleza del problema, pero es más conveniente
+    y escalable.
+
+    Dado un documento $D$ y su resumen automático $X$, y $M$ personas
+    que generan un resumen de referencia sobre $D$, ROUGE-$n$ se
+    determina de la siguiente forma:
+
+    $$\rouge\text{-}n = \frac{  \sum_{S \in \MREF} \sum_{\ngram i \in S} \Mmin( \Mcount(i,X),\Mcount(i,S) )   }{ \sum_{S\in \MREF}\sum_{\ngram i \in S}  \Mcount(i,S) }$$
+
+    Donde $\MREF$ es el conjunto de resúmenes de referencia, y
+    $\Mcount$ cuenta las ocurrencias del $n$-grama $i$ en $X$ o
+    $S$. $\rouge\text{-}n$ mide la cantidad de $n$-gramas de los
+    resúmenes de referencia que aparecen en el resumen automático, por
+    lo que es necesario que hayan muchos resúmenes de referencia dada
+    la potencial subjetividad a la que son sujetos.
+
+\section{Ranking de documentos sociales}
 \label{sec-2.5}
+
+
+   Siguiendo este proceso, primero identificando eventos, luego
+   generando resúmenes a partir de ellos, el último paso corresponde a
+   determinar, a partir de un conjunto pequeño de documentos (que si
+   bien, no corresponden directamente a un \emph{resumen} de acuerdo a lo
+   dicho en la sección anterior, puesto que estos resúmenes consideran
+   la extracción de frases a partir de los documentos, y no documentos
+   enteros), cómo determinar cuáles son más relevantes que otros. Otra
+   aplicación directa consiste en determinar, más que relevancia,
+   \emph{importancia} de un documento o mensaje, de acuerdo a
+   características propias de éste o bien de su autor. En
+   \cite{Castillo:2011:ICT:1963405.1963500}, los autores determinan
+   una metodología para verificar automáticamente la \emph{credibilidad} de
+   mensajes en Twitter, usando para ello indicadores obtenidos tanto
+   de los mensajes como de sus autores.
+
+   En este aspecto hay varias alternativas para generar rankings de
+   documentos:
+
+\begin{itemize}
+\item Si los documentos son documentos Web, existen
+     varias estrategias, correspondientes principalmente al campo de
+     IR y motores de búsqueda (PageRank, HITS, etc.), como puede ser
+     visto en \cite{signorini2005survey}.
+\item Si se toma en consideración el contenido en texto de los
+     documentos (por ejemplo, noticias, documentos legales,
+     históricos, técnicos, etc.), teniendo como base una consulta, se
+     pueden utilizar métricas de similitud para ordenar los documentos
+     de acuerdo a la similitud a la consulta. Si no existe una
+     consulta, se utiliza esta medida entre los mismos documentos.
+\item Si los documentos corresponden a mensajes cortos, como usualmente
+     es visto en los medios sociales, existen algunas aproximaciones
+     que utilizan metodologías de Learning to Rank para entrenar un
+     sistema de \emph{ranking} de documentos. Un trabajo empírico puede ser
+     consultado en \cite{Duan:2010:ESL:1873781.1873815}. Learning to
+     Rank\footnote{\href{http://en.wikipedia.org/wiki/Learning\_to\_rank}{http://en.wikipedia.org/wiki/Learning\_to\_rank} }
+     es un problema semi-supervisado de aprendizaje de
+     máquinas para construir un modelo de ranking de datos, es decir,
+     poder generar una permutación de los datos de acuerdo a ciertos
+     criterios que pueden ser entrenados con anticipación por este
+     modelo.
+\end{itemize}
+

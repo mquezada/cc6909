@@ -11,20 +11,22 @@
 \usepackage{lipsum}
 \usepackage{verbatim}
 
-\usepackage[latin1]{inputenc}
-\usepackage[T1]{fontenc}
-\inputencoding{latin1}
+%\usepackage[latin1]{inputenc}
+%\inputencoding{latin1}
 
-\usepackage[T1]{fontenc}
+%\usepackage[T1]{fontenc}
 \usepackage{fontspec}
+\usepackage{xunicode}
 \usepackage{graphicx}
 
 \usepackage[lined,boxed,commentsnumbered,ruled,vlined,portuguese,linesnumbered]{algorithm2e}
 \usepackage{setspace}
+\usepackage[all]{hypcap}
 
 \defaultfontfeatures{Mapping=tex-text}
+%\setmainfont{Linux Libertine O}
 \setmainfont{Linux Libertine O}
-\setmonofont[Scale=0.8]{DejaVu Sans Mono}
+\setmonofont[Scale=1]{CMU Typewriter Text}
 
 \let\evensidemargin\oddsidemargin
 \reversemarginpar
@@ -38,13 +40,13 @@
 \lipsum[1-4]
 \end{abstract}
 
-\begin{dedicatoria}
-Una dedicatoria corta.
-\end{dedicatoria}
+%\begin{dedicatoria}
+%Una dedicatoria corta.
+%\end{dedicatoria}
 
-\begin{thanks}
-\lipsum[1-2]
-\end{thanks}
+%\begin{thanks}
+%\lipsum[1-2]
+%\end{thanks}
 
 \cleardoublepage
 \begin{spacing}{1.5}
@@ -62,9 +64,10 @@ Una dedicatoria corta.
 \input{./capitulos/3-problema.tex}
 \input{./capitulos/4-solucion.tex}
 \input{./capitulos/5-conclusiones.tex}
-\input{./capitulos/6-anexos.tex}
 
 \nocite{*}
 \bibliographystyle{plain}
 \bibliography{bibliografia}
+
+\input{./capitulos/6-anexos.tex}
 \end{document}

@@ -33,6 +33,20 @@ for k in r_events:
     print '\n\n'
 
 
+### ver docs de un evento
+
+id = '47961910adba1a7cc98dc83b7bb2e773'
+docs = r.keys('document:*:' + id)
+for doc in docs:
+    d_id = doc.split(':')[1]
+    d_tweets_key = 'document:' + d_id + ':tweets'
+    tweets = r.lrange(d_tweets_key, 0, -1)
+    for t in tweets:
+        tweet = r.get('tweet:' + t + ':text')
+        print tweet
+        print r.get('tweet:' + t + ':urls')
+print '\n\n'
+
 ### urls por cantidad de tweets q la mencionan
 urls2 = []
 for k in r.keys('document:*:url'):
@@ -54,7 +68,7 @@ for k in r.keys('event:*:title'):
         st = st + ' - ' + ed + ']'
     else:
         st = st + ']'
-    print i, '[%s]' % id, st, '-', r.get(k)
+    print i, '[%s]' % id, st, '-', r.get(k), len(r.keys('document:*:'+id))
     i += 1
 
 

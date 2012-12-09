@@ -103,3 +103,4 @@ def get_features(event_id, documents_tweet_ids):
 		i += 1
 
 	pprint.pprint(documents)
+	return documents
