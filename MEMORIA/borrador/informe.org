@@ -1395,6 +1395,14 @@ $D''_e \leftarrow D''_e \cup \{d'\}$\;
     medir la relevancia de un tweet, según los experimentos llevados a
     cabo. 
 
+    La popularidad o /autoridad/ de un usuario en Twitter, se mide,
+    como se menciona en el trabajo referenciado, de acuerdo a en
+    cuántas listas de otros usuarios está este autor, en vez de
+    ponderar por la cantidad de seguidores o amigos en la red social,
+    dado que un usuario con muchos seguidores puede tener otras
+    explicaciones aparte de ser un usuario "influyente"; por ejemplo,
+    puede ser una cuenta de /spam/ o alguna celebridad de farándula.
+
     Se decidió utilizar una metología simple para asignar un puntaje a
     cada documento, dada la complejidad de entrenar un sistema de
     Learning to Rank, puesto que esto implica asignar puntajes a muchos datos con
@@ -1717,9 +1725,89 @@ para cada evento, y analizar los resultados obtenidos.
     Una vez generados los clusterings, se procedió a hacer un análisis
     caso a caso de los resultados obtenidos.
 
-    
+    Por ejemplo, para el evento "Tel Aviv", se determinó como $9$ el
+    número óptimo de clusters, dando como resultado una solución de
+    clustering que particionaba los tweets de tal forma que cada
+    cluster contenía principalmente sólo tweets del mismo tipo:
 
-   
+    1. =Previous bomb attacks in Tel Aviv...=
+    2. =RT @BreakingNews: Israel's army spokesman says Israeli Arab
+       arrested for Wednesday's bus bombing in Tel Aviv=
+    3. Contiene tweets de distintos temas, tanto de Tel Aviv como
+       otros relacionados a Israel, Egipto o Estados Unidos.
+    4. =RT @chaimlevinson: #breakingnews : after massive  police hunt,
+       2  suspects in the tel aviv bus bombing arrested in 443 road=
+    5. =Police Arrest Suspects in Tel Aviv Bus Blast, Including
+       Israeli Citizen:=
+    6. =Israel arrests suspects in Tel Aviv bus bombing: Israeli=
+       =authorities arrested an Israeli Arab on suspicion of planting a=
+       =bomb in a Te...=
+    7. =Arrest announced in Tel Aviv bus bombing: An arrest has been=
+       =made in Wednesday\xe2\x80\x99s bombing in Tel Aviv of a bus,=
+       =a...=
+    8. =RT @panosharitos: Tel Aviv police chasing after two suspects=
+       =(one arrested), say this was not a suicide bombing; 3 of the=
+       =casualties are ...=
+    9. =Shin Bet, police arrest suspects in Tel Aviv bus bombing=
+       =http://t.co/hJzLAOnD=
+       
+    Los mensajes expuestos son los más frecuentes dentro de su
+    cluster, a excepción del cluster n°2, que contenía tweets con
+    distintos temas. 
+
+    Los resultados del ranking sobre cada cluster entrega
+    efectivamente los tweets más "populares" dentro de los indicadores
+    escogidos (número de retweets, autoridad de la cuenta, etc.). En
+    la Figura \ref{fig:bn} se puede apreciar el documento con más
+    puntaje obtenido por el ranking. Su alto puntaje se debió
+    principalmente a la cantidad de retweets y a que el autor es una
+    cuenta verificada.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=10cm]{./img/breakingnews.png}
+  \caption[Documento con alto puntaje entre los resultados obtenidos]
+   { Documento (tweet) con más relevancia dentro del evento ``Tel Aviv". \label{fig:bn} }
+\end{figure}
+
+    Siguiendo con los resultados, para el evento "New York", el cual consiste en un
+    concierto musical de la Filarmónica de Nueva York, a pesar de la
+    poca cantidad de documentos (250), los resultados también fueron
+    muy representativos e incluso ricos en contenido multimedia. En la
+    Figura[fn::Fuente http://instagram.com/p/SF8w-3voOF/]
+    \ref{fig:dvorak} se puede apreciar uno de los resultados; además
+    de este se incluyen artículos de prensa, vídeos de YouTube,
+    grabaciones en servicios de sonido o música como Soundcloud,
+    Spotify o Shazam.
+
+    Por otra parte, sin embargo, al analizar los resultados del evento
+    "Stockholm", que tiene cerca de ocho mil documentos, se notó que
+    gran parte de ellos corresponden a tweets sin sentido con el tema,
+    o bien tweets de contenido personal que no tenían ninguna
+    relación. Estos tweets alcanzaron alta relevancia debido a altos
+    indicadores: autoridad de usuarios, cantidad de followers y en
+    ocasiones cantidad de retweets. Esto indica que la forma de
+    realizar ranking puede ser mejorada en otros aspectos, quizás
+    considerando el contenido del tweet directamente o de alguna
+    manera verificando la relevancia del documento mencionado.
+    
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=8cm]{./img/dvorak.png}
+  \includegraphics[width=8cm]{./img/dvorak2.png}  
+  \caption[Imagen y documento con altos puntajes entre los resultados obtenidos]
+   { Documento (fotografía) y tweet con alta relevancia dentro del evento
+  ``New York". \label{fig:dvorak} }
+\end{figure}
+
+    Finalmente, el evento "Clinton" obtuvo buenos resultados, en su
+    mayoría tweets sin URL, que discuten nuevamente el tema de
+    Gaza. Sin embargo, los medios de prensa mencionados en las URLs
+    consideran contenido multimedia (imágenes y vídeos), sin embargo,
+    se consideró esto anecdótico. La característica de este evento es
+    su alto contenido textual en la forma de consignas respecto al
+    tópico que discuten.
+
 * Conclusiones                                                       :export:
 \label{cap:conclusiones}
 
@@ -1744,11 +1832,60 @@ información social que mencionan los documentos.
 
 ** Objetivos alcanzados y trabajo futuro
 
-Si bien los objetivos fueron cumplidos a cabalidad de acuerdo al
+Si bien los objetivos fueron cumplidos casi a cabalidad de acuerdo al
 trabajo realizado, hay algunas componentes de la metodología propuesta
 que pueden ser sujetas a mejoras, de forma de mejorar en criterios
 como precisión, efectividad y eficiencia.
 
-** Relevancia del trabajo realizado
+Como se mostró en el análisis de casos de estudio, hubo algunos casos
+con buenos resultados y otros que son mejorables:
 
+- Mejorar la extracción de términos de búsqueda para medios
+  sociales. Es posible que una gran cantidad de términos no muy
+  relacionados directamente entre sí obtengan muchos documentos sin
+  relación entre ellos, tal como sucedió en el evento "Stockholm". O
+  bien, diseñar una metodología distinta para la identificación de
+  eventos y documentos asociados en medios sociales, considerando
+  otros medios, como Facebook o Tumblr, abundantes en contenido
+  multimedia.
+- El ranking de tweets muestra que en algunos casos, cuando los
+  usuarios tienen muchos seguidores o un tweet sin importancia obtiene
+  muchos retweets, estos tweets adquieren mucha relevancia dentro de
+  un evento, nuevamente como ocurrió para "Stockholm". Una mejora a
+  este aspecto puede considerar analizar el contenido del tweet o bien
+  la relevancia del documento que menciona, si menciona alguno.
+- Se hace necesario realizar un análisis más fino para determinar el
+  número de clusters adecuado a la hora de identificar los subtópicos
+  de un evento, dado que los resultados pueden variar en calidad
+  debido a este factor.
+
+En cuanto a los objetivos:
+- El objetivo principal fue cumplido casi completamente: se diseñó e
+  implementó un sistema para generar resúmenes automáticos en base a
+  documentos textuales y multimediales; sin embargo, sólo se
+  implementó una metodología y no al nivel de un software de
+  aplicación. Existen muchos aspectos que pueden ser mejorados aun.
+
+- De los objetivos específicos:
+  - El objetivo específico 1 fue cumplido. Se diseñó una metodología
+    para extraer documentos relacionados a eventos en la Web,
+    discutidos en las redes sociales online, en particular a Twitter.
+  - El objetivo específico 2 fue cumplido. Se lograron identificar
+    subtópicos y una metodología para determinar un número adecuado de
+    éstos, basados en medidas internas del conjunto de documentos.
+  - El objetivo específico 3 fue parcialmente cumplido. La estrategia
+    utilizada para realizar ranking puede ser mejorada de forma de
+    considerar no sólo características de la red de los mensajes
+    publicados, sino también características de los documentos.
+  - El objetivo específico 4 fue cumplido. Se analizaron 4 casos de
+    pruebas, dos noticias y dos conciertos, y se evaluó la efectividad
+    de la metodología. Se concluyó que existen ciertas características
+    que influyen fuertemente sobre la calidad de los resultados, las
+    cuales pueden ser corregidas o mejoradas.
+
+La metodología implementada permite tener un punto de partida para el
+desarrollo de un software para ser aplicado sobre eventos en redes
+sociales y generar contenido multimedial basado en éstos. Los
+resultados obtenidos muestran que la estrategia es adecuada para
+lograr estos objetivos. 
 

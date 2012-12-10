@@ -115,8 +115,8 @@ def cluster_event(event_id, num_clusters):
 
 ## test
 t = time()
-ev = '62d63b809018510981a48d263a646ef5'
-num_clusters = 11
+ev = 'b60e4389f7910448e4972f622afb9260'
+num_clusters = 28
 generate_documents_for(ev)
 
 C, matrix = cluster_event(ev, num_clusters)
@@ -125,15 +125,16 @@ C, matrix = cluster_event(ev, num_clusters)
 p = zip(documents_ids[ev], C.labels_)
 
 clusters = []
-"""
+
+tweets = []
 for i in range(C.n_clusters):
     ids = map(lambda x: x[0], filter(lambda x: x[1] == i, p))
     texts = []
     for id in ids:
         text = map(lambda x: r.get('tweet:' + x + ':text'), id)
         texts.append(text)
-    clusters.append(texts)
-"""
+    tweets.append(texts)
+
 
 
 # asigna a cada documento del evento (svm) el id del cluster que le corresponde
