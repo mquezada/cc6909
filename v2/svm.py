@@ -13,6 +13,7 @@ parser = HTMLParser.HTMLParser()
 r_events = map(lambda x: x.split(':')[1], r.keys('event:*:title'))
 documents = {}
 documents_ids = {}
+documents_real_ids = []
 stemmers = {
     'spanish': SnowballStemmer('spanish'),
     'english': SnowballStemmer('english')
@@ -45,6 +46,7 @@ def generate_documents_for(event_id):
         if urlparse(url).netloc == 'www.facebook.com':
             continue
 
+        documents_real_ids.append(doc_id)
         tweet_ids = r.lrange('document:' + doc_id + ':tweets', 0, -1)
         documents_ids[event_id].append(tweet_ids)
 
@@ -87,7 +89,7 @@ def generate_documents():
             documents[event_id].append(' '.join(document))
 
 
-def cluster_event(event_id):
+def cluster_event(event_id, num_clusters):
     t0 = time()
     vectorizer = TfidfVectorizer()
     X = vectorizer.fit_transform(documents[event_id])
@@ -100,7 +102,7 @@ def cluster_event(event_id):
                              init_size=1000,
                              batch_size=1000, verbose=1)"""
 
-    km = KMeans(n_clusters=5, init='k-means++', max_iter=100, n_init=10,
+    km = KMeans(n_clusters=num_clusters, init='k-means++', max_iter=100, n_init=10,
                 verbose=1, n_jobs=2)
 
     print "Clustering sparse data with %s" % km
@@ -108,26 +110,22 @@ def cluster_event(event_id):
     km.fit(X)
     print "done in %0.3fs" % (time() - t0)
     print
-    return km
+    return km, X
 
 
 ## test
 t = time()
-#ev = '82cefb914318e7a9e6664550080f259a'
-#ev = '47961910adba1a7cc98dc83b7bb2e773'
-#ev = '62d63b809018510981a48d263a646ef5'
-#ev = 'b60e4389f7910448e4972f622afb9260'
-#ev = 'e6525453ec8d901beed54ff7a412f470'
-#ev = '22cdb3aea0f32b9a64c50fd16eb482c4'
-ev = '51ec4e69bf46dd7fbf48cbf498cfb056'
+ev = '62d63b809018510981a48d263a646ef5'
+num_clusters = 11
 generate_documents_for(ev)
 
-C = cluster_event(ev)
+C, matrix = cluster_event(ev, num_clusters)
 
 ## clusters
 p = zip(documents_ids[ev], C.labels_)
 
 clusters = []
+"""
 for i in range(C.n_clusters):
     ids = map(lambda x: x[0], filter(lambda x: x[1] == i, p))
     texts = []
@@ -135,6 +133,14 @@ for i in range(C.n_clusters):
         text = map(lambda x: r.get('tweet:' + x + ':text'), id)
         texts.append(text)
     clusters.append(texts)
+"""
+
+
+# asigna a cada documento del evento (svm) el id del cluster que le corresponde
+doc_cl = zip(documents_real_ids, map(operator.itemgetter(1), p))
+
+for i in range(C.n_clusters):
+    ids = map(lambda x: x[0], filter(lambda x: x[1] == i, doc_cl))
+    clusters.append(ids)
 
 print str(time() - t)
-

@@ -155,6 +155,35 @@ generate_documents()
 print str(time() - t0)
 """
 
+# get domains from features in ranker
 
-for k,v in sorted(features.iteritems(), key=operator.itemgetter(1), reverse=True)[:30]:
-    print k+'\t'+str(v)
+import operator
+
+sorted_asdf = sorted(dom_freqs.items(), key=operator.itemgetter(1), reverse=True)
+max_v = len(documents)
+tot = 0
+for k, v in sorted_asdf:
+    print k + '\t' + str(float(v) / max_v)
+    tot += float(v) / max_v
+print tot
+
+# get cluto sparse matrix format from CSR from svm.py cluster
+filename = './data/dvorak.dat'
+X = matrix
+
+data = X.data
+indices = X.indices
+indptr = X.indptr
+
+rows = X.shape[0]
+cols = X.shape[1]
+
+f = open(filename, 'w')
+
+print >>f, rows, cols, X.nnz
+for i in range(0, rows):
+    for values in zip(data[indptr[i]:indptr[i+1]], indices[indptr[i]:indptr[i+1]]):
+        print >>f, values[1]+1, values[0],
+    print >>f, ''
+
+f.close()

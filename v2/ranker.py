@@ -109,5 +109,54 @@ def get_features(event_id, documents_tweet_ids):
         i += 1
 
     #pprint.pprint(documents)
-    return dom_freqs
+    return dom_freqs, documents
     #return documents
+
+
+def get_result(ev, documents_ids, clusters):
+    import operator
+
+    TWEETS = 0.152
+    RTS = 0.091
+    LEN = 0.091
+    VERI = 0.21
+    FOLLOW = 0.061
+    LIST = 0.182
+    STATS = 0.061
+    FRND = 0.12
+    GEO = 0.03
+
+    dom_freqs, documents = get_features(ev, documents_ids)
+
+    scores = {}
+    for id, d in documents.iteritems():
+        points = 0
+
+        # !!!
+        if 'num_tweets' not in d:
+            scores.update({id: 0})
+            continue
+
+        tw = d['num_tweets']
+
+        points += RTS * sum(map(int, d['retweets']))
+        points += VERI * sum(d['user_is_verified'])
+        points += FOLLOW * sum(map(int, d['user_followers']))
+        points += LIST * sum(map(int, d['user_lists']))
+        points += STATS * sum(map(int, d['user_statuses']))
+        points += FRND * sum(map(int, d['user_friends']))
+        points += GEO * sum(map(int, d['user_geo_enabled']))
+        points += LEN * sum(d['tweets_lengths'])
+        points /= tw
+
+        points += TWEETS * tw
+        scores.update({id: points})
+
+    result = []
+    for cluster in clusters:
+        tmp = map(lambda x: (x, scores[x]), cluster)
+        tmp = sorted(tmp, key=operator.itemgetter(1), reverse=True)[:2]
+        result.append(map(lambda x: (r.get('document:%s:url' % x[0]), x[1]), tmp))
+
+    result2 = sorted(reduce(lambda x, y: x + y, result, []), key=operator.itemgetter(1), reverse=True)
+    return result, result2

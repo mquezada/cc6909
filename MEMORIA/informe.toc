@@ -31,9 +31,10 @@
 \contentsline {subsection}{\numberline {4.2.3}Ranking de documentos}{28}{subsection.4.2.3}
 \contentsline {section}{\numberline {4.3}Desafíos técnicos}{29}{section.4.3}
 \contentsline {subsection}{\numberline {4.3.1}Restricciones de la API de Twitter}{29}{subsection.4.3.1}
-\contentsline {section}{\numberline {4.4}Casos de estudio}{30}{section.4.4}
-\contentsline {chapter}{\numberline {5}Conclusiones}{32}{chapter.5}
-\contentsline {section}{\numberline {5.1}Resumen del trabajo realizado}{32}{section.5.1}
-\contentsline {section}{\numberline {5.2}Objetivos alcanzados}{32}{section.5.2}
-\contentsline {section}{\numberline {5.3}Relevancia del trabajo realizado}{32}{section.5.3}
-\contentsline {section}{\numberline {5.4}Trabajo futuro}{32}{section.5.4}
+\contentsline {section}{\numberline {4.4}Casos de estudio}{31}{section.4.4}
+\contentsline {subsection}{\numberline {4.4.1}Distribuciones de dominios}{31}{subsection.4.4.1}
+\contentsline {subsection}{\numberline {4.4.2}Determinar el número de clusters}{32}{subsection.4.4.2}
+\contentsline {subsection}{\numberline {4.4.3}Análisis de resúmenes}{33}{subsection.4.4.3}
+\contentsline {chapter}{\numberline {5}Conclusiones}{37}{chapter.5}
+\contentsline {section}{\numberline {5.1}Objetivos alcanzados y trabajo futuro}{37}{section.5.1}
+\contentsline {section}{\numberline {5.2}Relevancia del trabajo realizado}{37}{section.5.2}

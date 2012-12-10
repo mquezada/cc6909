@@ -1371,7 +1371,10 @@ $D''_e \leftarrow D''_e \cup \{d'\}$\;
     $\tfidf$, lo que permite entonces aplicar un algoritmo de
     clustering para identificar subtópicos.
 
-    Se utilizó el algoritmo K-means para generar los clusters. Al
+    Se utilizó el algoritmo
+    K-means[fn::http://scikit-learn.org/stable/modules/clustering.html] 
+    que provee la librería
+    =scikit-learn= para generar los clusters. Al
     aplicarlo sobre el conjunto de vectores, éste retorna una 
     /lista de etiquetas/ $L$, de largo $n$, la cantidad de documentos
     utilizados. Cada $L_i \in [0..k-1], i \in [1..n]$ indica a cuál
@@ -1392,6 +1395,19 @@ $D''_e \leftarrow D''_e \cup \{d'\}$\;
     medir la relevancia de un tweet, según los experimentos llevados a
     cabo. 
 
+    Se decidió utilizar una metología simple para asignar un puntaje a
+    cada documento, dada la complejidad de entrenar un sistema de
+    Learning to Rank, puesto que esto implica asignar puntajes a muchos datos con
+    anticipación. Además, dado que se pueden hacer muchos ajustes a los
+    pasos previos, una solución muy especializada posiblemente no
+    entregaría mejores resultados en comparación.
+    
+    Con esto, se decidió asignar un puntaje a cada indicador, el cual se aplica
+    al promedio de los indicadores para cada documento, cuando
+    corresponde, y luego se suman dando el puntaje para ese
+    documento. Con esto es posible generar un orden y entregar los $k$
+    primeros, para un parámetro $k$ escogido.
+
     Los indicadores escogidos se pueden apreciar en la Tabla
     \ref{tbl:indicadores}. En el Código \ref{fig:doc-example} se puede
     apreciar un ejemplo de la información obtenida para un documento.
@@ -1399,47 +1415,43 @@ $D''_e \leftarrow D''_e \cup \{d'\}$\;
 
 ##+LABEL: tbl:indicadores
 ##+CAPTION: Indicadores sociales utilizados para medir relevancia. Todos los indicadores, a excepción de la fecha de creación del usuario, son sumas entre todos los tweets de un documento.
-#|-----------------+--------------------------------------------------------------|
-#| Indicador       | Descripción                                                  |
-#|-----------------+--------------------------------------------------------------|
-#|-----------------+--------------------------------------------------------------|
-#| TWEETS          | Número de tweets del documento                               |
-#| IS\_RETWEETED   | Número de tweets que son un retweet de otro                  |
-#| RETWEETS        | Número de retweets de los tweets del documento               |
-#| TWEET\_LENGTHS  | Largos de los tweets del documento, en cantidad de palabras  |
-#| USER\_VERIFIED  | Número de tweets cuyo autor está verificado por Twitter      |
-#| USER\_FOLLOWERS | Número de usuarios que siguen a cada autor                   |
-#| USER\_LISTS     | Número de listas en las cuales están estos autores           |
-#| USER\_STATUSES  | Número de tweets que han escrito los autores                 |
-#| USER\_FRIENDS   | Número de usuarios que siguen y son seguidos por los autores |
-#| USER\_GEO       | Número de autores cuyos tweets tienen ubicación habilitada   |
-#| USER\_CREATED   | Fechas de creación de las cuentas (en formato Unix)          |
-#|-----------------+--------------------------------------------------------------|
+#|-----------------+--------------------------------------------------------------+---------|
+#| Indicador       | Descripción                                                  | Puntaje |
+#|-----------------+--------------------------------------------------------------+---------|
+#|-----------------+--------------------------------------------------------------+---------|
+#| TWEETS          | Número de tweets del documento                               | $0.152$ |
+#| RETWEETS        | Número de retweets de los tweets del documento               | $0.091$ |
+#| TWEET\_LENGTHS  | Largos de los tweets del documento, en cantidad de palabras  | $0.091$ |
+#| USER\_VERIFIED  | Número de tweets cuyo autor está verificado por Twitter      | $0.21$  |
+#| USER\_FOLLOWERS | Número de usuarios que siguen a cada autor                   | $0.061$ |
+#| USER\_LISTS     | Número de listas en las cuales están estos autores           | $0.182$ |
+#| USER\_STATUSES  | Número de tweets que han escrito los autores                 | $0.061$ |
+#| USER\_FRIENDS   | Número de usuarios que siguen y son seguidos por los autores | $0.12$  |
+#| USER\_GEO       | Número de autores cuyos tweets tienen ubicación habilitada   | $0.03$  |
+#|-----------------+--------------------------------------------------------------+---------|
 
 
 #+begin_latex
 \begin{table}[htb]
 \begin{center}
-\begin{tabular}{|l|l|}
+\begin{tabular}{|l|l|l|}
 \hline
- Indicador        &  Descripción                                                   \\
+ Indicador        &  Descripción                                                   &  Puntaje  \\
 \hline
 \hline
- TWEETS           &  Número de tweets del documento                                \\
- IS\_RETWEETED    &  Número de tweets que son un retweet de otro                   \\
- RETWEETS         &  Número de retweets de los tweets del documento                \\
- TWEET\_LENGTHS   &  Largos de los tweets del documento, en cantidad de palabras   \\
- USER\_VERIFIED   &  Número de tweets cuyo autor está verificado por Twitter       \\
- USER\_FOLLOWERS  &  Número de usuarios que siguen a cada autor                    \\
- USER\_LISTS      &  Número de listas en las cuales están estos autores            \\
- USER\_STATUSES   &  Número de tweets que han escrito los autores                  \\
- USER\_FRIENDS    &  Número de usuarios que siguen y son seguidos por los autores  \\
- USER\_GEO        &  Número de autores cuyos tweets tienen ubicación habilitada    \\
- USER\_CREATED    &  Fechas de creación de las cuentas (en formato Unix)           \\
+ TWEETS           &  Número de tweets del documento                                &  $0.152$  \\
+ RETWEETS         &  Número de retweets de los tweets del documento                &  $0.091$  \\
+ TWEET\_LENGTHS   &  Largos de los tweets del documento, en cantidad de palabras   &  $0.091$  \\
+ USER\_VERIFIED   &  Número de tweets cuyo autor está verificado por Twitter       &  $0.21$   \\
+ USER\_FOLLOWERS  &  Número de usuarios que siguen a cada autor                    &  $0.061$  \\
+ USER\_LISTS      &  Número de listas en las cuales están estos autores            &  $0.182$  \\
+ USER\_STATUSES   &  Número de tweets que han escrito los autores                  &  $0.061$  \\
+ USER\_FRIENDS    &  Número de usuarios que siguen y son seguidos por los autores  &  $0.12$   \\
+ USER\_GEO        &  Número de autores cuyos tweets tienen ubicación habilitada    &  $0.03$   \\
 \hline
 \end{tabular}
 \end{center}
-\caption{\label{tbl:indicadores}Indicadores sociales utilizados para medir relevancia. Todos los indicadores, a excepción de la fecha de creación del usuario, son sumas entre todos los tweets de un documento.}
+\caption{\label{tbl:indicadores}Indicadores sociales utilizados para medir relevancia. Todos los indicadores son sumas entre todos los tweets de un documento.}
 \end{table}
 #+end_latex
 
@@ -1475,23 +1487,16 @@ $D''_e \leftarrow D''_e \cup \{d'\}$\;
 \caption{Información de un documento, correspondiente al evento ``Anef
 anuncia movilización nacional''. Los campos que corresponden a listas
 indican los valores para cada tweet del documento, en este caso, el
-documento tiene 6 tweets; por ejemplo, user_followers[2]=45 indica
+documento tiene 6 tweets; por ejemplo, user\_followers[2]=45 indica
 la cantidad de seguidores que tiene el autor del tweet en la tercera
 posición.}
 \label{fig:doc-example}
 \end{listing}
 #+end_latex
 
-\begin{figure}[h]
-  \centering
-  \includegraphics[width=12cm]{./img/fujimori_domain_freqs.png}
-  \caption[Timeline de Twitter.]
-   {Timeline de Twitter. En éste se ve una lista en orden cronológico
-  de los tweets generados por los usuarios que sigue el usuario
-  actual. Además, el sitio incluye tweets promocionados por cuentas
-  que pagan por dicho servicio, como es el caso del primer tweet en la
-  lista.}
-\end{figure}
+   
+
+   
 
 
 ** Desafíos técnicos
@@ -1547,8 +1552,174 @@ posición.}
 ** Casos de estudio                                                 :incompl:
 \label{casosest}
 
+  Fueron analizados 4 eventos, dos noticiosos y dos musicales, en los
+  cuales se realizaron distintas actividades:
 
+  - Distribucion de dominios: determinar cuáles son los dominios más
+    usuales según los documentos que los apuntan.
+  - Determinar número óptimo de clusters: dado que se determinó un
+    número fijo de clusters para cada evento, es posible que no sea un
+    número adecuado dada la naturaleza de los datos.
+  - Analizar contenido de los clusters: se realizó también un análisis
+    de los resultados obtenidos.
 
+  Los eventos fueron los siguientes:
+  - Noticiosos:
+    - =Police arrest suspects in Tel Aviv= (250 documentos)
+    - =Clinton to join Gaza ceasefire effort= (1022 documentos)
+  - Musicales:
+    - =Sound of Stockholm 2012= (8117 documentos)
+    - =New York Philarmonic Dvorak's New World Symphony= (150
+      documentos)
+
+  Como se puede apreciar, se escogieron eventos con baja y alta
+  cantidad de documentos, de forma de poder evaluar el impacto del
+  número de documentos en la calidad de los resultados obtenidos.
+
+*** Distribuciones de dominios
+
+    A partir de la representación de documentos generada, se determinó
+    la distribución de frecuencias de dominios Web, los cuales son los
+    identificadores de los documentos. A continuación se presentan
+    algunos de los resultados obtenidos:
+    
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=14cm]{./img/telaviv-domain-freqs.png}
+  \caption[Dominios evento 1]
+   {Distribución de frecuencias de dominios del evento ``Police Arrest
+  suspects in Tel Aviv"\label{fig:telaviv-domains}. Las frecuencias son relativas al total de
+  documentos correspondientes al evento. Se puede apreciar rápidamente
+  que la mayoría de los documentos tienen enlaces a Twitter.}
+\end{figure}
+
+    - En la Figura \ref{fig:telaviv-domains} se aprecia una gran
+      mayoría de documentos que tienen como URL =api.twitter.com=, lo
+      cual significa que los tweets de esos documentos no presentaron
+      ninguna URL en su contenido (dado que esos tweets pasan a
+      representar un documento cuyo identificador es una URL que
+      identifica al tweet que lo compone). 
+
+      En segundo lugar, la URL =adf.ly= tiene una segunda
+      mayoría. [[Adf.ly]] es un servicio de acortamiento de enlaces, con
+      la característica de que el sitio muestra publicidad antes de
+      mostrar el enlace a la URL a la cual apunta. Como no es una
+      redirección directa, al tratar de resolver este dominio no fue
+      posible recuperar destino final. Es posible suponer que los
+      destinos de estas direcciones apuntan a más sitios de noticias,
+      dadas los dominios que siguen a continuación, como CNN o NY
+      Times.
+
+    - De la misma forma, tanto para los eventos "Clinton" y
+      "Stockholm", en las Figuras \ref{fig:clinton-domains} y
+      \ref{fig:stockholm-domains}, la distribución de dominios sigue una tónica
+      similar: la gran mayoría de documentos corresponden a un tweet
+      de sólo texto, sin URL. Es posible que gran parte de los tweets
+      hayan correspondido a texto debido a los términos de búsqueda
+      que fueron utilizados para recuperarlos, tales como =clinton=,
+      =ceasefire=, =effort=, o =stockholm=.
+     
+    - Un caso especial ocurre para el evento "New York" en la Figura
+      \ref{fig:dvorak-domains}. No hay una mayoría de documentos
+      apuntando a Twitter: de hecho, la gran mayoría de los documentos
+      posee una URL distinta, dada la proporción a la que se
+      encuentran los dominios más frecuentes.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=14cm]{./img/clinton-domain-freqs.png}
+  \caption[Dominios evento 2]
+   {Distribución de frecuencias de dominios del evento ``Clinton to
+  join Gaza ceasefire effort"\label{fig:clinton-domains}. Las frecuencias son relativas al total de
+  documentos correspondientes al evento. Se puede apreciar rápidamente
+  que la mayoría de los documentos tienen enlaces a Twitter.}
+\end{figure}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=14cm]{./img/stockholm-domain-freqs.png}
+  \caption[Dominios evento 3]
+   {Distribución de frecuencias de dominios del evento ``Sound of
+  Stockholm 2012"\label{fig:stockholm-domains}. Las frecuencias son relativas al total de
+  documentos correspondientes al evento. En este caso se quitó del
+  gráfico lo que corresponde a Twitter, dejando los datos
+  restantes. Se puede apreciar que los siguientes dominios representan
+  no más del 10\% del total.}
+\end{figure}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=14cm]{./img/dvorak-domain-freqs.png}
+  \caption[Dominios evento 4]
+   {Distribución de frecuencias de dominios del evento ``New York
+  Philarmonic Dvorak's New World Symphony"\label{fig:dvorak-domains}. Las frecuencias son relativas al total de
+  documentos correspondientes al evento.}
+\end{figure}
+
+*** Determinar el número de clusters
+
+Para determinar un número adecuado de clusters para cada evento se
+utilizaron métricas de evaluación internas, dado que no se contó con
+las clases reales de los datos obtenidos. Para esto, se utilizó el
+software Cluto[fn::http://glaros.dtc.umn.edu/gkhome/views/cluto], el
+cual ofrece varios algoritmos de clustering con medidas de evaluación
+tanto internas (similitud intra-cluster y inter-cluster) como externas
+(pureza y entropía).
+
+La metodología utilizada para determinar el número de clusters fue la
+siguiente:
+
++ Calcular una solución de clustering particional usando 
+  $k \in \{2,\ldots,30\}$ clusters como parámetro.
++ Para cada solución obtenida, documentar la similitud intra-cluster
+  promedio y inter-cluster promedio.
++ Determinar experimentalmente la solución con mayor similitud
+  intra-cluster y menor similitud inter-cluster, calculando el radio
+  entre estas dos medidas.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=14cm]{./img/telaviv-clusters-radio.png}
+  \caption[Radios de similitud para evento 1]
+   { Radio ISim/ESim del evento ``Tel Aviv". \label{fig:telaviv-radio}. }
+\end{figure}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=14cm]{./img/clinton-clusters-radio.png}
+  \caption[Radios de similitud para evento 2]
+   { Radio ISim/ESim del evento ``Clinton". \label{fig:clinton-radio}. }
+\end{figure}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=14cm]{./img/stockholm-clusters-radio.png}
+  \caption[Radios de similitud para evento 3]
+   { Radio ISim/ESim del evento ``Stockholm". \label{fig:stockholm-radio}. }
+\end{figure}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=14cm]{./img/dvorak-clusters-radio.png}
+  \caption[Radios de similitud para evento 4]
+   { Radio ISim/ESim del evento ``New York". \label{fig:dvorak-radio}. }
+\end{figure}
+
+Con esto, se puede determinar experimentalmente un número de clusters
+para cada evento, y analizar los resultados obtenidos.
+
+*** Análisis de resúmenes
+
+    Para analizar los resultados obtenidos, se generaron nuevamente
+    clusterings utilizando el número estimado en la sección anterior, de
+    forma de determinar una solución de mejor calidad.
+
+    Una vez generados los clusterings, se procedió a hacer un análisis
+    caso a caso de los resultados obtenidos.
+
+    
+
+   
 * Conclusiones                                                       :export:
 \label{cap:conclusiones}
 
