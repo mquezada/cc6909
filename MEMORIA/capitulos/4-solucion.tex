@@ -1,4 +1,5 @@
 
+
 \chapter{Descripción de la Solución}
 \label{sec-4}
 
@@ -461,6 +462,14 @@ $D''_e \leftarrow D''_e \cup \{d'\}$\;
     medir la relevancia de un tweet, según los experimentos llevados a
     cabo.
 
+    La popularidad o \emph{autoridad} de un usuario en Twitter, se mide,
+    como se menciona en el trabajo referenciado, de acuerdo a en
+    cuántas listas de otros usuarios está este autor, en vez de
+    ponderar por la cantidad de seguidores o amigos en la red social,
+    dado que un usuario con muchos seguidores puede tener otras
+    explicaciones aparte de ser un usuario ``influyente''; por ejemplo,
+    puede ser una cuenta de \emph{spam} o alguna celebridad de farándula.
+
     Se decidió utilizar una metología simple para asignar un puntaje a
     cada documento, dada la complejidad de entrenar un sistema de
     Learning to Rank, puesto que esto implica asignar puntajes a muchos datos con
@@ -785,3 +794,83 @@ para cada evento, y analizar los resultados obtenidos.
 
     Una vez generados los clusterings, se procedió a hacer un análisis
     caso a caso de los resultados obtenidos.
+
+    Por ejemplo, para el evento ``Tel Aviv'', se determinó como $9$ el
+    número óptimo de clusters, dando como resultado una solución de
+    clustering que particionaba los tweets de tal forma que cada
+    cluster contenía principalmente sólo tweets del mismo tipo:
+
+\begin{enumerate}
+\item \texttt{Previous bomb attacks in Tel Aviv...}
+\item \texttt{RT @BreakingNews: Israel's army spokesman says Israeli Arab        arrested for Wednesday's bus bombing in Tel Aviv}
+\item Contiene tweets de distintos temas, tanto de Tel Aviv como
+       otros relacionados a Israel, Egipto o Estados Unidos.
+\item \texttt{RT @chaimlevinson: \#breakingnews : after massive  police hunt,        2  suspects in the tel aviv bus bombing arrested in 443 road}
+\item \texttt{Police Arrest Suspects in Tel Aviv Bus Blast, Including        Israeli Citizen:}
+\item \texttt{Israel arrests suspects in Tel Aviv bus bombing: Israeli}
+       \texttt{authorities arrested an Israeli Arab on suspicion of planting a}
+       \texttt{bomb in a Te...}
+\item \texttt{Arrest announced in Tel Aviv bus bombing: An arrest has been}
+       \texttt{made in Wednesday\textbackslash{}xe2\textbackslash{}x80\textbackslash{}x99s bombing in Tel Aviv of a bus,=        =a...}
+\item \texttt{RT @panosharitos: Tel Aviv police chasing after two suspects}
+       \texttt{(one arrested), say this was not a suicide bombing; 3 of the}
+       \texttt{casualties are ...}
+\item \texttt{Shin Bet, police arrest suspects in Tel Aviv bus bombing}
+       \texttt{http://t.co/hJzLAOnD}
+\end{enumerate}
+    Los mensajes expuestos son los más frecuentes dentro de su
+    cluster, a excepción del cluster n°2, que contenía tweets con
+    distintos temas.
+
+    Los resultados del ranking sobre cada cluster entrega
+    efectivamente los tweets más ``populares'' dentro de los indicadores
+    escogidos (número de retweets, autoridad de la cuenta, etc.). En
+    la Figura \ref{fig:bn} se puede apreciar el documento con más
+    puntaje obtenido por el ranking. Su alto puntaje se debió
+    principalmente a la cantidad de retweets y a que el autor es una
+    cuenta verificada.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=10cm]{./img/breakingnews.png}
+  \caption[Documento con alto puntaje entre los resultados obtenidos]
+   { Documento (tweet) con más relevancia dentro del evento ``Tel Aviv". \label{fig:bn} }
+\end{figure}
+
+    Siguiendo con los resultados, para el evento ``New York'', el cual consiste en un
+    concierto musical de la Filarmónica de Nueva York, a pesar de la
+    poca cantidad de documentos (250), los resultados también fueron
+    muy representativos e incluso ricos en contenido multimedia. En la
+    Figura\footnote{Fuente \href{http://instagram.com/p/SF8w-3voOF/}{http://instagram.com/p/SF8w-3voOF/} }
+    \ref{fig:dvorak} se puede apreciar uno de los resultados; además
+    de este se incluyen artículos de prensa, vídeos de YouTube,
+    grabaciones en servicios de sonido o música como Soundcloud,
+    Spotify o Shazam.
+
+    Por otra parte, sin embargo, al analizar los resultados del evento
+    ``Stockholm'', que tiene cerca de ocho mil documentos, se notó que
+    gran parte de ellos corresponden a tweets sin sentido con el tema,
+    o bien tweets de contenido personal que no tenían ninguna
+    relación. Estos tweets alcanzaron alta relevancia debido a altos
+    indicadores: autoridad de usuarios, cantidad de followers y en
+    ocasiones cantidad de retweets. Esto indica que la forma de
+    realizar ranking puede ser mejorada en otros aspectos, quizás
+    considerando el contenido del tweet directamente o de alguna
+    manera verificando la relevancia del documento mencionado.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=8cm]{./img/dvorak.png}
+  \includegraphics[width=8cm]{./img/dvorak2.png}
+  \caption[Imagen y documento con altos puntajes entre los resultados obtenidos]
+   { Documento (fotografía) y tweet con alta relevancia dentro del evento
+  ``New York". \label{fig:dvorak} }
+\end{figure}
+
+    Finalmente, el evento ``Clinton'' obtuvo buenos resultados, en su
+    mayoría tweets sin URL, que discuten nuevamente el tema de
+    Gaza. Sin embargo, los medios de prensa mencionados en las URLs
+    consideran contenido multimedia (imágenes y vídeos), sin embargo,
+    se consideró esto anecdótico. La característica de este evento es
+    su alto contenido textual en la forma de consignas respecto al
+    tópico que discuten.

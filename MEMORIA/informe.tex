@@ -48,13 +48,14 @@
 Este trabajo consistió en el diseño e implementación de una metodología para la generación automática
 de resúmenes a partir de documentos de contenido tanto textual como multimedial. La medida de relevancia para
 la extracción de documentos en el proceso de la generación de resúmenes consideró la inclusión de indicadores
-\textit{sociales}, es decir, se consideran más importantes los documentos con mayor impacto en medios sociales, como
+\textit{sociales}, es decir, se consideran más importantes los documentos con mayor impacto en medios sociales, tal como
 las redes sociales online.
 
 El problema central fue la generación de resúmenes de eventos bien definidos, es decir, no se consideró el problema
 de identificación de eventos en medios sociales. Se utilizó una estrategia de clustering particional para la identificación
-de subtópicos de cada evento, y una estrategia simple para ponderar la relevancia de cada documento. Este tipo de trabajos
-no ha sido profundamente estudiado en las áreas de investigación relacionadas.
+de subtópicos de cada evento, y una estrategia simple para ponderar la relevancia de cada documento. Al no considerar
+el contenido de los documentos, éstos pueden ser de tipo textual o multimedial, pudiendo generar resúmenes multimedia o visuales.
+Este tipo de trabajos no ha sido profundamente estudiado en las áreas de investigación relacionadas.
 
 Se utilizaron los servicios de Google News y Last.fm para la obtención de eventos noticiosos y musicales, respectivamente.
 Además, se utilizó la red social Twitter para el enriquecimiento y generación de documentos con información social. Se utilizó el
@@ -92,5 +93,5 @@ no considerara su contenido, de forma de generar un resumen visual de cada event
 \bibliographystyle{plain}
 \bibliography{bibliografia}
 
-\input{./capitulos/6-anexos.tex}
+%\input{./capitulos/6-anexos.tex}
 \end{document}

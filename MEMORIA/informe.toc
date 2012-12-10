@@ -35,6 +35,5 @@
 \contentsline {subsection}{\numberline {4.4.1}Distribuciones de dominios}{31}{subsection.4.4.1}
 \contentsline {subsection}{\numberline {4.4.2}Determinar el número de clusters}{32}{subsection.4.4.2}
 \contentsline {subsection}{\numberline {4.4.3}Análisis de resúmenes}{33}{subsection.4.4.3}
-\contentsline {chapter}{\numberline {5}Conclusiones}{37}{chapter.5}
-\contentsline {section}{\numberline {5.1}Objetivos alcanzados y trabajo futuro}{37}{section.5.1}
-\contentsline {section}{\numberline {5.2}Relevancia del trabajo realizado}{37}{section.5.2}
+\contentsline {chapter}{\numberline {5}Conclusiones}{39}{chapter.5}
+\contentsline {section}{\numberline {5.1}Objetivos alcanzados y trabajo futuro}{39}{section.5.1}

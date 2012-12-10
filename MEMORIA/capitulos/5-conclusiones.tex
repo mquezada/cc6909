@@ -28,11 +28,67 @@ información social que mencionan los documentos.
 \label{sec-5.1}
 
 
-Si bien los objetivos fueron cumplidos a cabalidad de acuerdo al
+Si bien los objetivos fueron cumplidos casi a cabalidad de acuerdo al
 trabajo realizado, hay algunas componentes de la metodología propuesta
 que pueden ser sujetas a mejoras, de forma de mejorar en criterios
 como precisión, efectividad y eficiencia.
 
-\section{Relevancia del trabajo realizado}
-\label{sec-5.2}
+Como se mostró en el análisis de casos de estudio, hubo algunos casos
+con buenos resultados y otros que son mejorables:
 
+\begin{itemize}
+\item Mejorar la extracción de términos de búsqueda para medios
+  sociales. Es posible que una gran cantidad de términos no muy
+  relacionados directamente entre sí obtengan muchos documentos sin
+  relación entre ellos, tal como sucedió en el evento ``Stockholm''. O
+  bien, diseñar una metodología distinta para la identificación de
+  eventos y documentos asociados en medios sociales, considerando
+  otros medios, como Facebook o Tumblr, abundantes en contenido
+  multimedia.
+\item El ranking de tweets muestra que en algunos casos, cuando los
+  usuarios tienen muchos seguidores o un tweet sin importancia obtiene
+  muchos retweets, estos tweets adquieren mucha relevancia dentro de
+  un evento, nuevamente como ocurrió para ``Stockholm''. Una mejora a
+  este aspecto puede considerar analizar el contenido del tweet o bien
+  la relevancia del documento que menciona, si menciona alguno.
+\item Se hace necesario realizar un análisis más fino para determinar el
+  número de clusters adecuado a la hora de identificar los subtópicos
+  de un evento, dado que los resultados pueden variar en calidad
+  debido a este factor.
+\end{itemize}
+En cuanto a los objetivos:
+\begin{itemize}
+\item El objetivo principal fue cumplido casi completamente: se diseñó e
+  implementó un sistema para generar resúmenes automáticos en base a
+  documentos textuales y multimediales; sin embargo, sólo se
+  implementó una metodología y no al nivel de un software de
+  aplicación. Existen muchos aspectos que pueden ser mejorados aun.
+\item De los objetivos específicos:
+
+\begin{itemize}
+\item El objetivo específico 1 fue cumplido. Se diseñó una metodología
+    para extraer documentos relacionados a eventos en la Web,
+    discutidos en las redes sociales online, en particular a Twitter.
+\item El objetivo específico 2 fue cumplido. Se lograron identificar
+    subtópicos y una metodología para determinar un número adecuado de
+    éstos, basados en medidas internas del conjunto de documentos.
+\item El objetivo específico 3 fue parcialmente cumplido. La estrategia
+    utilizada para realizar ranking puede ser mejorada de forma de
+    considerar no sólo características de la red de los mensajes
+    publicados, sino también características de los documentos.
+\item El objetivo específico 4 fue cumplido. Se analizaron 4 casos de
+    pruebas, dos noticias y dos conciertos, y se evaluó la efectividad
+    de la metodología. Se concluyó que existen ciertas características
+    que influyen fuertemente sobre la calidad de los resultados, las
+    cuales pueden ser corregidas o mejoradas.
+\end{itemize}
+
+\end{itemize}
+La metodología implementada permite tener un punto de partida para el
+desarrollo de un software para ser aplicado sobre eventos en redes
+sociales y generar contenido multimedial basado en éstos. Los
+resultados obtenidos muestran que la estrategia es adecuada para
+lograr estos objetivos. El que se puedan realizar mejoras a la
+metodología y a la implementación indica que la calidad de los
+resultados puede ser mejorada, trayendo consigo documentos que
+representen aún más los eventos que los discuten.

@@ -1887,5 +1887,7 @@ La metodología implementada permite tener un punto de partida para el
 desarrollo de un software para ser aplicado sobre eventos en redes
 sociales y generar contenido multimedial basado en éstos. Los
 resultados obtenidos muestran que la estrategia es adecuada para
-lograr estos objetivos. 
-
+lograr estos objetivos. El que se puedan realizar mejoras a la
+metodología y a la implementación indica que la calidad de los
+resultados puede ser mejorada, trayendo consigo documentos que
+representen aún más los eventos que los discuten.
