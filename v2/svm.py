@@ -2,6 +2,7 @@ from nltk.stem import SnowballStemmer
 from redis import Redis
 import utils
 import HTMLParser
+from urlparse import urlparse
 from sklearn.cluster import KMeans, MiniBatchKMeans
 from sklearn.feature_extraction.text import TfidfVectorizer
 from time import time
@@ -37,6 +38,13 @@ def generate_documents_for(event_id):
     docs = set(keys)
     for doc_id in docs:
         #doc_id = id(doc_key)
+
+        # fb no se dejo resolver, y quedan muchos documentos apuntando a unsuportedbrowser
+        # se ignora fb mientras no se arregle este problema
+        url = r.get('document:%s:url' % doc_id)
+        if urlparse(url).netloc == 'www.facebook.com':
+            continue
+
         tweet_ids = r.lrange('document:' + doc_id + ':tweets', 0, -1)
         documents_ids[event_id].append(tweet_ids)
 
@@ -88,12 +96,12 @@ def cluster_event(event_id):
     print "n_samples: %d, n_features: %d" % X.shape
     print
 
-    km = MiniBatchKMeans(n_clusters=5, init='k-means++', n_init=1,
+    """km = MiniBatchKMeans(n_clusters=5, init='k-means++', n_init=1,
                              init_size=1000,
-                             batch_size=1000, verbose=1)
+                             batch_size=1000, verbose=1)"""
 
-    """km = KMeans(n_clusters=true_k, init='random', max_iter=100, n_init=1,
-                verbose=1)"""
+    km = KMeans(n_clusters=5, init='k-means++', max_iter=100, n_init=10,
+                verbose=1, n_jobs=2)
 
     print "Clustering sparse data with %s" % km
     t0 = time()
@@ -108,7 +116,10 @@ t = time()
 #ev = '82cefb914318e7a9e6664550080f259a'
 #ev = '47961910adba1a7cc98dc83b7bb2e773'
 #ev = '62d63b809018510981a48d263a646ef5'
-ev = 'b60e4389f7910448e4972f622afb9260'
+#ev = 'b60e4389f7910448e4972f622afb9260'
+#ev = 'e6525453ec8d901beed54ff7a412f470'
+#ev = '22cdb3aea0f32b9a64c50fd16eb482c4'
+ev = '51ec4e69bf46dd7fbf48cbf498cfb056'
 generate_documents_for(ev)
 
 C = cluster_event(ev)

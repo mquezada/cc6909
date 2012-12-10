@@ -27,13 +27,13 @@
 \contentsline {subsubsection}{Recolección de eventos}{24}{section*.7}
 \contentsline {subsubsection}{Enriquecimiento de eventos}{25}{section*.8}
 \contentsline {subsubsection}{Identificación de documentos a partir de tweets}{26}{section*.9}
-\contentsline {subsection}{\numberline {4.2.2}Identificación de subtópicos}{26}{subsection.4.2.2}
+\contentsline {subsection}{\numberline {4.2.2}Identificación de subtópicos}{27}{subsection.4.2.2}
 \contentsline {subsection}{\numberline {4.2.3}Ranking de documentos}{28}{subsection.4.2.3}
-\contentsline {section}{\numberline {4.3}Desafíos técnicos}{28}{section.4.3}
-\contentsline {subsection}{\numberline {4.3.1}Restricciones de la API de Twitter}{28}{subsection.4.3.1}
-\contentsline {section}{\numberline {4.4}Casos de estudio}{29}{section.4.4}
-\contentsline {chapter}{\numberline {5}Conclusiones}{30}{chapter.5}
-\contentsline {section}{\numberline {5.1}Resumen del trabajo realizado}{30}{section.5.1}
-\contentsline {section}{\numberline {5.2}Objetivos alcanzados}{30}{section.5.2}
-\contentsline {section}{\numberline {5.3}Relevancia del trabajo realizado}{30}{section.5.3}
-\contentsline {section}{\numberline {5.4}Trabajo futuro}{30}{section.5.4}
+\contentsline {section}{\numberline {4.3}Desafíos técnicos}{29}{section.4.3}
+\contentsline {subsection}{\numberline {4.3.1}Restricciones de la API de Twitter}{29}{subsection.4.3.1}
+\contentsline {section}{\numberline {4.4}Casos de estudio}{30}{section.4.4}
+\contentsline {chapter}{\numberline {5}Conclusiones}{32}{chapter.5}
+\contentsline {section}{\numberline {5.1}Resumen del trabajo realizado}{32}{section.5.1}
+\contentsline {section}{\numberline {5.2}Objetivos alcanzados}{32}{section.5.2}
+\contentsline {section}{\numberline {5.3}Relevancia del trabajo realizado}{32}{section.5.3}
+\contentsline {section}{\numberline {5.4}Trabajo futuro}{32}{section.5.4}

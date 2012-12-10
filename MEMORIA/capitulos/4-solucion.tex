@@ -1,5 +1,4 @@
 
-
 \chapter{Descripción de la Solución}
 \label{sec-4}
 
@@ -194,17 +193,17 @@
     datos, tanto de eventos como de documentos con sus indicadores
     sociales respectivos.
 
-    Las etapas de generación del dataset son las siguientes:
+    Las etapas de generación del dataset fueron las siguientes:
 
 \begin{itemize}
 \item Recolección de eventos (noticias y conciertos);
 \item Enriquecimiento de los eventos existentes mediante tweets; e
 \item Identificación de documentos a partir de los tweets por cada evento.
-
-      Se recolectaron datos (eventos y tweets) desde el 19 de noviembre de
-      2012 hasta el 30 de noviembre del mismo año, todos los días
-      desde la medianoche hasta que el proceso termina exitosamente.
 \end{itemize}
+    Se recolectaron datos (eventos y tweets) desde el 19 de noviembre de
+    2012 hasta el 30 de noviembre del mismo año, todos los días
+    desde la medianoche hasta que el proceso termina exitosamente.
+
 \subsubsection{Recolección de eventos}
 
 Se consideraron dos tipos de eventos para el sistema: noticias y
@@ -212,9 +211,10 @@ conciertos musicales. Los conciertos incluyen festivales de varios
 artistas.
 
 \begin{itemize}
-\item Noticias
+\item \textbf{Noticias}
+
   Para obtener las noticias, se utilizó el servicio de Google
-  News\footnote{\href{http://news.google.com}{http://news.google.com} }. Existe una API (en proceso de
+  News. Existe una API (en proceso de
   obsolescencia\footnote{\href{http://googlecode.blogspot.com/2011/05/spring-cleaning-for-some-of-our-apis.html}{http://googlecode.blogspot.com/2011/05/spring-cleaning-for-some-of-our-apis.html} },
   pero funcional a la fecha de este trabajo) que permite
   obtener no sólo los titulares y breve descripción de cada noticia,
@@ -229,7 +229,8 @@ artistas.
 \item Titulares de las noticias relacionadas.
 \end{itemize}
 
-\item Conciertos
+\item \textbf{Conciertos}
+
   Utilizando el servicio de Last.fm para obtener los conciertos y
   festivales de una ubicación en
   particular\footnote{\href{http://www.lastfm.es/api/show/geo.getEvents}{http://www.lastfm.es/api/show/geo.getEvents} }, se
@@ -248,6 +249,7 @@ artistas.
 \item Artistas que participan; y
 \item Fechas de inicio y término (esta última no siempre está como
     dato).
+
 
   Además de otros datos descriptivos, como la ubicación, descripción
   breve, sitio web de la banda o festival, etc.
@@ -347,6 +349,20 @@ eventos noticiosos y musicales, respectivamente.
     antemano), lo que consume recursos de ancho de banda y
     tiempo.
 
+    Una vez identificada la URL, si existía el documento previamente,
+    se añade el tweet a éste, sino se crea un nuevo documento cuyo
+    identificador es la URL encontrada:
+
+\begin{verbatim}
+ Event: Kamelot
+ Event type: Concert
+ Document URL: http://www.youtube.com/watch?v=pkiZOTc_tTw&feature=related
+ Document content:
+ ['#np Kamelot - Can You Remember? :http://t.co/s7MUh7VW',
+  'RT @El__Azar: #np Kamelot - Can You Remember? :http://t.co/s7MUh7VW']
+\end{verbatim}
+
+
 \subsection{Identificación de subtópicos}
 \label{sec-4.2.2}
 
@@ -419,19 +435,107 @@ $D''_e \leftarrow D''_e \cup \{d'\}$\;
     $\tfidf$, lo que permite entonces aplicar un algoritmo de
     clustering para identificar subtópicos.
 
-    Se utilizó el algoritmo Mini Batch K-means, el CUAL\ldots{} COMPLETAR
-    ACA Y MODIFICAR ANTES DONDE DIGA KMEANS!!!!!. Al aplicarlo sobre
-    el conjunto de vectores, éste retorna una \emph{lista de etiquetas}
-    $L$, de largo $n$, la cantidad de documentos utilizados. Cada
-    $L_i \in [0..k-1], i \in [1..n]$ indica a cuál cluster corresponde
-    el $i$-ésimo documento, lo que permite fácilmente filtrar y
-    recuperar los clusters por separado, para pasar a la siguiente
-    etapa.
+    Se utilizó el algoritmo K-means para generar los clusters. Al
+    aplicarlo sobre el conjunto de vectores, éste retorna una
+    \emph{lista de etiquetas} $L$, de largo $n$, la cantidad de documentos
+    utilizados. Cada $L_i \in [0..k-1], i \in [1..n]$ indica a cuál
+    cluster corresponde el $i$-ésimo documento, lo que permite
+    fácilmente filtrar y recuperar los clusters por separado, para
+    pasar a la siguiente etapa.
+
 
 \subsection{Ranking de documentos}
 \label{sec-4.2.3}
 
 
+    Para generar un ranking de documentos, se procedió a obtener toda
+    la información relevante de éstos. Se escogió un conjunto de
+    indicadores según \cite{Castillo:2011:ICT:1963405.1963500} y las
+    conclusiones de \cite{Duan:2010:ESL:1873781.1873815}, en
+    las cuales se menciona
+    que la \emph{popularidad} de un autor de un tweet, el largo de un tweet
+    y si éste contiene o no una URL, son los mejores indicadores para
+    medir la relevancia de un tweet, según los experimentos llevados a
+    cabo.
+
+    Los indicadores escogidos se pueden apreciar en la Tabla
+    \ref{tbl:indicadores}. En el Código \ref{fig:doc-example} se puede
+    apreciar un ejemplo de la información obtenida para un documento.
+
+
+
+
+\begin{table}[htb]
+\begin{center}
+\begin{tabular}{|l|l|}
+\hline
+ Indicador        &  Descripción                                                   \\
+\hline
+\hline
+ TWEETS           &  Número de tweets del documento                                \\
+ IS\_RETWEETED    &  Número de tweets que son un retweet de otro                   \\
+ RETWEETS         &  Número de retweets de los tweets del documento                \\
+ TWEET\_LENGTHS   &  Largos de los tweets del documento, en cantidad de palabras   \\
+ USER\_VERIFIED   &  Número de tweets cuyo autor está verificado por Twitter       \\
+ USER\_FOLLOWERS  &  Número de usuarios que siguen a cada autor                    \\
+ USER\_LISTS      &  Número de listas en las cuales están estos autores            \\
+ USER\_STATUSES   &  Número de tweets que han escrito los autores                  \\
+ USER\_FRIENDS    &  Número de usuarios que siguen y son seguidos por los autores  \\
+ USER\_GEO        &  Número de autores cuyos tweets tienen ubicación habilitada    \\
+ USER\_CREATED    &  Fechas de creación de las cuentas (en formato Unix)           \\
+\hline
+\end{tabular}
+\end{center}
+\caption{\label{tbl:indicadores}Indicadores sociales utilizados para medir relevancia. Todos los indicadores, a excepción de la fecha de creación del usuario, son sumas entre todos los tweets de un documento.}
+\end{table}
+
+\begin{listing}
+\begin{minted}[frame=single,
+               framesep=3mm,
+               bgcolor=bg,
+               fontsize=\small,
+               tabsize=4]{js}
+{
+"850a0f7e08e9cf2e080678679857eef9": {
+  "domain": "twitter",
+  "is_retweet": [0, 0, 0, 0, 0, 0],
+  "num_tweets": 6,
+  "retweets": ["0", "0", "0", "0", "0", "0"],
+  "tweets_lengths": [8, 6, 8, 6, 6, 8],
+  "url": "https://api.twitter.com/1/statuses/show.json?id=270299718540738560",
+  "user_created_at": [1309224895.0,
+                      1285052229.0,
+                      1309224895.0,
+                      1285052229.0,
+                      1285052229.0,
+                      1309224895.0],
+  "user_followers": ["45", "37", "45", "37", "37", "45"],
+  "user_friends": ["2", "25", "2", "25", "25", "2"],
+  "user_geo_enabled": [1, 0, 1, 0, 0, 1],
+  "user_is_verified": [0, 0, 0, 0, 0, 0],
+  "user_lists": ["0", "1", "0", "1", "1", "0"],
+  "user_statuses": ["12484", "4756", "12484", "4756", "4756", "12484"]}
+}
+\end{minted}
+\caption{Información de un documento, correspondiente al evento ``Anef
+anuncia movilización nacional''. Los campos que corresponden a listas
+indican los valores para cada tweet del documento, en este caso, el
+documento tiene 6 tweets; por ejemplo, user\_followers[23]=45 indica
+la cantidad de seguidores que tiene el autor del tweet en la tercera
+posición.}
+\label{fig:doc-example}
+\end{listing}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=16cm]{./img/stockholm-domain-freqs.png}
+  \caption[Timeline de Twitter.]
+   {Timeline de Twitter. En éste se ve una lista en orden cronológico
+  de los tweets generados por los usuarios que sigue el usuario
+  actual. Además, el sitio incluye tweets promocionados por cuentas
+  que pagan por dicho servicio, como es el caso del primer tweet en la
+  lista.}
+\end{figure}
 
 
 \section{Desafíos técnicos}

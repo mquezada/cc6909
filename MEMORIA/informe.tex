@@ -22,11 +22,18 @@
 \usepackage[lined,boxed,commentsnumbered,ruled,vlined,portuguese,linesnumbered]{algorithm2e}
 \usepackage{setspace}
 \usepackage[all]{hypcap}
+\usepackage{minted}
+\usepackage{longtable}
+
 
 \defaultfontfeatures{Mapping=tex-text}
 %\setmainfont{Linux Libertine O}
 \setmainfont{Linux Libertine O}
 \setmonofont[Scale=1]{CMU Typewriter Text}
+
+\renewcommand\listingscaption{Código}
+\definecolor{bg}{rgb}{0.95,0.95,0.95}
+
 
 \let\evensidemargin\oddsidemargin
 \reversemarginpar
@@ -37,7 +44,23 @@
 \maketitle
 
 \begin{abstract}
-\lipsum[1-4]
+
+Este trabajo consistió en el diseño e implementación de una metodología para la generación automática
+de resúmenes a partir de documentos de contenido tanto textual como multimedial. La medida de relevancia para
+la extracción de documentos en el proceso de la generación de resúmenes consideró la inclusión de indicadores
+\textit{sociales}, es decir, se consideran más importantes los documentos con mayor impacto en medios sociales, como
+las redes sociales online.
+
+El problema central fue la generación de resúmenes de eventos bien definidos, es decir, no se consideró el problema
+de identificación de eventos en medios sociales. Se utilizó una estrategia de clustering particional para la identificación
+de subtópicos de cada evento, y una estrategia simple para ponderar la relevancia de cada documento. Este tipo de trabajos
+no ha sido profundamente estudiado en las áreas de investigación relacionadas.
+
+Se utilizaron los servicios de Google News y Last.fm para la obtención de eventos noticiosos y musicales, respectivamente.
+Además, se utilizó la red social Twitter para el enriquecimiento y generación de documentos con información social. Se utilizó el
+algoritmo de clustering K-means para la identificación de subtópicos mediante una representación adecuada de los documentos que
+no considerara su contenido, de forma de generar un resumen visual de cada evento.
+
 \end{abstract}
 
 %\begin{dedicatoria}

@@ -154,3 +154,7 @@ t0 = time()
 generate_documents()
 print str(time() - t0)
 """
+
+
+for k,v in sorted(features.iteritems(), key=operator.itemgetter(1), reverse=True)[:30]:
+    print k+'\t'+str(v)
