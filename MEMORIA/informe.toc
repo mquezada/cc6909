@@ -24,14 +24,14 @@
 \contentsline {section}{\numberline {4.1}Descripción detallada}{23}{section.4.1}
 \contentsline {section}{\numberline {4.2}Metodología de desarrollo e implementación}{24}{section.4.2}
 \contentsline {subsection}{\numberline {4.2.1}Obtención de datos}{24}{subsection.4.2.1}
-\contentsline {subsubsection}{Recolección de eventos}{24}{section*.9}
-\contentsline {subsubsection}{Enriquecimiento de eventos}{25}{section*.10}
+\contentsline {subsubsection}{Recolección de eventos}{25}{section*.9}
+\contentsline {subsubsection}{Enriquecimiento de eventos}{26}{section*.10}
 \contentsline {subsubsection}{Identificación de documentos a partir de tweets}{26}{section*.11}
 \contentsline {subsection}{\numberline {4.2.2}Identificación de subtópicos}{27}{subsection.4.2.2}
 \contentsline {subsection}{\numberline {4.2.3}Ranking de documentos}{29}{subsection.4.2.3}
 \contentsline {section}{\numberline {4.3}API de búsqueda de Twitter}{30}{section.4.3}
-\contentsline {section}{\numberline {4.4}Casos de estudio}{31}{section.4.4}
+\contentsline {section}{\numberline {4.4}Casos de estudio}{32}{section.4.4}
 \contentsline {subsection}{\numberline {4.4.1}Distribuciones de dominios}{32}{subsection.4.4.1}
-\contentsline {subsection}{\numberline {4.4.2}Determinación del número de clusters}{33}{subsection.4.4.2}
-\contentsline {subsection}{\numberline {4.4.3}Análisis de resúmenes}{34}{subsection.4.4.3}
-\contentsline {chapter}{\numberline {5}Conclusiones y trabajo a futuro}{40}{chapter.5}
+\contentsline {subsection}{\numberline {4.4.2}Determinación del número de clusters}{34}{subsection.4.4.2}
+\contentsline {subsection}{\numberline {4.4.3}Análisis de resúmenes}{36}{subsection.4.4.3}
+\contentsline {chapter}{\numberline {5}Conclusiones y trabajo a futuro}{41}{chapter.5}

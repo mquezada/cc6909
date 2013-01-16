@@ -98,7 +98,7 @@
    de su contenido, utilizando la información social asociada a
    éstos. Se decidió que el problema de identificación de eventos está
    fuera del alcance de este trabajo, por lo cual, se asume que los
-   eventos son dados como input a la solución diseñada. A partir de un
+   eventos son dados como \emph{input} a la solución diseñada. A partir de un
    evento determinado, se identifican los  subtópicos del evento
    utilizando los documentos, y luego, para cada
    subtópico se determinan los documentos más relevantes utilizando
@@ -130,18 +130,31 @@
      autor del mensaje, como la cantidad de conexiones en la red, y
      en general, datos que permitan comparar dos autores.
 \end{itemize}
-   Utilizando estas dos fuentes, el siguiente paso luego de obtener
-   una lista de eventos fue enriquecerlos utilizando las fuentes
-   sociales, generando documentos del tipo
-   $d = (s_1, s_2, \ldots, s_m)$, donde  $s_i$, $i \in [1..m]$
-   es un mensaje de alguna fuente social, con los
-   metadatos asociados. El documento es identificado por la URI de
-   algún documento en la Web, de forma que todos los mensajes que
-   contengan una URI en particular, corresponderán al mismo documento
-   $d$.
 
-   A continuación, utilizando alguna representación adecuada
-   (\emph{vector space model}, \emph{bag of words}, etc.), se generaron clusters
+
+   Utilizando estas fuentes, el primer paso correspondió a obtener una
+   lista de eventos con los documentos asociados. Recuérdese que un evento se definió
+   como un acontecimiento dentro de un período de tiempo $T$ y una lista de objetos Web
+   $d_1, d_2, \ldots, d_m$ asociados al evento en cuestión. Cada evento $e$ entonces se
+   representa mediante los objetos Web que lo mencionan. 
+
+   Para generar una lista de eventos con sus objetos Web asociados, se obtuvieron 
+   mensajes de fuentes sociales $M_j$, los cuales pueden mencionar un objeto Web identificándolo
+   mediante una URI. Como puede darse el caso (y es deseable que suceda) que dos (o más) mensajes
+   $M_j$ y $M_{j'}$ mencionen al mismo objeto Web, en el sentido de que las URIs que contienen
+   apunten al mismo recurso o a recursos equivalentes (no siendo las URIs necesariamente iguales),
+   se consideró un documento $d$ con $M_j$ y $M_{j'}$ como componentes. El proceso entonces
+   consideró tomar todos los mensajes que mencionan al mismo objeto Web y juntarlos para generar
+   un único documento $d$.
+
+   Por lo tanto, obtenida una lista de eventos $e_i$, $i\in [1..n]$ a partir de las fuentes de eventos,
+   se obtuvieron mensajes $M_j$, $j \in [1..n_i]$ de las fuentes sociales, dentro de un intervalo de tiempo cercano a $T$, que hablan de $e_i$. Con éstos, se generaron
+   documentos $d_k = (M'_1, M'_2, \ldots, M'_{|d|})$, $k \in [1..m]$ que corresponden a objetos Web
+   que mencionan al evento, y los mensajes $M'_{k'}$ corresponden a los mensajes que tienen como URI al
+   objeto en cuestión.
+
+   A continuación, utilizando una representación 
+   en \emph{vector space model} de los documentos, se generaron clusters
    de documentos de un mismo evento, identificando los subtópicos. Con
    ellos fue posible generar un resumen que abarcara todos los
    aspectos del evento, en contraste con seleccionar directamente los
@@ -151,7 +164,7 @@
    Finalmente se seleccionaron los $k>0$ documentos más representativos de
    cada cluster, utilizando como criterio los metadatos de los
    mensajes de la fuente social. De esta forma, se ordenan los
-   documentos dejando como más ``relevantes'' los que más interés atrae
+   documentos dejando como más ``relevantes'' los que más interés atraen
    de los usuarios.
 
 \section{Metodología de desarrollo e implementación}
@@ -350,7 +363,7 @@ eventos noticiosos y musicales, respectivamente.
     Por lo anterior, una vez identificada la URL del texto de un
     tweet, se resuelve su URL completa (que puede ya serlo de
     antemano), lo que consume recursos de ancho de banda y
-    tiempo.
+    tiempo considerable comparado con el resto del proceso.
 
     Una vez identificada la URL, si existía el documento previamente,
     se añade el tweet a éste, sino se crea un nuevo documento cuyo
@@ -375,6 +388,16 @@ eventos noticiosos y musicales, respectivamente.
     cada evento. Para esto, se utilizó el algoritmo K-means para
     construir clusters a partir de todos los documentos de un solo
     evento.
+
+    Dado un evento representado por sus documentos, un subtópico de 
+    éste es un cluster de documentos, tal que los documentos dentro del cluster 
+    son más similares entre sí que con el resto de los documentos que no 
+    pertencen a ese cluster. Visto de otro punto de vista, corresponde a una
+    arista o punto de vista del evento. Por ejemplo, para el evento ``Tel Aviv'',
+    el cual trata principalmente de que fueron arrestados sospechosos de un 
+    atentado explosivo, tiene distintos subtópicos: el hilo principal, en el cual
+    fueron arrestados sospechosos del atentado; un recuento de atentados previos en
+    la misma zona; declaraciones de autoridades sobre el hecho, entre otros.  
 
     Como se mencionó anteriormente, los documentos consisten en
     vectores del tipo $d_{\textrm{URL}}=(t_1,t_2,\ldots,t_m)$, donde
@@ -414,6 +437,7 @@ eventos noticiosos y musicales, respectivamente.
       evento dado por los metadatos de éste. Se utilizó el Snowball
       Stemmer\footnote{\href{http://snowball.tartarus.org/}{http://snowball.tartarus.org/} } para esto.
 \end{itemize}
+
     Una vez normalizados los documentos, se convierten a la
     representación como vectores con pesos por cada término:
 
@@ -581,8 +605,8 @@ posición.}
 
    Existe una limitación de uso de este servicio: sólo es posible hacer
    hasta 180 requests por cada 15 minutos, o 1 request cada 5
-   segundos. Además, sólo retorna tweets de hasta 7 días de antigüedad, y
-   sus resultados no son necesariamente en tiempo real y su estabilidad
+   segundos. Además, sólo retorna tweets de hasta 7 días de antigüedad.
+   Los resultados no son necesariamente en tiempo real y su estabilidad
    varía de acuerdo a factores externos. Esto implicó que la etapa de
    enriquecimiento de eventos y generación de documentos haya sido muy
    costosa en tiempo, dado que se pueden obtener a lo más 100 tweets
@@ -604,7 +628,7 @@ posición.}
 \begin{itemize}
 \item Si la cuenta está \emph{verificada};
 \item La cantidad de seguidores del usuario;
-\item Cantidad de amigos (seguidores que también lo siguen);
+\item Cantidad de \emph{amigos} (usuarios que siguen y son seguidos por el usuario);
 \item Cantidad de tweets;
 \item Su descripción, y si incluye alguna URL, etc;
 \item Ubicación (dada por el mismo usuario);
@@ -618,7 +642,8 @@ posición.}
 
 \label{casosest}
 
-  Fueron analizados 4 eventos, dos noticiosos y dos musicales, en los
+  Para estudiar la viabilidad de la metodología propuesta, 
+  fueron analizados 4 eventos, dos noticiosos y dos musicales, en los
   cuales se realizaron distintas actividades:
 
 \begin{itemize}
@@ -630,8 +655,11 @@ posición.}
 \item Analizar contenido de los clusters: se realizó también un análisis
     de los resultados obtenidos.
 \end{itemize}
+
   Los eventos fueron los siguientes:
+
 \begin{itemize}
+
 \item Noticiosos:
 
 \begin{itemize}
@@ -648,9 +676,15 @@ posición.}
 \end{itemize}
 
 \end{itemize}
-  Como se puede apreciar, se escogieron eventos con baja y alta
-  cantidad de documentos, de forma de poder evaluar el impacto del
-  número de documentos en la calidad de los resultados obtenidos.
+
+  Se escogieron los eventos de forma que la cantidad de documentos de estos
+  representen la mayoría de los eventos obtenidos: con pocos documentos (del orden
+  de $100$), con una cantidad ``mediana'' de documentos (del orden de $1000$) y de 
+  muchos documentos (del orden de $10000$). Esto con el objetivo de evaluar el impacto
+  del número de documentos en la calidad de los resultados.
+
+  Para cada evento se buscaron los tweets que los mencionaban, y luego se generaron documentos
+  identificados por una URL, y sus componentes corresponden a los tweets que mencionan a dicha URL.
 
 \subsection{Distribuciones de dominios}
 \label{sec-4.4.1}
@@ -672,22 +706,27 @@ posición.}
 \end{figure}
 
 \begin{itemize}
+
 \item En la Figura \ref{fig:telaviv-domains} se aprecia una gran
-      mayoría de documentos que tienen como URL \texttt{api.twitter.com}, lo
-      cual significa que los tweets de esos documentos no presentaron
-      ninguna URL en su contenido (dado que esos tweets pasan a
-      representar un documento cuyo identificador es una URL que
-      identifica al tweet que lo compone).
+      mayoría de documentos que tienen como dominio de URL identificadora a \texttt{api.twitter.com}.
+      Por diseño, los tweets que no contienen ninguna URL en su mensaje pasan a generar
+      un documento con ese único tweet como componente, y su URL identificadora es la URL
+      del tweet en cuestión.
 
       En segundo lugar, la URL \texttt{adf.ly} tiene una segunda
       mayoría. \hyperref[sec-4.4.1]{Adf.ly} es un servicio de acortamiento de enlaces, con
       la característica de que el sitio muestra publicidad antes de
-      mostrar el enlace a la URL a la cual apunta. Como no es una
-      redirección directa, al tratar de resolver este dominio no fue
-      posible recuperar destino final. Es posible suponer que los
+      mostrar el enlace a la URL a la cual apunta. Como es necesario obtener
+      la URL ``terminal'' (sin redirecciones) de un recurso para poder generar los 
+      documentos, se hizo necesario resolver o expandir las URLs que aparecen en los tweets.
+      Como las URLs acortadas con \texttt{adf.ly} no tienen una
+      redirección directa, al tratar de expandir estas URLs no fue
+      posible recuperar destino terminal. Es posible suponer que los
       destinos de estas direcciones apuntan a más sitios de noticias,
       dadas los dominios que siguen a continuación, como CNN o NY
       Times.
+
+
 \item De la misma forma, tanto para los eventos ``Clinton'' y
       ``Stockholm'', en las Figuras \ref{fig:clinton-domains} y
       \ref{fig:stockholm-domains}, la distribución de dominios sigue una tónica
@@ -695,12 +734,23 @@ posición.}
       de sólo texto, sin URL. Es posible que gran parte de los tweets
       hayan correspondido a texto debido a los términos de búsqueda
       que fueron utilizados para recuperarlos, tales como \texttt{clinton},
-      \texttt{ceasefire}, \texttt{effort}, o \texttt{stockholm}.
+      \texttt{ceasefire}, \texttt{effort}, o \texttt{stockholm}. Por una parte,
+      los eventos ``Clinton'' y ``Tel Aviv'' son noticias, mientras que ``Stockholm''
+      es un festival de música. Los dos primeros fueron temas con amplia cobertura en
+      el momento en que ocurrieron, y a su vez, muy comentados en Twitter, 
+      mientras que la gran cantidad de tweets obtenidos para el tercero
+      pudo significar que muchos de estos tweets sólo hayan contenido texto.
+
+
 \item Un caso especial ocurre para el evento ``New York'' en la Figura
       \ref{fig:dvorak-domains}. No hay una mayoría de documentos
       apuntando a Twitter: de hecho, la gran mayoría de los documentos
       posee una URL distinta, dada la proporción a la que se
-      encuentran los dominios más frecuentes.
+      encuentran los dominios más frecuentes. Esto pudo darse debido a que al no ser un evento
+      con mucha cobertura (comparado con los otros), los resultados obtenidos de la búsqueda de 
+      tweets fueron mucho más precisos, al no haber ``ruido'' de por medio.
+
+
 \end{itemize}
 \begin{figure}[h]
   \centering
@@ -737,7 +787,7 @@ posición.}
 \label{sec-4.4.2}
 
 
-Para determinar un número adecuado de clusters para cada evento se
+Para determinar un número adecuado de subtópicos (clusters) para cada evento se
 utilizaron métricas de evaluación internas, dado que no se contó con
 las clases reales de los datos obtenidos. Para esto, se utilizó el
 software Cluto\footnote{\href{http://glaros.dtc.umn.edu/gkhome/views/cluto}{http://glaros.dtc.umn.edu/gkhome/views/cluto} }, el
@@ -786,7 +836,24 @@ siguiente:
 \end{figure}
 
 Con esto, se puede determinar experimentalmente un número de clusters
-para cada evento, y analizar los resultados obtenidos. En las Figuras \ref{fig:telaviv-radio}, \ref{fig:clinton-radio}, \ref{fig:stockholm-radio}, y \ref{fig:dvorak-radio} se pueden apreciar los resultados obtenidos en la determinación del número de clusters.
+para cada evento, y analizar los resultados obtenidos. En las Figuras \ref{fig:telaviv-radio}, \ref{fig:clinton-radio}, \ref{fig:stockholm-radio}, y \ref{fig:dvorak-radio} se pueden apreciar los resultados obtenidos en la determinación del número de clusters:
+
+\begin{enumerate}
+\item Para el evento ``Tel Aviv'' en la Figura \ref{fig:telaviv-radio}
+      se determinó como $9$ un número adecuado de clusters.
+      Como se mencionó anteriorimente, este número de determina como el número de clusters que entrega mayor similitud intra-cluster, y menor similitud inter-cluster. Éste corresponde a un máximo local, puesto que 
+      a mayor número de clusters (en el extremo, 1 cluster por documento) estas medidas pueden dar un óptimo global.
+\item Para ``Clinton'' en la Figura \ref{fig:clinton-radio} se determinó como $27$ el número de clusters a utilizar. Como el radio siguió aumentando a medida que aumenta el número de clusters, posiblemente se trate de un máximo local. 
+
+\item Para ``Stockholm'' el máximo se encontró con $11$ clusters en la Figura \ref{fig:stockholm-radio}. 
+
+\item Finalmente, en la Figura \ref{fig:dvorak-radio}, el evento ``New York'' presenta un máximo con $25$ y $28$ clusters. Fueron utilizados $25$ clusters para el análisis.
+
+\end{enumerate}
+
+Estas medidas indican que una cantidad adecuada de clusters es la obtenida, de acuerdo al criterio del radio de las similitudes. Sin embargo, esto no quiere decir necesariamente que la solución sea óptima incluso si se trata de un máximo global para cada caso, dado que esta medida sólo se basa en la similitud de los documentos, y no en el contenido de éstos. Por ejemplo, un evento puede tener todos sus documentos con tweets distintos, siendo que sólo hablen de dos subtópicos distintos; en ese caso el óptimo se encontraría a un número muy alto de clusters, siendo que bastaría con sólo dos. Por esto se realizó un análisis de los eventos caso por caso, sin suponer que el número de clusters determinado entregará una solución óptima.
+
+  
 
 \subsection{Análisis de resúmenes}
 \label{sec-4.4.3}
