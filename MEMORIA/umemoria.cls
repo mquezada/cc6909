@@ -172,11 +172,11 @@
 
 %% Miscelaneos
 \newcommand{\A}{\mathcal{A}}
-\newcommand{\C}{\mathbb{C}}
+%\newcommand{\C}{\mathbb{C}}
 \newcommand{\D}{\mathbb{D}}
 \newcommand{\E}{\mathbb{E}}
 \newcommand{\F}{\mathcal{F}}
-\newcommand{\G}{\mathcal{G}}
+%\newcommand{\G}{\mathcal{G}}
 \renewcommand{\H}{\mathcal{H}}
 \newcommand{\K}{\mathcal{K}}
 \renewcommand{\L}{\mathcal{L}}

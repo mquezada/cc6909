@@ -3,24 +3,27 @@
 \catcode`<\active
 \catcode`>\active
 \@nameuse{es@quoting}
-\ifx\hyper@anchor\@undefined
-\global \let \oldcontentsline\contentsline
-\gdef \contentsline#1#2#3#4{\oldcontentsline{#1}{#2}{#3}}
-\global \let \oldnewlabel\newlabel
-\gdef \newlabel#1#2{\newlabelxx{#1}#2}
-\gdef \newlabelxx#1#2#3#4#5#6{\oldnewlabel{#1}{{#2}{#3}}}
-\AtEndDocument{\let \contentsline\oldcontentsline
-\let \newlabel\oldnewlabel}
-\else
-\global \let \hyper@last\relax 
-\fi
-
+\providecommand\HyperFirstAtBeginDocument{\AtBeginDocument}
+\HyperFirstAtBeginDocument{\ifx\hyper@anchor\@undefined
+\global\let\oldcontentsline\contentsline
+\gdef\contentsline#1#2#3#4{\oldcontentsline{#1}{#2}{#3}}
+\global\let\oldnewlabel\newlabel
+\gdef\newlabel#1#2{\newlabelxx{#1}#2}
+\gdef\newlabelxx#1#2#3#4#5#6{\oldnewlabel{#1}{{#2}{#3}}}
+\AtEndDocument{\ifx\hyper@anchor\@undefined
+\let\contentsline\oldcontentsline
+\let\newlabel\oldnewlabel
+\fi}
+\fi}
+\global\let\hyper@last\relax 
+\gdef\HyperFirstAtBeginDocument#1{#1}
 \providecommand*\HyPL@Entry[1]{}
 \HyPL@Entry{0<</S/r>>}
 \select@language{spanish}
 \@writefile{toc}{\select@language{spanish}}
 \@writefile{lof}{\select@language{spanish}}
 \@writefile{lot}{\select@language{spanish}}
+\@writefile{loa}{\addvspace {10\p@ }}
 \@writefile{loa}{\addvspace {10\p@ }}
 \@writefile{loa}{\addvspace {10\p@ }}
 \@writefile{loa}{\addvspace {10\p@ }}
@@ -53,26 +56,24 @@
 \newlabel{sec-2.2}{{2.2}{8}{Clustering de documentos\relax }{section.2.2}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.2.1}Modelos de representación de documentos}{9}{subsection.2.2.1}}
 \newlabel{sec-2.2.1}{{2.2.1}{9}{Modelos de representación de documentos\relax }{subsection.2.2.1}{}}
-\@writefile{toc}{\contentsline {subsubsection}{Standard Boolean Model}{9}{section*.4}}
-\@writefile{toc}{\contentsline {subsubsection}{Bag of words Model}{9}{section*.5}}
-\@writefile{toc}{\contentsline {subsubsection}{Vector Space Model}{9}{section*.6}}
+\@writefile{toc}{\contentsline {subsubsection}{Standard Boolean Model}{9}{section*.5}}
+\@writefile{toc}{\contentsline {subsubsection}{Bag of words Model}{9}{section*.6}}
+\@writefile{toc}{\contentsline {subsubsection}{Vector Space Model}{10}{section*.7}}
 \citation{Zhao02criterionfunctions}
-\citation{Lloyd:2006:LSQ:2263356.2269955}
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.2.2}Medidas de similitud}{11}{subsection.2.2.2}}
 \newlabel{sec-2.2.2}{{2.2.2}{11}{Medidas de similitud\relax }{subsection.2.2.2}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.2.3}Algoritmos de clustering}{11}{subsection.2.2.3}}
 \newlabel{sec-2.2.3}{{2.2.3}{11}{Algoritmos de clustering\relax }{subsection.2.2.3}{}}
+\citation{Lloyd:2006:LSQ:2263356.2269955}
 \citation{Arthur:2007:KAC:1283383.1283494}
 \@writefile{loa}{\contentsline {algocf}{\numberline {1}{\ignorespaces K-means}}{12}{algocf.1}}
 \citation{Sculley:2010:WKC:1772690.1772862}
-\@writefile{loa}{\contentsline {algocf}{\numberline {2}{\ignorespaces K-means++}}{13}{algocf.2}}
-\@writefile{lof}{\contentsline {figure}{\numberline {2.2}{\ignorespaces Comparación de algoritmos de clustering}}{13}{figure.2.2}}
-\newlabel{fig:clusters}{{2.2}{13}{Comparación de algoritmos de clustering\relax }{figure.2.2}{}}
 \citation{Zhao02criterionfunctions}
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.2.4}Evaluación de clusters}{14}{subsection.2.2.4}}
-\newlabel{sec-2.2.4}{{2.2.4}{14}{Evaluación de clusters\relax }{subsection.2.2.4}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {2.3}Identificación automática de eventos}{14}{section.2.3}}
-\newlabel{sec-2.3}{{2.3}{14}{Identificación automática de eventos\relax }{section.2.3}{}}
+\@writefile{loa}{\contentsline {algocf}{\numberline {2}{\ignorespaces K-means++}}{13}{algocf.2}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2.4}Evaluación de clusters}{13}{subsection.2.2.4}}
+\newlabel{sec-2.2.4}{{2.2.4}{13}{Evaluación de clusters\relax }{subsection.2.2.4}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2.2}{\ignorespaces Comparación de algoritmos de clustering}}{14}{figure.2.2}}
+\newlabel{fig:clusters}{{2.2}{14}{Comparación de algoritmos de clustering\relax }{figure.2.2}{}}
 \citation{Yang:1999:LAD:630307.630471}
 \citation{allan2002topic}
 \citation{Diakopoulos:2012:FAS:2208276.2208409}
@@ -83,18 +84,20 @@
 \citation{chakrabarti2011event}
 \citation{Ganapathiraju_relevanceof}
 \citation{Das07asurvey}
-\@writefile{toc}{\contentsline {section}{\numberline {2.4}Resúmenes automáticos}{15}{section.2.4}}
-\newlabel{sec-2.4}{{2.4}{15}{Resúmenes automáticos\relax }{section.2.4}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {2.3}Identificación automática de eventos}{15}{section.2.3}}
+\newlabel{sec-2.3}{{2.3}{15}{Identificación automática de eventos\relax }{section.2.3}{}}
 \citation{DBLP:conf:spire:Bravo-MarquezM12}
+\@writefile{toc}{\contentsline {section}{\numberline {2.4}Resúmenes automáticos}{16}{section.2.4}}
+\newlabel{sec-2.4}{{2.4}{16}{Resúmenes automáticos\relax }{section.2.4}{}}
 \citation{chakrabarti2011event}
 \citation{Lin:2003:AES:1073445.1073465}
 \citation{Castillo:2011:ICT:1963405.1963500}
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.4.1}Evaluación de resúmenes}{17}{subsection.2.4.1}}
-\newlabel{sec-2.4.1}{{2.4.1}{17}{Evaluación de resúmenes\relax }{subsection.2.4.1}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {2.5}Ranking de documentos sociales}{17}{section.2.5}}
-\newlabel{sec-2.5}{{2.5}{17}{Ranking de documentos sociales\relax }{section.2.5}{}}
+\newlabel{sec-2.4.1}{{2.4}{17}{Evaluación de resúmenes:\relax }{section*.8}{}}
+\@writefile{toc}{\contentsline {paragraph}{Evaluación de resúmenes:}{17}{section*.8}}
 \citation{signorini2005survey}
 \citation{Duan:2010:ESL:1873781.1873815}
+\@writefile{toc}{\contentsline {section}{\numberline {2.5}Ranking de documentos sociales}{18}{section.2.5}}
+\newlabel{sec-2.5}{{2.5}{18}{Ranking de documentos sociales\relax }{section.2.5}{}}
 \@writefile{loa}{\addvspace {10\p@ }}
 \@writefile{toc}{\contentsline {chapter}{\numberline {3}Especificación del Problema}{19}{chapter.3}}
 \@writefile{lof}{\addvspace {10\p@ }}
@@ -119,69 +122,65 @@
 \@writefile{toc}{\contentsline {section}{\numberline {4.1}Descripción detallada}{23}{section.4.1}}
 \newlabel{sec-4.1}{{4.1}{23}{Descripción detallada\relax }{section.4.1}{}}
 \newlabel{descdet}{{4.1}{23}{Descripción detallada\relax }{section.4.1}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {4.2}Metodología de desarrollo e implementación}{23}{section.4.2}}
-\newlabel{sec-4.2}{{4.2}{23}{Metodología de desarrollo e implementación\relax }{section.4.2}{}}
-\newlabel{impl}{{4.2}{23}{Metodología de desarrollo e implementación\relax }{section.4.2}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4.2}Metodología de desarrollo e implementación}{24}{section.4.2}}
+\newlabel{sec-4.2}{{4.2}{24}{Metodología de desarrollo e implementación\relax }{section.4.2}{}}
+\newlabel{impl}{{4.2}{24}{Metodología de desarrollo e implementación\relax }{section.4.2}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.2.1}Obtención de datos}{24}{subsection.4.2.1}}
 \newlabel{sec-4.2.1}{{4.2.1}{24}{Obtención de datos\relax }{subsection.4.2.1}{}}
-\@writefile{toc}{\contentsline {subsubsection}{Recolección de eventos}{24}{section*.7}}
-\@writefile{toc}{\contentsline {subsubsection}{Enriquecimiento de eventos}{25}{section*.8}}
-\@writefile{toc}{\contentsline {subsubsection}{Identificación de documentos a partir de tweets}{26}{section*.9}}
+\@writefile{toc}{\contentsline {subsubsection}{Recolección de eventos}{24}{section*.9}}
+\@writefile{toc}{\contentsline {subsubsection}{Enriquecimiento de eventos}{25}{section*.10}}
+\@writefile{toc}{\contentsline {subsubsection}{Identificación de documentos a partir de tweets}{26}{section*.11}}
 \@writefile{lof}{\contentsline {figure}{\numberline {4.2}{\ignorespaces Ejemplo de enlaces acortados.}}{27}{figure.4.2}}
 \newlabel{fig:short}{{4.2}{27}{Ejemplo de enlaces acortados}{figure.4.2}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.2.2}Identificación de subtópicos}{27}{subsection.4.2.2}}
 \newlabel{sec-4.2.2}{{4.2.2}{27}{Identificación de subtópicos\relax }{subsection.4.2.2}{}}
-\@writefile{loa}{\contentsline {algocf}{\numberline {3}{\ignorespaces Preprocesamiento de documentos}}{27}{algocf.3}}
+\@writefile{loa}{\contentsline {algocf}{\numberline {3}{\ignorespaces Preprocesamiento de documentos}}{28}{algocf.3}}
+\@writefile{loa}{\contentsline {algocf}{\numberline {4}{\ignorespaces Transformación de documentos a vector space model}}{28}{algocf.4}}
 \citation{Castillo:2011:ICT:1963405.1963500}
 \citation{Duan:2010:ESL:1873781.1873815}
-\@writefile{loa}{\contentsline {algocf}{\numberline {4}{\ignorespaces Transformación de documentos a vector space model}}{28}{algocf.4}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.3}Ranking de documentos}{28}{subsection.4.2.3}}
-\newlabel{sec-4.2.3}{{4.2.3}{28}{Ranking de documentos\relax }{subsection.4.2.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.3}Ranking de documentos}{29}{subsection.4.2.3}}
+\newlabel{sec-4.2.3}{{4.2.3}{29}{Ranking de documentos\relax }{subsection.4.2.3}{}}
 \@writefile{lot}{\contentsline {table}{\numberline {4.1}{\ignorespaces Indicadores sociales utilizados para medir relevancia. Todos los indicadores son sumas entre todos los tweets de un documento.}}{29}{table.4.1}}
-\newlabel{tbl:indicadores}{{4.1}{29}{\label {tbl:indicadores}Indicadores sociales utilizados para medir relevancia. Todos los indicadores son sumas entre todos los tweets de un documento}{table.4.1}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {4.3}Desafíos técnicos}{29}{section.4.3}}
-\newlabel{sec-4.3}{{4.3}{29}{Desafíos técnicos\relax }{section.4.3}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.3.1}Restricciones de la API de Twitter}{29}{subsection.4.3.1}}
-\newlabel{sec-4.3.1}{{4.3.1}{29}{Restricciones de la API de Twitter\relax }{subsection.4.3.1}{}}
+\newlabel{tbl:indicadores}{{4.1}{29}{Indicadores sociales utilizados para medir relevancia. Todos los indicadores son sumas entre todos los tweets de un documento}{table.4.1}{}}
 \@writefile{lol}{\contentsline {listing}{\numberline {1}{\ignorespaces Información de un documento, correspondiente al evento ``Anef anuncia movilización nacional''. Los campos que corresponden a listas indican los valores para cada tweet del documento, en este caso, el documento tiene 6 tweets; por ejemplo, user\_followers[24]=45 indica la cantidad de seguidores que tiene el autor del tweet en la tercera posición.}}{30}{listing.1}}
 \newlabel{fig:doc-example}{{1}{30}{Ranking de documentos\relax }{listing.1}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4.3}API de búsqueda de Twitter}{30}{section.4.3}}
+\newlabel{sec-4.3}{{4.3}{30}{API de búsqueda de Twitter\relax }{section.4.3}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {4.4}Casos de estudio}{31}{section.4.4}}
 \newlabel{sec-4.4}{{4.4}{31}{Casos de estudio\relax }{section.4.4}{}}
 \newlabel{casosest}{{4.4}{31}{Casos de estudio\relax }{section.4.4}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.4.1}Distribuciones de dominios}{31}{subsection.4.4.1}}
-\newlabel{sec-4.4.1}{{4.4.1}{31}{Distribuciones de dominios\relax }{subsection.4.4.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.4.1}Distribuciones de dominios}{32}{subsection.4.4.1}}
+\newlabel{sec-4.4.1}{{4.4.1}{32}{Distribuciones de dominios\relax }{subsection.4.4.1}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {4.3}{\ignorespaces Dominios evento 1}}{32}{figure.4.3}}
 \newlabel{fig:telaviv-domains}{{4.3}{32}{Dominios evento 1\relax }{figure.4.3}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.4.2}Determinar el número de clusters}{32}{subsection.4.4.2}}
-\newlabel{sec-4.4.2}{{4.4.2}{32}{Determinar el número de clusters\relax }{subsection.4.4.2}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {4.4}{\ignorespaces Dominios evento 2}}{33}{figure.4.4}}
 \newlabel{fig:clinton-domains}{{4.4}{33}{Dominios evento 2\relax }{figure.4.4}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.4.3}Análisis de resúmenes}{33}{subsection.4.4.3}}
-\newlabel{sec-4.4.3}{{4.4.3}{33}{Análisis de resúmenes\relax }{subsection.4.4.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.4.2}Determinación del número de clusters}{33}{subsection.4.4.2}}
+\newlabel{sec-4.4.2}{{4.4.2}{33}{Determinación del número de clusters\relax }{subsection.4.4.2}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {4.5}{\ignorespaces Dominios evento 3}}{34}{figure.4.5}}
 \newlabel{fig:stockholm-domains}{{4.5}{34}{Dominios evento 3\relax }{figure.4.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.4.3}Análisis de resúmenes}{34}{subsection.4.4.3}}
+\newlabel{sec-4.4.3}{{4.4.3}{34}{Análisis de resúmenes\relax }{subsection.4.4.3}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {4.6}{\ignorespaces Dominios evento 4}}{35}{figure.4.6}}
 \newlabel{fig:dvorak-domains}{{4.6}{35}{Dominios evento 4\relax }{figure.4.6}{}}
-\@writefile{loa}{\addvspace {10\p@ }}
 \@writefile{lof}{\contentsline {figure}{\numberline {4.7}{\ignorespaces Radios de similitud para evento 1}}{36}{figure.4.7}}
 \newlabel{fig:telaviv-radio}{{4.7}{36}{Radios de similitud para evento 1\relax }{figure.4.7}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4.8}{\ignorespaces Radios de similitud para evento 2}}{36}{figure.4.8}}
-\newlabel{fig:clinton-radio}{{4.8}{36}{Radios de similitud para evento 2\relax }{figure.4.8}{}}
+\@writefile{loa}{\addvspace {10\p@ }}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.8}{\ignorespaces Radios de similitud para evento 2}}{37}{figure.4.8}}
+\newlabel{fig:clinton-radio}{{4.8}{37}{Radios de similitud para evento 2\relax }{figure.4.8}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {4.9}{\ignorespaces Radios de similitud para evento 3}}{37}{figure.4.9}}
 \newlabel{fig:stockholm-radio}{{4.9}{37}{Radios de similitud para evento 3\relax }{figure.4.9}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4.10}{\ignorespaces Radios de similitud para evento 4}}{37}{figure.4.10}}
-\newlabel{fig:dvorak-radio}{{4.10}{37}{Radios de similitud para evento 4\relax }{figure.4.10}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.10}{\ignorespaces Radios de similitud para evento 4}}{38}{figure.4.10}}
+\newlabel{fig:dvorak-radio}{{4.10}{38}{Radios de similitud para evento 4\relax }{figure.4.10}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {4.11}{\ignorespaces Documento con alto puntaje entre los resultados obtenidos}}{38}{figure.4.11}}
 \newlabel{fig:bn}{{4.11}{38}{Documento con alto puntaje entre los resultados obtenidos\relax }{figure.4.11}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4.12}{\ignorespaces Imagen y documento con altos puntajes entre los resultados obtenidos}}{38}{figure.4.12}}
-\newlabel{fig:dvorak}{{4.12}{38}{Imagen y documento con altos puntajes entre los resultados obtenidos\relax }{figure.4.12}{}}
-\@writefile{toc}{\contentsline {chapter}{\numberline {5}Conclusiones}{39}{chapter.5}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.12}{\ignorespaces Imagen y documento con altos puntajes entre los resultados obtenidos}}{39}{figure.4.12}}
+\newlabel{fig:dvorak}{{4.12}{39}{Imagen y documento con altos puntajes entre los resultados obtenidos\relax }{figure.4.12}{}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {5}Conclusiones y trabajo a futuro}{40}{chapter.5}}
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\newlabel{sec-5}{{5}{39}{Conclusiones\relax }{chapter.5}{}}
-\newlabel{cap:conclusiones}{{5}{39}{Conclusiones\relax }{chapter.5}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {5.1}Objetivos alcanzados y trabajo futuro}{39}{section.5.1}}
-\newlabel{sec-5.1}{{5.1}{39}{Objetivos alcanzados y trabajo futuro\relax }{section.5.1}{}}
+\newlabel{sec-5}{{5}{40}{Conclusiones y trabajo a futuro\relax }{chapter.5}{}}
+\newlabel{cap:conclusiones}{{5}{40}{Conclusiones y trabajo a futuro\relax }{chapter.5}{}}
 \citation{*}
 \bibstyle{plain}
 \bibdata{bibliografia}

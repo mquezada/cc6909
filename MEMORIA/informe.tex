@@ -3,7 +3,7 @@
 \author{MAURICIO DANIEL QUEZADA VEAS}
 \title{IDENTIFICACI\'ON DE CONTENIDO MULTIMEDIA RELEVANTE A PARTIR DE EVENTOS UTILIZANDO SU INFORMACI\'ON SOCIAL}
 \auspicio{}
-\date{DICIEMBRE 2012}
+\date{ENERO 2013}
 \guia{B\'ARBARA POBLETE LABRA}
 \carrera{INGENIERO CIVIL EN COMPUTACI\'ON}
 \comision{SERGIO OCHOA DELORENZI}{MAURICIO MAR\'IN CAIHUAN}{}
@@ -25,6 +25,8 @@
 \usepackage{minted}
 \usepackage{longtable}
 
+\usepackage{geometry}
+\geometry{top=2cm, bottom=2cm, left=3cm, right=2cm}
 
 \defaultfontfeatures{Mapping=tex-text}
 %\setmainfont{Linux Libertine O}
@@ -46,13 +48,15 @@
 \begin{abstract}
 
 Este trabajo consistió en el diseño e implementación de una metodología para la generación automática
-de resúmenes a partir de documentos de contenido tanto textual como multimedial. La medida de relevancia para
-la extracción de documentos en el proceso de la generación de resúmenes consideró la inclusión de indicadores
+de resúmenes de eventos a partir de documentos de contenido tanto textual como multimedial. La medida de relevancia para
+la extracción de documentos representativos en el proceso de la generación de resúmenes consideró la inclusión de indicadores
 \textit{sociales}, es decir, se consideran más importantes los documentos con mayor impacto en medios sociales, tal como
 las redes sociales online.
 
 El problema central fue la generación de resúmenes de eventos bien definidos, es decir, no se consideró el problema
-de identificación de eventos en medios sociales. Se utilizó una estrategia de clustering particional para la identificación
+de identificación de eventos en medios sociales. Para este trabajo, un evento se define como un acontecimiento que genera actividad en medios sociales. El resumen de un evento se construye principalmente a partir de una selección de documentos descriptivos que son publicados en los medios sociales en torno al evento en cuestión.
+
+Se utilizó una estrategia de clustering particional para la identificación
 de subtópicos de cada evento, y una estrategia simple para ponderar la relevancia de cada documento. Al no considerar
 el contenido de los documentos, éstos pueden ser de tipo textual o multimedial, pudiendo generar resúmenes multimedia o visuales.
 Este tipo de trabajos no ha sido profundamente estudiado en las áreas de investigación relacionadas.
@@ -60,26 +64,33 @@ Este tipo de trabajos no ha sido profundamente estudiado en las áreas de invest
 Se utilizaron los servicios de Google News y Last.fm para la obtención de eventos noticiosos y musicales, respectivamente.
 Además, se utilizó la red social Twitter para el enriquecimiento y generación de documentos con información social. Se utilizó el
 algoritmo de clustering K-means para la identificación de subtópicos mediante una representación adecuada de los documentos que
-no considerara su contenido, de forma de generar un resumen visual de cada evento.
+no considerara su contenido, de forma de generar un resumen visual de cada evento, y una estrategia simple para ordenar los resultados de acuerdo a relevancia de acuerdo a determinados indicadores sociales de los documentos.
+
+La metodología fue evaluada sobre distintos eventos, tanto noticiosos como musicales, a partir de los cuales se generaron resúmenes multimediales automáticamente. También se analizaron casos puntuales manualmente, previa determinación de parámetros adecuados. Los resultados obtenidos indicaron que la calidad de los resultados no depende directamente de la cantidad de documentos utilizados, y que los indicadores sociales utilizados pueden ser calibrados para entregar más resultados relevantes. La metodología diseñada fue adecuada para alcanzar el objetivo principal, y puede ser mejorada en muchas aristas tanto en diseño como en implementación en el futuro.
 
 \end{abstract}
 
-%\begin{dedicatoria}
-%Una dedicatoria corta.
-%\end{dedicatoria}
+\begin{dedicatoria}
+No sé qué poner aquí.
+\end{dedicatoria}
 
-%\begin{thanks}
-%\lipsum[1-2]
-%\end{thanks}
+\begin{thanks}
+Ni acá
+\end{thanks}
 
 \cleardoublepage
-\begin{spacing}{1.5}
-\tableofcontents
+\begin{spacing}{1}
+
+	\tableofcontents
+	%\cleardoublepage
+	%\listoftables
+	%\cleardoublepage
+	\listoffigures
+
 \end{spacing}
-%\cleardoublepage
-%\listoftables
-%\cleardoublepage
-\listoffigures
+
+% doble espaciado "makes a mess"
+\setlength{\parskip}{\baselineskip}
 
 \mainmatter
 

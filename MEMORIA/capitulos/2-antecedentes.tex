@@ -167,9 +167,7 @@
     que se considera el calce exacto entre los términos de una query
     $q$ y un documento $d$. La query puede ser una consulta hecha por
     un usuario al conjunto de documentos, o bien un documento del
-    mismo conjunto.
-
-    Una consulta es una fórmula de lógica proposicional que pide los
+    mismo conjunto. Una consulta es una fórmula de lógica proposicional que pide los
     documentos que contengan o no ciertos términos.
 
     \subsubsection{Bag of words Model}
@@ -195,9 +193,7 @@
     $$d = (f(w_1), f(w_2), \ldots, f(w_m))$$
 
     Cada dimensión de este vector corresponde al peso asociado a un
-    término del documento.
-
-    El peso puede ser directamente la frecuencia del término dentro
+    término del documento. El peso puede ser directamente la frecuencia del término dentro    
     del documento:
 
     $$\freq(w,d) = |\{w : w \in d\}|$$
@@ -258,17 +254,15 @@
     A lo largo de los años, dos formas han sido las usuales para
     determinar similitud entre
     documentos\cite{Zhao02criterionfunctions}: calculando el coseno de
-    los dos vectores, y la distancia euclidiana.
-
-    El coseno de dos documentos $d_i$ y $d_j$ se define como
+    los dos vectores, y la distancia euclidiana. El coseno de dos documentos 
+    $d_i$ y $d_j$ se define como:
 
     $$\cos(d_i, d_j) = \frac{d_i^td_j}{\|d_i\|\|d_j\|}$$
 
     Si ambos $d_i$ y $d_j$ son iguales, entonces la fórmula anterior
     se evalúa a 1, y 0 si no tienen nada en común, es decir, ambos
-    vectores son ortogonales.
-
-    La distancia euclidiana entre $d_i$ y $d_j$ se define como
+    vectores son ortogonales. La distancia euclidiana entre $d_i$ y $d_j$ 
+    se define como:
 
     $$d(d_i,d_j) = \sqrt{(d_i-d_j)^t(d_i-d_j)} = \|d_i-d_j\|$$
 
@@ -395,7 +389,6 @@ Proceder con K-means estándar\;
 \subsection{Evaluación de clusters}
 \label{sec-2.2.4}
 
-
     Existen dos enfoques para evaluar clusterings: validación interna
     y externa\footnote{\href{http://en.wikipedia.org/wiki/Cluster\_analysis\#Evaluation\_of\_clustering\_results}{http://en.wikipedia.org/wiki/Cluster\_analysis\#Evaluation\_of\_clustering\_results} } La validación interna considera evaluar el clustering
     con respecto a los datos que han sido agrupados (es decir, sin
@@ -419,7 +412,7 @@ Proceder con K-means estándar\;
 
 \begin{itemize}
 \item \textbf{Entropía}: mide cómo son distribuidas las clases de documentos
-      entre cada cluster. Se define formalmente como
+      entre cada cluster. Se define formalmente como:
 
       $$E(C_r) = -\frac{1}{\log q}\sum_{i=1}^q\frac{n^i_r}{n_r}\log\frac{n^i_r}{n_r}$$
 
@@ -435,16 +428,15 @@ Proceder con K-means estándar\;
       será 0. En general, conviene tener bajos valores de entropía.
 \item \textbf{Pureza}: mide la cantidad de documentos de la clase más grande
       en un cluster dividida por el tamaño del cluster. La pureza de
-      un cluster $C_r$ se define como
+      un cluster $C_r$ se define como:
 
       $$P(C_r) = \frac{1}{n_r} \Mmax_i\{n^i_r\}$$
 
-      A mejor pureza, mejor es la solución.
+      A mayor pureza, se considera que mejor es la solución.
 \end{itemize}
+
 \section{Identificación automática de eventos}
 \label{sec-2.3}
-
-
    La identificación automática de eventos consiste en, dado un
    conjunto de documentos, donde cada documento está asociado a un
    evento (desconocido), poder particionar el conjunto de
@@ -464,7 +456,7 @@ Proceder con K-means estándar\;
    (1) un período de tiempo asociado $T_e$, y (2) una secuencia
    ordenada cronológicamente de mensajes $M_e$ de volumen sustancial,
    que discuten la ocurrencia y que son publicados durante el período
-   $T_e$ \end{defn}
+   $T_e$. \end{defn}
 
    Si los eventos son conocidos con anticipación, el problema consiste
    en recuperar documentos que los discutan. Las fuentes de datos son
@@ -501,6 +493,8 @@ Proceder con K-means estándar\;
    identificar las partes más relevantes de cada partido, basándose en
    los bursts de tweets ocurridos en Twitter.
 
+% evita que baje el texto demasiado antes de la siguiente seccion
+\vspace*{\fill}
 
 \section{Resúmenes automáticos}
 \label{sec-2.4}
@@ -600,7 +594,8 @@ Proceder con K-means estándar\;
      para determinar características ocultas entre los datos, como fue
      usado en \cite{chakrabarti2011event}; etc.
 \end{itemize}
-\subsection{Evaluación de resúmenes}
+
+\paragraph{Evaluación de resúmenes:}
 \label{sec-2.4.1}
 
 

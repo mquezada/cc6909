@@ -12,9 +12,9 @@
   la solución parcial.
 
   Para esto, se asume que existe una fuente de eventos, de esta forma,
-  el enfoque de la solución radica principalmente en la generación de
-  los resúmenes y no en la identificación de eventos en medios
-  sociales.
+  el enfoque de la solución radica principalmente en la selección y 
+  ordenamiento de los elementos, o generación de resúmenes, y no en 
+  la identificación de eventos en medios sociales.
 
   La Figura \ref{fig:overview} muestra de manera general el modelo
   propuesto. El modelo considera varias etapas: obtención de eventos,
@@ -38,6 +38,7 @@
      de relevancia, y poder seleccionar los $k$ documentos más
      relevantes.
 \end{enumerate}
+
   \begin{figure}[h!b]
   \centering
   \includegraphics[width=11cm]{./dia/model2.ps}
@@ -61,7 +62,8 @@
   mencionan al documento. Se realizó una limpieza y preprocesamiento
   de los datos, quitando las \emph{stopwords} y realizando \emph{stemming}
   sobre el contenido en texto. Luego, se aplicó \emph{tf-idf} sobre los
-  documentos, representándolos como vectores en el \emph{space vector   model}. Para identificar los subtópicos de un evento se utilizó el
+  documentos, representándolos como vectores en el \emph{space vector model}. 
+  Para identificar los subtópicos o clusters de un evento se utilizó el
   algoritmo de clustering $k$-means sobre los vectores.
 
   Para el ranking de los documentos se decidió usar una ponderación
@@ -554,11 +556,11 @@ posición.}
 
 
 
-\section{Desafíos técnicos}
+\section{API de búsqueda de Twitter}
 \label{sec-4.3}
 
-\subsection{Restricciones de la API de Twitter}
-\label{sec-4.3.1}
+%\subsection{Restricciones de la API de Twitter}
+%\label{sec-4.3.1}
 
 
    La API de búsqueda de Twitter permite obtener tweets de acuerdo a un
@@ -567,7 +569,7 @@ posición.}
    tanto los títulos de las noticias como los nombres de los artistas
    para las noticias y los conciertos, respectivamente.
 
-   Funciona de la siguiente forma: cada vez que se hace un request a la
+   Funciona de la siguiente manera: cada vez que se hace un request a la
    URL dada por el servicio, éste retorna a lo más 100 tweets por página, con un
    máximo de 15 páginas (indicando en el request qué página queremos
    consultar), dando como total hasta 1500 tweets por búsqueda. Existirán
@@ -586,7 +588,7 @@ posición.}
    costosa en tiempo, dado que se pueden obtener a lo más 100 tweets
    cada 5 segundos.
 
-   Los tweets retornados vienen en formato \texttt{JSON} (\emph{Javascript Simple Object Notation}),
+   Los tweets devueltos vienen en formato \texttt{JSON} (\emph{Javascript Simple Object Notation}),
    e incluyen varios metadatos sobre el tweet aparte de los principales,
    como autor, fecha, contenido. Algunos de estos metadatos son:
 
@@ -609,6 +611,8 @@ posición.}
 \item Fecha de creación de la cuenta;
 \item etc.
 \end{itemize}
+
+
 \section{Casos de estudio}
 \label{sec-4.4}
 
@@ -729,7 +733,7 @@ posición.}
   documentos correspondientes al evento.}
 \end{figure}
 
-\subsection{Determinar el número de clusters}
+\subsection{Determinación del número de clusters}
 \label{sec-4.4.2}
 
 
@@ -755,34 +759,34 @@ siguiente:
 \end{itemize}
 \begin{figure}[h]
   \centering
-  \includegraphics[width=14cm]{./img/telaviv-clusters-radio.png}
+  \includegraphics[width=12cm]{./img/telaviv-clusters-radio.png}
   \caption[Radios de similitud para evento 1]
-   { Radio ISim/ESim del evento ``Tel Aviv". \label{fig:telaviv-radio}. }
+   { Radio ISim/ESim del evento ``Tel Aviv". El eje de las abscisas corresponde a la cantidad de clusters que se generan para la matriz de $\tfidf$, mientras que el eje de las ordenadas corresponde al radio ISim/ESim de la solución obtenida los clusterings. Se aprecia un máximo del radio cuando el número de clusters es 9, lo que muestra que es conveniente utilizar 9 clusters para este evento. \label{fig:telaviv-radio} }
 \end{figure}
 
 \begin{figure}[h]
   \centering
-  \includegraphics[width=14cm]{./img/clinton-clusters-radio.png}
+  \includegraphics[width=12cm]{./img/clinton-clusters-radio.png}
   \caption[Radios de similitud para evento 2]
-   { Radio ISim/ESim del evento ``Clinton". \label{fig:clinton-radio}. }
+   { Radio ISim/ESim del evento ``Clinton". El radio, en este caso, aumenta a medida que se aumenta el número de clusters, siendo el máximo en 27 clusters, para esta experimentación. Se podría apreciar un número mayor si se prueba con más clusters, sin embargo, no pareció que hacerlo influyera en la calidad efectiva de la solución. \label{fig:clinton-radio} }
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[h!]
   \centering
-  \includegraphics[width=14cm]{./img/stockholm-clusters-radio.png}
+  \includegraphics[width=12cm]{./img/stockholm-clusters-radio.png}
   \caption[Radios de similitud para evento 3]
-   { Radio ISim/ESim del evento ``Stockholm". \label{fig:stockholm-radio}. }
+   { Radio ISim/ESim del evento ``Stockholm". En este caso, se aprecia un máximo local con 11 clusters.\label{fig:stockholm-radio}}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[h!]
   \centering
-  \includegraphics[width=14cm]{./img/dvorak-clusters-radio.png}
+  \includegraphics[width=12cm]{./img/dvorak-clusters-radio.png}
   \caption[Radios de similitud para evento 4]
-   { Radio ISim/ESim del evento ``New York". \label{fig:dvorak-radio}. }
+   { Radio ISim/ESim del evento ``New York". Se aprecian dos máximos, con 25 y 28 clusters, respectivamente. Al ser máximos locales, es posible que a mayor número de clusters las soluciones puedan tener mejores medidas de similitud. \label{fig:dvorak-radio} }
 \end{figure}
 
 Con esto, se puede determinar experimentalmente un número de clusters
-para cada evento, y analizar los resultados obtenidos.
+para cada evento, y analizar los resultados obtenidos. En las Figuras \ref{fig:telaviv-radio}, \ref{fig:clinton-radio}, \ref{fig:stockholm-radio}, y \ref{fig:dvorak-radio} se pueden apreciar los resultados obtenidos en la determinación del número de clusters.
 
 \subsection{Análisis de resúmenes}
 \label{sec-4.4.3}
@@ -790,28 +794,29 @@ para cada evento, y analizar los resultados obtenidos.
 
     Para analizar los resultados obtenidos, se generaron nuevamente
     clusterings utilizando el número estimado en la sección anterior, de
-    forma de determinar una solución de mejor calidad.
-
-    Una vez generados los clusterings, se procedió a hacer un análisis
+    forma de determinar una solución de mejor calidad. Una vez generados 
+    los clusterings, se procedió a hacer un análisis
     caso a caso de los resultados obtenidos.
 
     Por ejemplo, para el evento ``Tel Aviv'', se determinó como $9$ el
     número óptimo de clusters, dando como resultado una solución de
     clustering que particionaba los tweets de tal forma que cada
-    cluster contenía principalmente sólo tweets del mismo tipo:
+    cluster contenía principalmente sólo tweets de cierto tipo. A continuación 
+    se muestra el tweet más frecuente por cluster, o bien una descripción de los tweets
+    del cluster, al no haber un tweet más repetido:
 
 \begin{enumerate}
 \item \texttt{Previous bomb attacks in Tel Aviv...}
 \item \texttt{RT @BreakingNews: Israel's army spokesman says Israeli Arab        arrested for Wednesday's bus bombing in Tel Aviv}
-\item Contiene tweets de distintos temas, tanto de Tel Aviv como
-       otros relacionados a Israel, Egipto o Estados Unidos.
+\item Este cluster contiene tweets de distintos temas, tanto de Tel Aviv como
+       otros relacionados a Israel, Egipto o Estados Unidos, sin haber ninguno repetido en particular.
 \item \texttt{RT @chaimlevinson: \#breakingnews : after massive  police hunt,        2  suspects in the tel aviv bus bombing arrested in 443 road}
 \item \texttt{Police Arrest Suspects in Tel Aviv Bus Blast, Including        Israeli Citizen:}
 \item \texttt{Israel arrests suspects in Tel Aviv bus bombing: Israeli}
        \texttt{authorities arrested an Israeli Arab on suspicion of planting a}
        \texttt{bomb in a Te...}
 \item \texttt{Arrest announced in Tel Aviv bus bombing: An arrest has been}
-       \texttt{made in Wednesday\textbackslash{}xe2\textbackslash{}x80\textbackslash{}x99s bombing in Tel Aviv of a bus,=        =a...}
+       \texttt{made in Wednesdaybombing in Tel Aviv of a bus, a...}
 \item \texttt{RT @panosharitos: Tel Aviv police chasing after two suspects}
        \texttt{(one arrested), say this was not a suicide bombing; 3 of the}
        \texttt{casualties are ...}
@@ -830,42 +835,41 @@ para cada evento, y analizar los resultados obtenidos.
     principalmente a la cantidad de retweets y a que el autor es una
     cuenta verificada.
 
-\begin{figure}[h!]
+\begin{figure}    
   \centering
-  \includegraphics[width=10cm]{./img/breakingnews.png}
+  \includegraphics[width=14cm]{./img/breakingnews.png}
   \caption[Documento con alto puntaje entre los resultados obtenidos]
-   { Documento (tweet) con más relevancia dentro del evento ``Tel Aviv". \label{fig:bn} }
+   { Documento (tweet) con más relevancia dentro del evento ``Tel Aviv". Su relevancia dentro de los resultados se debe principalmente a que el autor posee una cuenta verificada en Twitter, además del número de retweets. \label{fig:bn} }
 \end{figure}
 
-    Siguiendo con los resultados, para el evento ``New York'', el cual consiste en un
+    Por otra parte, al analizar los resultados del evento
+    ``Stockholm'', que tiene cerca de ocho mil documentos, se notó que
+    gran parte de ellos corresponden a tweets sin relación con el tema,
+    o bien tweets de contenido personal que no tenían ninguna
+    incidencia. Estos tweets alcanzaron alta relevancia debido a altos
+    valores en sus indicadores: autoridad de usuarios, cantidad de followers 
+    y en ocasiones cantidad de retweets. Esto indica que la forma de
+    realizar ranking puede ser mejorada en otros aspectos,
+    considerando el contenido del tweet o verificando la validez del documento.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=11cm]{./img/dvorak.png}
+  \includegraphics[width=11cm]{./img/dvorak2.png}
+  \caption[Imagen y documento con altos puntajes entre los resultados obtenidos]
+   { Documentos con alta relevancia dentro del evento
+  ``New York". El primero corresponde a una imagen en Instagram evaluada con alto puntaje, y el segundo a un tweet de un medio de noticias hablando sobre el evento. \label{fig:dvorak} }
+\end{figure}
+
+    Para el evento ``New York'', el cual consiste en un
     concierto musical de la Filarmónica de Nueva York, a pesar de la
-    poca cantidad de documentos (250), los resultados también fueron
+    poca cantidad de documentos (250), los resultados fueron
     muy representativos e incluso ricos en contenido multimedia. En la
     Figura\footnote{Fuente \href{http://instagram.com/p/SF8w-3voOF/}{http://instagram.com/p/SF8w-3voOF/} }
-    \ref{fig:dvorak} se puede apreciar uno de los resultados; además
-    de este se incluyen artículos de prensa, vídeos de YouTube,
+    \ref{fig:dvorak}, al final de este capítulo, se puede apreciar uno de los resultados; 
+    además de este se incluyen artículos de prensa, vídeos de YouTube,
     grabaciones en servicios de sonido o música como Soundcloud,
     Spotify o Shazam.
-
-    Por otra parte, sin embargo, al analizar los resultados del evento
-    ``Stockholm'', que tiene cerca de ocho mil documentos, se notó que
-    gran parte de ellos corresponden a tweets sin sentido con el tema,
-    o bien tweets de contenido personal que no tenían ninguna
-    relación. Estos tweets alcanzaron alta relevancia debido a altos
-    indicadores: autoridad de usuarios, cantidad de followers y en
-    ocasiones cantidad de retweets. Esto indica que la forma de
-    realizar ranking puede ser mejorada en otros aspectos, quizás
-    considerando el contenido del tweet directamente o de alguna
-    manera verificando la relevancia del documento mencionado.
-
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=8cm]{./img/dvorak.png}
-  \includegraphics[width=8cm]{./img/dvorak2.png}
-  \caption[Imagen y documento con altos puntajes entre los resultados obtenidos]
-   { Documento (fotografía) y tweet con alta relevancia dentro del evento
-  ``New York". \label{fig:dvorak} }
-\end{figure}
 
     Finalmente, el evento ``Clinton'' obtuvo buenos resultados, en su
     mayoría tweets sin URL, que discuten nuevamente el tema de

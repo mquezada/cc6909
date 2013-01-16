@@ -1,7 +1,7 @@
 se = -shell-escape
 
 init:
-	fig2ps ./dia/*.fig
+	#fig2ps ./dia/*.fig
 	xelatex $(se) informe.tex && bibtex informe && xelatex $(se) informe.tex && xelatex $(se) informe.tex
 
 clean:

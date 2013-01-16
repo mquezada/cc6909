@@ -4,20 +4,33 @@
 
 \label{cap:problema}
 
-  El problema a resolver consiste en poder \emph{resumir} eventos en base
+  El problema a resolver consistió en poder \emph{resumir} eventos en base
   al contenido textual y multimedial de la información publicada en
-  medios sociales, tales como las redes sociales online.
+  medios sociales, tales como las redes sociales online. 
 
-  Se considerará un evento como una ocurrencia en el mundo real
-  con un período de tiempo asociado y un conjunto de mensajes, de
-  volumen considerable, que discutan la ocurrencia y además publicados
-  dentro del período de tiempo.
+  Un resumen de un evento se consideró como una selección de elementos relevantes 
+  y descriptivos del evento. Estos elementos corresponden a documentos u 
+  \emph{objetos Web}: artículos, noticias, \emph{tweets}, fotografías, 
+  vídeos, sonidos anotados, etc. Estos documentos deben ser descriptivos y poco redundantes:
+  un pequeño grupo de documentos que permita describir el evento. Nótese que los
+  objetos Web son objetos de alto nivel: no es sólo texto o contenido multimedia, sino
+  que se consideran como objetos con información \emph{social} asociada, como la autoría
+  del documento, tags o etiquetas, comentarios de consumidores (usuarios), viralidad en
+  la Web, etc. Un resumen en este sentido no constituye una selección de datos de distintos documentos,
+  sino que la selección íntegra de un documento que sea relevante y a su vez descriptivo del evento, filtrando
+  o descartando los que no lo son.
+
+  Se consideró un evento como una ocurrencia en el mundo real
+  con un período de tiempo asociado y un conjunto de documentos, de
+  volumen considerable, que discuten el acontecimiento y además son publicados
+  dentro del período de tiempo asociado.
 
   El resumir un evento consiste en entregar un subconjunto de
   mensajes o de documentos mencionados en ellos que tengan
   relación directa con el evento en cuestión. Por ejemplo, el evento
   \texttt{Anef anuncia movilización nacional} contiene muchos mensajes, tales
   como:
+
 \begin{itemize}
 \item \texttt{RT @econtingencia: Reajuste: Trabajadores del sector público}
     \texttt{convocan a movilizaciones: La negociación entra a su recta final:}
@@ -37,6 +50,7 @@
 \item \texttt{RT @Barbara\_figue: Reajuste: Trabajadores del sector público}
     \texttt{convocan a movilizaciones http://t.co/DeXKACSR vía @nacioncl}
 \end{itemize}
+
   El resumen consistirá en una colección de objetos, documentos o
   mensajes, donde en este caso los documentos están representados por
   las URLs contenidas en los mensajes, de forma que esta colección
@@ -63,9 +77,7 @@
   social asociada a los documentos para generar medidas de relevancia
   en la generación de resúmenes visuales automáticos.
 
-  Las aplicaciones de una solución comprenden muchas en común con las
-  aplicaciones de clustering y resúmenes automáticos, además de la
-  obtención de conocimiento:
+  Algunas aplicaciones de una solución al problema planteado son:
 
 \begin{itemize}
 \item Poder distinguir entre dos eventos rápidamente, por ejemplo, si

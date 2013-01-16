@@ -1,48 +1,49 @@
-This is BibTeX, Version 0.99c (TeX Live 2009/Debian)
+This is BibTeX, Version 0.99d (TeX Live 2012/Debian)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
 The top-level auxiliary file: informe.aux
 The style file: plain.bst
 Database file #1: bibliografia.bib
+Warning--empty journal in Ganapathiraju_relevanceof
 Warning--empty journal in signorini2005survey
-Warning--empty institution in Zhao02criterionfunctions
 You've used 19 entries,
             2118 wiz_defined-function locations,
-            630 strings with 8404 characters,
-and the built_in function-call counts, 7796 in all, are:
-= -- 826
-> -- 308
+            635 strings with 8469 characters,
+and the built_in function-call counts, 7877 in all, are:
+= -- 842
+> -- 303
 < -- 12
-+ -- 125
-- -- 102
-* -- 489
-:= -- 1186
-add.period$ -- 66
++ -- 123
+- -- 100
+* -- 500
+:= -- 1204
+add.period$ -- 68
 call.type$ -- 19
-change.case$ -- 108
+change.case$ -- 106
 chr.to.int$ -- 0
 cite$ -- 21
-duplicate$ -- 340
-empty$ -- 620
-format.name$ -- 102
-if$ -- 1750
+duplicate$ -- 349
+empty$ -- 621
+format.name$ -- 100
+if$ -- 1763
 int.to.chr$ -- 0
 int.to.str$ -- 19
-missing$ -- 17
-newline$ -- 96
+missing$ -- 20
+newline$ -- 98
 num.names$ -- 38
-pop$ -- 123
+pop$ -- 113
 preamble$ -- 1
-purify$ -- 89
+purify$ -- 88
 quote$ -- 0
-skip$ -- 282
+skip$ -- 280
 stack$ -- 0
-substring$ -- 515
+substring$ -- 540
 swap$ -- 125
 text.length$ -- 12
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 74
 warning$ -- 2
-while$ -- 77
+while$ -- 79
 width$ -- 21
-write$ -- 231
+write$ -- 236
 (There were 2 warnings)

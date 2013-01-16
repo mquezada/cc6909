@@ -11,11 +11,13 @@
 
   Pero, ¿qué hacer si hay demasiados platos y no se conocen todos? de
   alguna manera hay que saber cuáles hay que probar, si el objetivo es
-  comer lo mejor posible. Un amigo, u otras personas que hayan comido
-  en el restaurant pueden recomendar una u otra comida,
-  lo cual puede servir para orientarse. Entonces se pueden escoger
+  comer lo mejor posible. Para hacerse la idea de cuál 
+  es la mejor oferta gastronómica del
+  restaurant, sin tener que probar todos los platos, se puede
+  preguntar a la gente que come habitualmente ahí qué platos fueron
+  los que más les han gustado, y así definir la calidad de éste y/o
+  escoger los mejores platos. Entonces se pueden escoger
   muestras de acuerdo a las recomendaciones.
-
 
   Pasando a un contexto diferente, supóngase que este gran buffet es la
   Web y los distintos platos corresponden a contenido publicado en
@@ -25,27 +27,23 @@
   haciendo otra suposición importante con esta analogía, y es que se
   está considerando que la información es íntegramente para ser
   \emph{consumida}, y no, por ejemplo, para generar más contenido,
-  conocimiento, o para ser utilizada por máquinas, etc. Dentro de
+  conocimiento, para ser utilizada por máquinas, etc. Dentro de
   este contexto se plantea la pregunta de cómo seleccionar el contenido
-  más atractivo dentro de todo lo que hay disponible en un momento dado.
-
-  Para hacerse la idea de cuál es la mejor oferta gastronómica de un
-  restaurant, sin tener que probar todos los platos, se puede
-  preguntar a la gente que come habitualmente ahí qué platos fueron
-  los que más les han gustado, y así definir la calidad de éste y/o
-  escoger los mejores platos. O bien, filtrar los documentos que
-  hablan de un mismo evento de acuerdo a las preferencias de los
-  usuarios, y luego presentarlo en la forma de un \emph{resumen} de cada
-  uno.
+  más atractivo dentro de todo lo que hay disponible en un momento dado. 
+  O bien, filtrar los documentos que hablan de un mismo evento de acuerdo 
+  a las preferencias de los usuarios, y luego presentarlo en la forma de 
+  un \emph{resumen} de cada uno.
 
   Este trabajo consistió en el desarrollo de una metodología
   que permite generar resúmenes automáticos de eventos determinados
-  a partir de los documentos Web que hablan de éstos. No se hace
-  ninguna suposición sobre el \emph{contenido} de estos documentos (pueden
+  a partir de los documentos Web que hablan de éstos. Un \emph{resumen} se
+  considera como una selección de los documentos más representativos de un evento,
+  lo cual permite describirlo con pocos elementos, en comparación a todos los que
+  lo mencionan. A su vez, no se hace ninguna suposición sobre el \emph{contenido} de estos documentos (pueden
   ser de texto, imágenes, videos, \emph{multimedios} en general). Los
   documentos del resumen son seleccionados de acuerdo a
   \emph{indicadores sociales}: los elementos con mayor impacto en las redes
-  sociales son considerados más importantes.
+  sociales son considerados más importantes. 
 
   La metodología diseñada se implementó sobre dos tipos de eventos:
   noticias y conciertos musicales. Para obtenerlos, se utilizó
@@ -55,19 +53,20 @@
   Twitter\footnote{\href{http://twitter.com/}{http://twitter.com/} }; y utilizando una representación
   adecuada de los documentos como vectores, se utilizó una estrategia
   de clustering para identificar los subtópicos de cada evento y así
-  generar un resumen, basándose en los indicadores obtenidos.
+  generar un resumen, basándose en los indicadores obtenidos. Esta memoria posee una 
+  componente de investigación, al no estar del todo resuelto el problema 
+  de la generación de resúmenes de contenido multimedia heterogéneo a partir de eventos.
 
   La estructura de este informe es como sigue: en este capítulo se
   comenta el contexto dentro del cual se desarrolló este sistema, las
   contribuciones realizadas, los objetivos y una descripción general
-  de la solución; en Capítulo \ref{cap:antecedentes} se discute el estado del
-  arte y el marco teórico del cual se desprende este trabajo; el
+  de la solución. En Capítulo \ref{cap:antecedentes} se discute el estado del
+  arte y el marco teórico del cual se desprende este trabajo. El
   Capítulo \ref{cap:problema} describe más en detalle el problema a resolver, su
-  relevancia y sus dificultades, para luego, en el
-  Capítulo \ref{cap:solucion}, describir la solución implementada, más
-  un par de casos de estudio sobre los resultados obtenidos, para
-  finalizar con las conclusiones de este trabajo en el Capítulo
-  \ref{cap:conclusiones}.
+  relevancia y sus dificultades. En el
+  Capítulo \ref{cap:solucion} se describe la solución implementada, más
+  un par de casos de estudio sobre los resultados obtenidos. Finalmente, las conclusiones 
+  de este trabajo se encuentran en el Capítulo \ref{cap:conclusiones}.
 
 \section{Contexto y Motivación}
 \label{sec-1.1}
@@ -77,14 +76,12 @@
    particular, en las \emph{redes sociales online} (OSN, \emph{Online Social Networks}),
    es de tal magnitud que se vuelve necesario encontrar formas de
    filtrar y buscar sólo la información relevante dentro de todas las
-   fuentes que hablan del mismo evento.
-
-   Por otra parte, para poder entender lo que está pasando en el
-   mundo a partir de los puntos de vista de toda las personas que
-   manifiestan su opinión o los hechos recabados en las redes
-   sociales, se hace necesario poder procesar toda esta
-   información. Nuevamente, dado el gran volumen de datos, es
-   necesario poder resumir esta información para ser rápidamente
+   fuentes que hablan de un mismo acontecimiento. Por otra parte, 
+   para poder entender lo que está pasando en el mundo a partir de los 
+   puntos de vista de todas las personas o los hechos recabados en las redes
+   sociales, se hace necesario poder procesar eficientemente estos 
+   datos. Nuevamente, dado el gran volumen de datos, se vuelve 
+   deseable el poder resumir esta información para ser rápidamente
    consumida.
 
    En el contexto de las redes sociales online, cada día los usuarios
@@ -150,8 +147,9 @@
      Israel. El poder distinguir rápidamente mediante una imagen o un
      vídeo acelera mucho el proceso. \emph{Una imagen vale más que mil palabras}.
 \end{itemize}
-   La metodología implementada es una primera aproximación que puede
-   satisfacer los ejemplos mencionados.
+
+  La metodología implementada está pensada como una primera aproximación para
+  satisfacer los ejemplos mencionados.
 
 \section{Objetivos}
 \label{sec-1.2}
@@ -166,7 +164,7 @@
     automáticos de \emph{eventos}: información temporal publicada en redes
     sociales online sobre sucesos en particular. Esta información se
     basa en contenido textual y multimedial generado por los usuarios
-    de estas redes, cuya relevancia se basa en el impacto generado en
+    de estas redes, cuya relevancia esté basada en el impacto generado en
     éstas.
 
 
@@ -184,22 +182,24 @@
 \item Analizar la efectividad de la metodología propuesta sobre un
        conjunto de eventos noticiosos y conciertos.
 \end{enumerate}
+
+
 \section{Descripción general de la solución}
 \label{sec-1.3}
 
 
    Para enfrentar el problema se diseñó una solución que consiste en
-   tres componentes para resolverlo, resultando cada una en diferente
-   grado de complejidad, siendo posible además ser mejoradas en el
+   tres componentes, implementadas con diferentes
+   grados de complejidad, siendo posible además mejorarlas en el
    futuro. Para probar la viabilidad de la metodología, ésta fue
    aplicada sobre un conjunto de casos de prueba.
 
    En particular:
 
 \begin{itemize}
-\item Se llevó a cabo una metodología para la obtención de documentos y
+\item Se llevó a cabo un método para la obtención de documentos y
      enriquecerlos con datos obtenidos de fuentes sociales;
-\item Se diseñó un procedimiento que separar estos documentos en
+\item Se diseñó un procedimiento que separa estos documentos en
      \emph{clusters}, \emph{sin considerar su contenido}. Sólo se utilizó la
      información social asociada; y
 \item Se diseñó además un procedimiento para \emph{rankear} u ordenar los
@@ -207,6 +207,10 @@
      acuerdo a la información social asociada a los documentos
      generados.
 \end{itemize}
+
+% que quede el enumerate y su descriptor en la misma pagina
+\newpage
+
    Las componentes diseñadas fueron las siguientes:
 
 \begin{enumerate}

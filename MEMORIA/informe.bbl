@@ -55,8 +55,10 @@ Jack~G. Conrad, Khalid Al-Kofahi, Ying Zhao, and George Karypis.
   USA, 2005. ACM.
 
 \bibitem{Das07asurvey}
-Dipanjan Das and André F.~T. Martins.
-\newblock A survey on automatic text summarization, 2007.
+D.~Das and A.F.T. Martins.
+\newblock A survey on automatic text summarization.
+\newblock {\em Literature Survey for the Language and Statistics II course at
+  CMU}, 4:192--195, 2007.
 
 \bibitem{Diakopoulos:2012:FAS:2208276.2208409}
 Nicholas Diakopoulos, Munmun De~Choudhury, and Mor Naaman.
@@ -74,9 +76,10 @@ Yajuan Duan, Long Jiang, Tao Qin, Ming Zhou, and Heung-Yeung Shum.
   2010. Association for Computational Linguistics.
 
 \bibitem{Ganapathiraju_relevanceof}
-K.~Ganapathiraju, Advisors Dr, Jaime Carbonell, and Dr~Yiming Yang.
+K.~Ganapathiraju, J.~Carbonell, and Y.~Yang.
 \newblock Relevance of cluster size in mmr based summarizer: A report 11-742:
   Self-paced lab in information retrieval.
+\newblock 2002.
 
 \bibitem{Lin:2003:AES:1073445.1073465}
 Chin-Yew Lin and Eduard Hovy.
@@ -116,9 +119,9 @@ Yiming Yang, Jaime~G. Carbonell, Ralf~D. Brown, Thomas Pierce, Brian~T.
 \newblock {\em IEEE Intelligent Systems}, 14(4):32--43, July 1999.
 
 \bibitem{Zhao02criterionfunctions}
-Ying Zhao and George Karypis.
+Y.~Zhao and G.~Karypis.
 \newblock Criterion functions for document clustering: Experiments and
   analysis.
-\newblock Technical report, 2002.
+\newblock {\em Machine Learning}, 2001.
 
 \end{thebibliography}
