@@ -37,6 +37,9 @@
 \RequirePackage[pdfpagelabels]{hyperref}												%%Links y numeracion del PDF
 
 %% Lenguaje
+% requisito de cybertesis:
+\addto\captionsspanish{\renewcommand\contentsname{Tabla de contenido}}
+
 \addto\captionsspanish{\renewcommand\tablename{Tabla}}
 \addto\captionsspanish{\renewcommand\listtablename{\'Indice de tablas}}
 
